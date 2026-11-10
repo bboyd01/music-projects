@@ -149,36 +149,71 @@ local function main()
   end
 
   local url = server .. "/api/v1/audio?filename=" .. urlencode(project_name .. "." .. ext)
-  local cmd = table.concat({
-    "curl -sS -w " .. shell_quote("\\n%{http_code}"), -- curl expands \n itself
+  -- curl prints the HTTP status after a clear marker, so it can't be confused with the reply.
+  local parts = {
+    "curl -sS --max-time 600 -w " .. shell_quote("\\nMP_STATUS:%{http_code} %{redirect_url}"),
     "-X POST",
     "-H " .. shell_quote("Authorization: Bearer " .. token),
     "-H " .. shell_quote("Content-Type: " .. ctype),
     "--data-binary @" .. shell_quote(out_file),
-    shell_quote(url)
-  }, " ")
-  local result = reaper.ExecProcess(cmd, 0)
-  if not result then
-    msg("Couldn’t run curl to upload the file.")
-    return
+    shell_quote(url),
+    "2>&1" -- include curl's own error messages (e.g. can't connect)
+  }
+  local cmd = table.concat(parts, " ")
+  local log_file = out_dir .. "/music-projects-upload.log"
+
+  -- io.popen always runs through the system shell, so quoting and spaces behave predictably.
+  local output = ""
+  local pipe = io.popen(cmd)
+  if pipe then
+    output = pipe:read("*a") or ""
+    pipe:close()
   end
-  -- ExecProcess returns "<exit code>\n<output>"; curl's output ends with the HTTP status.
-  local output = result:gsub("^%-?%d+\n", "")
-  local status = tonumber(output:match("(%d%d%d)%s*$") or "")
-  local body = output:gsub("%d%d%d%s*$", "")
+
+  local code, redirect = output:match("MP_STATUS:(%d+) ?([^\n]*)%s*$")
+  local status = tonumber(code or "")
+  local body = (output:gsub("\n?MP_STATUS:[^\n]*%s*$", "")):gsub("^%s+", ""):gsub("%s+$", "")
+
+  -- Keep a log of the last upload (token hidden) to make problems easy to diagnose.
+  local log = io.open(log_file, "w")
+  if log then
+    log:write(os.date("%Y-%m-%d %H:%M:%S"), "\n")
+    log:write("command: ", (cmd:gsub("Bearer [^'\"]+", "Bearer mp_…")), "\n")
+    log:write("status: ", tostring(status), "\n")
+    log:write("output:\n", output, "\n")
+    log:close()
+  end
 
   if status == 200 then
     local project = body:match('"project":%s*{[^}]-"name":%s*"(.-)"') or "?"
     local track = body:match('"track":%s*{[^}]-"title":%s*"(.-)"') or project_name
     msg("Uploaded " .. project_name .. "." .. ext .. "\n" .. project .. " → " .. track, "Music Projects — uploaded")
+    return
+  end
+
+  local why
+  if not pipe or output == "" then
+    why = "curl couldn’t be run, or returned nothing."
+  elseif not status or status == 0 then
+    -- No HTTP response at all: curl's own message explains (DNS, TLS, refused…).
+    why = "Couldn’t reach " .. server .. "\n\n" .. body
+  elseif status >= 300 and status < 400 then
+    why = "The server redirected the upload" .. ((redirect or "") ~= "" and (" to " .. redirect) or "") ..
+      ".\nThe server address is probably slightly off (http vs https, or www); use the exact address you open the app at."
+    reaper.DeleteExtState(SECTION, "server", true)
+    why = why .. "\n\nRun the script again to re-enter the server address."
   else
-    local why = body:match('"message":%s*"(.-)"') or body
+    why = body:match('"message":%s*"(.-)"') or (body ~= "" and body or "(empty response)")
+    if #why > 500 then why = why:sub(1, 500) .. "…" end
     if status == 401 then
       reaper.DeleteExtState(SECTION, "token", true)
       why = why .. "\n\nThe API token was rejected. Run the script again to enter a new one."
+    elseif status == 404 and not body:match('"message"') then
+      why = "The server at " .. server .. " doesn’t have the upload API. Check the address (and that the app is up to date)."
     end
-    msg("Upload failed (" .. tostring(status or "no response") .. "):\n" .. why, "Music Projects — upload failed")
   end
+  msg("Upload failed" .. (status and status > 0 and (" (HTTP " .. status .. ")") or "") .. ":\n" .. why ..
+    "\n\nDetails: " .. log_file, "Music Projects — upload failed")
 end
 
 main()
