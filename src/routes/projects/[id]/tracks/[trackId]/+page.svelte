@@ -8,6 +8,9 @@
 	import StatusSelect from '#lib/components/StatusSelect.svelte';
 	import DateChip from '#lib/components/DateChip.svelte';
 	import { autogrow } from '#lib/actions.ts';
+	import { openerUrl, projectPath } from '#lib/daw.ts';
+	import { page } from '$app/state';
+	import FolderOpen from '@lucide/svelte/icons/folder-open';
 	import TrackAudio from '#lib/components/tracks/TrackAudio.svelte';
 	import CommentsPanel from '#lib/components/comments/CommentsPanel.svelte';
 	import TodosPanel from '#lib/components/todos/TodosPanel.svelte';
@@ -18,6 +21,11 @@
 	const t = $derived(d.track);
 	const canEdit = $derived(d.role !== 'viewer');
 	const base = $derived(`/projects/${t.projectId}`);
+	// "Open in DAW" (Settings): <folder>/<Track Name>/<Track Name><ext>, opened by the Mac helper.
+	const userSettings = $derived(page.data.user?.settings ?? {});
+	const dawPath = $derived(
+		userSettings.dawEnabled === false ? null : projectPath(userSettings.projectFolder, userSettings.projectExt, t.title)
+	);
 
 	let title = $state('');
 	let description = $state('');
@@ -89,6 +97,9 @@
 		</div>
 		<!-- Desktop actions sit beside the title… -->
 		<div class="hidden items-center gap-1 sm:flex">
+			{#if dawPath}
+				<a class="btn btn-outline" href={openerUrl(dawPath)} title={dawPath}><FolderOpen size={16} /> Open Project</a>
+			{/if}
 			<button class="btn btn-accent" disabled={!d.audio} title={d.audio ? 'Open in the Listen tab' : 'Upload audio first'} onclick={listen}>
 				<Headphones size={16} /> Listen
 			</button>
@@ -100,6 +111,9 @@
 	<!-- …on phones, details and actions get full-width rows. -->
 	<div class="mt-3 flex flex-wrap items-center gap-2 sm:hidden">{@render meta()}</div>
 	<div class="mt-4 flex items-center gap-2 sm:hidden">
+		{#if dawPath}
+			<a class="btn btn-outline h-10" href={openerUrl(dawPath)} title={dawPath} aria-label="Open Project"><FolderOpen size={17} /></a>
+		{/if}
 		<button class="btn btn-accent h-10 flex-1" disabled={!d.audio} onclick={listen}><Headphones size={16} /> Listen</button>
 		{#if canEdit}
 			<button class="icon-btn size-10 hover:text-danger" aria-label="Delete track" onclick={del}><Trash2 size={17} /></button>

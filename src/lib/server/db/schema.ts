@@ -17,6 +17,12 @@ export type UserSettings = {
 	musicService?: 'apple' | 'spotify';
 	/** Player timeline style: a waveform (default) or the plain line. */
 	timeline?: 'line' | 'waveform';
+	/** "Open in DAW": on unless turned off; needs folder + extension to show the button. */
+	dawEnabled?: boolean;
+	/** e.g. /Users/me/Documents/REAPER Media/PROJECTS/ */
+	projectFolder?: string;
+	/** e.g. .rpp */
+	projectExt?: string;
 };
 
 export const users = sqliteTable('users', {

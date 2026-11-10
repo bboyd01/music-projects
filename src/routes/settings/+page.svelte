@@ -9,6 +9,7 @@
 	import KeyRound from '@lucide/svelte/icons/key-round';
 	import LogOut from '@lucide/svelte/icons/log-out';
 	import { api } from '#lib/api.ts';
+	import { normalizeExt, projectPath } from '#lib/daw.ts';
 	import { setMotion, setTheme } from '#lib/state/ui.svelte.ts';
 	import StatusManager from '#lib/components/settings/StatusManager.svelte';
 	import BackgroundPicker from '#lib/components/settings/BackgroundPicker.svelte';
@@ -19,7 +20,7 @@
 	const statuses = $derived((page.data.statuses ?? []) as Status[]);
 	const settings = $derived(me.settings ?? {});
 
-	async function save(patch: Record<string, string>) {
+	async function save(patch: Record<string, string | boolean>) {
 		if (patch.theme) setTheme(patch.theme as 'system');
 		if (patch.motion) setMotion(patch.motion as 'on');
 		await api('PATCH', '/api/me/settings', patch);
@@ -36,6 +37,23 @@
 		{ value: 'mobile-off', label: 'Off on mobile' },
 		{ value: 'off', label: 'Off' }
 	];
+	const onOff = [
+		{ value: 'on', label: 'On' },
+		{ value: 'off', label: 'Off' }
+	];
+	const ext = $derived(normalizeExt(settings.projectExt ?? ''));
+	const examplePath = $derived(projectPath(settings.projectFolder, settings.projectExt, 'New Sketch 14'));
+	const installCmd = $derived(`curl -fsSL '${page.url.origin}/opener/install.sh' | bash -s -- ${ext || '.rpp'}`);
+	let copied = $state(false);
+	async function copyInstall() {
+		try {
+			await navigator.clipboard.writeText(installCmd);
+			copied = true;
+			setTimeout(() => (copied = false), 1600);
+		} catch {
+			/* clipboard unavailable — the command is selectable */
+		}
+	}
 	const timelines = [
 		{ value: 'line', label: 'Line' },
 		{ value: 'waveform', label: 'Waveform' }
@@ -118,6 +136,62 @@
 					<p class="text-[12.5px] text-fg-3">Falls back to a search when a direct link isn’t available.</p>
 				</div>
 				{@render segmented(services, settings.musicService ?? 'apple', (v) => save({ musicService: v }), 'Music service')}
+			</div>
+		</section>
+
+		<section class="card enter p-5">
+			<h2 class="serif mb-1 text-2xl">Open in DAW</h2>
+			<p class="mb-4 text-[12.5px] text-fg-3">Adds an Open Project button to each track that opens its project file in your DAW.</p>
+			<div class="space-y-4">
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<p class="font-medium">Open Project button</p>
+					{@render segmented(onOff, settings.dawEnabled === false ? 'off' : 'on', (v) => save({ dawEnabled: v === 'on' }), 'Open Project button')}
+				</div>
+				{#if settings.dawEnabled !== false}
+					<div class="grid gap-3 sm:grid-cols-[1fr_9rem]">
+						<label class="block">
+							<span class="mb-1 block text-[12px] text-fg-2">Project folder</span>
+							<input
+								class="input font-mono text-[12.5px]"
+								placeholder="/Users/you/Documents/REAPER Media/PROJECTS/"
+								value={settings.projectFolder ?? ''}
+								spellcheck="false"
+								autocapitalize="none"
+								onchange={(e) => save({ projectFolder: e.currentTarget.value })}
+							/>
+						</label>
+						<label class="block">
+							<span class="mb-1 block text-[12px] text-fg-2">File extension</span>
+							<input
+								class="input font-mono text-[12.5px]"
+								placeholder=".rpp"
+								value={settings.projectExt ?? ''}
+								spellcheck="false"
+								autocapitalize="none"
+								onchange={(e) => save({ projectExt: e.currentTarget.value })}
+							/>
+						</label>
+					</div>
+					<div class="rounded-xl bg-hover px-3 py-2.5">
+						<p class="eyebrow mb-1">Example: a track called “New Sketch 14”</p>
+						<p class="font-mono text-[12px] break-all text-fg-2">
+							{examplePath ?? 'Set a folder and extension to see the path.'}
+						</p>
+					</div>
+					<div>
+						<p class="mb-1.5 text-[13px] font-medium">One-time setup on your Mac</p>
+						<p class="mb-2 text-[12.5px] text-fg-3">
+							Browsers can’t open local files directly, so a tiny helper (no Dock icon) handles the button. Open Terminal and run:
+						</p>
+						<div class="flex items-stretch gap-2">
+							<code class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[12px] whitespace-nowrap">{installCmd}</code>
+							<button class="btn btn-outline h-auto" onclick={copyInstall}>{copied ? 'Copied' : 'Copy'}</button>
+						</div>
+						<p class="mt-2 text-[12px] text-fg-3">
+							It only opens existing {ext || '.rpp'} files. The first time, your browser asks to allow opening “Music Projects Opener”. Run it again if you change the extension; delete ~/Applications/Music Projects Opener.app to remove it.
+						</p>
+					</div>
+				{/if}
 			</div>
 		</section>
 
