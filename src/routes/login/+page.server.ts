@@ -1,11 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { count, eq } from 'drizzle-orm';
+import { count, eq, or } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
 import { createSession, hashPassword, verifyPassword } from '#lib/server/auth.ts';
 
 export function load({ locals }) {
 	if (locals.user) redirect(303, '/projects');
-	const [{ n }] = db.select({ n: count() }).from(schema.users).all();
+	const [{ n }] = db.select({ n: count() }).from(schema.users).where(eq(schema.users.readOnly, false)).all();
 	return { noUsers: n === 0 };
 }
 
@@ -17,12 +17,17 @@ export const actions = {
 		const form = await request.formData();
 		const email = String(form.get('email') ?? '').trim().toLowerCase();
 		const password = String(form.get('password') ?? '');
-		if (!email || !password) return fail(400, { email, message: 'Enter your email and password.' });
+		if (!email || !password) return fail(400, { email, message: 'Enter your email or username, and password.' });
 
-		const user = db.select().from(schema.users).where(eq(schema.users.email, email)).get();
+		const handle = email.replace(/^@/, '');
+		const user = db
+			.select()
+			.from(schema.users)
+			.where(or(eq(schema.users.email, email), eq(schema.users.username, handle)))
+			.get();
 		dummyHash ??= hashPassword('not-a-real-password');
 		const ok = await verifyPassword(user?.passwordHash ?? (await dummyHash), password);
-		if (!user || !ok) return fail(400, { email, message: 'That email and password don’t match.' });
+		if (!user || !ok) return fail(400, { email, message: 'Those sign-in details don’t match.' });
 
 		createSession(user.id, cookies, url.protocol === 'https:');
 		const next = url.searchParams.get('next');

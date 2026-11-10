@@ -45,13 +45,21 @@ export function projectBackdrop(project: schema.Project): Backdrop {
 }
 
 export function listProjects(userId: string) {
-	const rows = db
-		.select({ project: schema.projects, role: schema.projectMembers.role })
-		.from(schema.projectMembers)
-		.innerJoin(schema.projects, eq(schema.projects.id, schema.projectMembers.projectId))
-		.where(eq(schema.projectMembers.userId, userId))
-		.orderBy(desc(schema.projects.createdAt))
-		.all();
+	const readOnly = !!db.select({ r: schema.users.readOnly }).from(schema.users).where(eq(schema.users.id, userId)).get()?.r;
+	const rows = readOnly
+		? db
+				.select({ project: schema.projects })
+				.from(schema.projects)
+				.orderBy(desc(schema.projects.createdAt))
+				.all()
+				.map((r) => ({ project: r.project, role: 'viewer' as const }))
+		: db
+				.select({ project: schema.projects, role: schema.projectMembers.role })
+				.from(schema.projectMembers)
+				.innerJoin(schema.projects, eq(schema.projects.id, schema.projectMembers.projectId))
+				.where(eq(schema.projectMembers.userId, userId))
+				.orderBy(desc(schema.projects.createdAt))
+				.all();
 	const ids = rows.map((r) => r.project.id);
 	const counts = ids.length
 		? db
@@ -177,6 +185,8 @@ export type CommentView = {
 	createdAt: number;
 	author: { id: string; name: string; username: string };
 	hasTodo: boolean;
+	resolvedAt: number | null;
+	resolvedBy: string | null;
 };
 
 export function trackComments(trackId: string): CommentView[] {
@@ -188,8 +198,19 @@ export function trackComments(trackId: string): CommentView[] {
 		.from(schema.comments)
 		.innerJoin(schema.users, eq(schema.users.id, schema.comments.authorId))
 		.where(eq(schema.comments.trackId, trackId))
-		.orderBy(desc(schema.comments.createdAt))
+		.orderBy(desc(schema.comments.createdAt), desc(sql`comments.rowid`))
 		.all();
+	const resolverIds = [...new Set(rows.map((r) => r.c.resolvedBy).filter((x): x is string => !!x))];
+	const resolvers = new Map(
+		resolverIds.length
+			? db
+					.select({ id: schema.users.id, name: schema.users.name })
+					.from(schema.users)
+					.where(inArray(schema.users.id, resolverIds))
+					.all()
+					.map((u) => [u.id, u.name])
+			: []
+	);
 	const ids = rows.map((r) => r.c.id);
 	const withTodo = new Set(
 		ids.length
@@ -209,7 +230,9 @@ export function trackComments(trackId: string): CommentView[] {
 		timestampSec: c.timestampSec,
 		createdAt: c.createdAt,
 		author,
-		hasTodo: withTodo.has(c.id)
+		hasTodo: withTodo.has(c.id),
+		resolvedAt: c.resolvedAt,
+		resolvedBy: c.resolvedBy ? (resolvers.get(c.resolvedBy) ?? 'someone') : null
 	}));
 }
 
@@ -243,7 +266,7 @@ export function trackChecklists(trackId: string): ChecklistView[] {
 				lists.map((l) => l.id)
 			)
 		)
-		.orderBy(asc(schema.todos.createdAt))
+		.orderBy(asc(schema.todos.createdAt), asc(sql`todos.rowid`))
 		.all();
 	return lists.map((l) => ({
 		id: l.id,

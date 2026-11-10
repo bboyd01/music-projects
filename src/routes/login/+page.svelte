@@ -23,8 +23,8 @@
 			}}
 		>
 			<label class="block">
-				<span class="mb-1.5 block text-[12px] text-fg-2">Email</span>
-				<input class="input h-10" type="email" name="email" autocomplete="email" required value={form?.email ?? ''} />
+				<span class="mb-1.5 block text-[12px] text-fg-2">Email or username</span>
+				<input class="input h-10" type="text" name="email" autocomplete="username" autocapitalize="none" spellcheck="false" required value={form?.email ?? ''} />
 			</label>
 			<label class="block">
 				<span class="mb-1.5 block text-[12px] text-fg-2">Password</span>

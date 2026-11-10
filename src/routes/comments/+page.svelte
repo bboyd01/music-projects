@@ -5,6 +5,7 @@
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import Check from '@lucide/svelte/icons/check';
 	import MessageSquare from '@lucide/svelte/icons/message-square';
+	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import Popover from '#lib/components/Popover.svelte';
 	import TrackIcon from '#lib/components/TrackIcon.svelte';
 	import CommentBody from '#lib/components/comments/CommentBody.svelte';
@@ -81,6 +82,7 @@
 										{formatTime(c.timestampSec)}
 									</button>
 								{/if}
+								{#if c.resolvedAt}<span class="inline-flex items-center gap-1 text-accent" title="Resolved"><CircleCheck size={13} /> Resolved</span>{/if}
 								<span class="ml-auto text-fg-3">{relativeTime(c.createdAt)}</span>
 							</header>
 							<CommentBody body={c.body} />

@@ -1,12 +1,43 @@
 import { fail } from '@sveltejs/kit';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { config } from '#lib/server/config.ts';
 import { and, asc, eq, ne, or } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
 import { newId } from '#lib/server/id.ts';
 import { destroyUserSessions, hashPassword, verifyPassword } from '#lib/server/auth.ts';
 import { requireAdmin } from '#lib/server/access.ts';
 
-export function load({ locals }) {
+async function folderUsage(dir: string) {
+	let bytes = 0;
+	let files = 0;
+	try {
+		for (const name of await fs.readdir(dir)) {
+			const st = await fs.stat(path.join(dir, name));
+			if (st.isFile()) {
+				bytes += st.size;
+				files++;
+			}
+		}
+	} catch {
+		/* folder may not exist yet */
+	}
+	return { bytes, files };
+}
+
+async function storageUsage() {
+	const [audio, images] = await Promise.all([folderUsage(config.audioDir), folderUsage(config.imageDir)]);
+	let database = 0;
+	for (const f of ['app.db', 'app.db-wal']) {
+		database += await fs.stat(path.join(config.dataDir, f)).then((s) => s.size, () => 0);
+	}
+	return { audio, images, database };
+}
+
+export async function load({ locals }) {
 	const me = locals.user!;
+	// Admins first, then read-only accounts, then everyone else (by name).
+	const rank = (u: { isAdmin: boolean; readOnly: boolean }) => (u.isAdmin ? 0 : u.readOnly ? 1 : 2);
 	return {
 		users: me.isAdmin
 			? db
@@ -15,12 +46,15 @@ export function load({ locals }) {
 						name: schema.users.name,
 						email: schema.users.email,
 						username: schema.users.username,
-						isAdmin: schema.users.isAdmin
+						isAdmin: schema.users.isAdmin,
+						readOnly: schema.users.readOnly
 					})
 					.from(schema.users)
 					.orderBy(asc(schema.users.name))
 					.all()
+					.sort((a, b) => rank(a) - rank(b))
 			: [],
+		storage: me.isAdmin ? await storageUsage() : null,
 		globalWebhook: !!process.env.DISCORD_WEBHOOK_URL
 	};
 }

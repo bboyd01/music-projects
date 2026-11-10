@@ -15,6 +15,6 @@ export async function POST({ params, request, locals }) {
 		.where(eq(schema.checklists.trackId, params.id))
 		.all();
 	const id = newId();
-	db.insert(schema.checklists).values({ id, trackId: params.id, title, sortOrder: max + 1 }).run();
+	db.insert(schema.checklists).values({ id, trackId: params.id, title, sortOrder: max + 1, createdAt: Date.now() }).run();
 	return json({ id }, { status: 201 });
 }

@@ -10,15 +10,26 @@ function load(id: string) {
 	return c;
 }
 
+/** Edit your own comment ({ body }), or resolve/unresolve it ({ resolved }). */
 export async function PATCH({ params, request, locals }) {
 	const c = load(params.id);
-	const { user } = requireProjectAccess(locals.user, c.projectId, 'viewer');
-	if (c.authorId !== user.id) error(403, 'You can only edit your own comments');
+	const { user, role } = requireProjectAccess(locals.user, c.projectId, 'viewer');
 	const body = await readJson(request);
-	db.update(schema.comments)
-		.set({ body: str(body.body, 'Comment', { min: 1, max: 5000 }) })
-		.where(eq(schema.comments.id, c.id))
-		.run();
+	if (typeof body.resolved === 'boolean') {
+		// Editors and owners resolve feedback; authors can resolve their own.
+		if (c.authorId !== user.id && !roleAllows(role, 'editor')) error(403, 'Only editors can resolve comments');
+		db.update(schema.comments)
+			.set(body.resolved ? { resolvedAt: Date.now(), resolvedBy: user.id } : { resolvedAt: null, resolvedBy: null })
+			.where(eq(schema.comments.id, c.id))
+			.run();
+	}
+	if (body.body !== undefined) {
+		if (c.authorId !== user.id) error(403, 'You can only edit your own comments');
+		db.update(schema.comments)
+			.set({ body: str(body.body, 'Comment', { min: 1, max: 5000 }) })
+			.where(eq(schema.comments.id, c.id))
+			.run();
+	}
 	return json({ ok: true });
 }
 

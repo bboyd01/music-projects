@@ -40,6 +40,9 @@
 		{ value: 'spotify', label: 'Spotify' }
 	];
 
+	const fmtBytes = (b: number) =>
+		b < 1024 * 1024 ? `${(b / 1024).toFixed(0)} KB` : b < 1024 ** 3 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${(b / 1024 ** 3).toFixed(2)} GB`;
+
 	const msg = (section: string) => (form?.section === section ? form : null);
 	const submit = () => async ({ update }: { update: (o?: { reset?: boolean }) => Promise<void> }) => update({ reset: false });
 </script>
@@ -107,12 +110,18 @@
 			</div>
 		</section>
 
+		{#if me.readOnly}
+			<section class="card enter p-5">
+				<h2 class="serif mb-1 text-2xl">Read-only account</h2>
+				<p class="text-[13px] text-fg-2">You can browse and listen to every project, but not change anything. Appearance and music-link settings above still apply to you.</p>
+			</section>
+		{:else}
 		<section class="card enter p-5">
 			<h2 class="serif mb-4 text-2xl">Profile</h2>
 			<form method="POST" action="?/profile" class="grid gap-3 sm:grid-cols-2" use:enhance={submit}>
 				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Name</span><input class="input" name="name" value={me.name} required /></label>
 				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Username (for @mentions)</span><input class="input" name="username" value={me.username} required /></label>
-				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Email</span><input class="input" type="email" name="email" value={me.email} required /></label>
+				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Email</span><input class="input" type="email" name="email" value={me.email ?? ''} required /></label>
 				<label class="block">
 					<span class="mb-1 block text-[12px] text-fg-2">Discord user ID <span class="text-fg-3">(optional)</span></span>
 					<input class="input" name="discordUserId" value={me.discordUserId ?? ''} inputmode="numeric" placeholder="Pings you on Discord when mentioned" />
@@ -135,6 +144,7 @@
 				</div>
 			</form>
 		</section>
+		{/if}
 
 		{#if me.isAdmin}
 			<section class="card enter p-5">
@@ -160,10 +170,14 @@
 						<li class="flex flex-wrap items-center gap-3 py-2.5">
 							<span class="flex size-8 items-center justify-center rounded-full bg-hover text-[12px] font-semibold">{u.name[0]?.toUpperCase()}</span>
 							<div class="min-w-0 flex-1 leading-tight">
-								<p class="truncate font-medium">{u.name} {#if u.isAdmin}<span class="chip ml-1 h-5 text-[11px]">Admin</span>{/if}</p>
-								<p class="truncate text-[12px] text-fg-3">@{u.username} · {u.email}</p>
+								<p class="truncate font-medium">
+									{u.name}
+									{#if u.isAdmin}<span class="chip ml-1 h-5 text-[11px]">Admin</span>{/if}
+									{#if u.readOnly}<span class="chip ml-1 h-5 text-[11px]">Read-only</span>{/if}
+								</p>
+								<p class="truncate text-[12px] text-fg-3">@{u.username}{u.email ? ` · ${u.email}` : ''}{u.readOnly ? ' · password “test” · INCLUDE_TEST_USER' : ''}</p>
 							</div>
-							{#if u.id !== me.id}
+							{#if u.id !== me.id && !u.readOnly}
 								<form
 									method="POST"
 									action="?/resetPassword"
@@ -205,6 +219,22 @@
 					</div>
 				</form>
 			</section>
+
+			{#if data.storage}
+				{@const s = data.storage}
+				<section class="card enter p-5">
+					<h2 class="serif mb-4 text-2xl">Storage</h2>
+					<dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+						{#each [{ label: 'Audio', bytes: s.audio.bytes, note: `${s.audio.files} ${s.audio.files === 1 ? 'file' : 'files'}` }, { label: 'Images', bytes: s.images.bytes, note: `${s.images.files} ${s.images.files === 1 ? 'file' : 'files'}` }, { label: 'Database', bytes: s.database, note: 'comments, todos…' }, { label: 'Total', bytes: s.audio.bytes + s.images.bytes + s.database, note: 'in /data' }] as row (row.label)}
+							<div class="rounded-xl bg-hover p-3">
+								<dt class="eyebrow mb-1">{row.label}</dt>
+								<dd class="tabular text-xl font-semibold">{fmtBytes(row.bytes)}</dd>
+								<dd class="text-[12px] text-fg-3">{row.note}</dd>
+							</div>
+						{/each}
+					</dl>
+				</section>
+			{/if}
 
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">Discord</h2>

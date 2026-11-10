@@ -15,6 +15,9 @@ services:
       ADMIN_NAME: ${ADMIN_NAME:-Admin}
       # Optional fallback Discord webhook for projects without their own.
       DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL:-}
+      # Read-only demo account (username "test", password "test", sees every project).
+      # Anyone who can reach the site can sign in with it; set to false to remove it.
+      INCLUDE_TEST_USER: ${INCLUDE_TEST_USER:-true}
       # Largest audio upload in MB.
       MAX_AUDIO_MB: ${MAX_AUDIO_MB:-500}
     volumes:

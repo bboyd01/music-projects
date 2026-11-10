@@ -195,6 +195,10 @@
 		font-optical-sizing: auto;
 		letter-spacing: -0.01em;
 	}
+	/* Section headings on track and listen views: larger than .eyebrow. */
+	.section-title {
+		@apply text-[13px] font-semibold tracking-[0.09em] text-fg-2 uppercase;
+	}
 	.tabular {
 		font-variant-numeric: tabular-nums;
 	}

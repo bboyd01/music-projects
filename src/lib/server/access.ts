@@ -18,6 +18,11 @@ export function requireAdmin(user: SafeUser | null | undefined): SafeUser {
 }
 
 export function projectRole(userId: string, projectId: string): Role | null {
+	if (isReadOnly(userId)) {
+		// Read-only accounts can look at every project, as a viewer.
+		const p = db.select({ id: schema.projects.id }).from(schema.projects).where(eq(schema.projects.id, projectId)).get();
+		return p ? 'viewer' : null;
+	}
 	const row = db
 		.select({ role: schema.projectMembers.role })
 		.from(schema.projectMembers)
@@ -50,7 +55,12 @@ export function requireTrackAccess(
 	return { ...access, track };
 }
 
+function isReadOnly(userId: string) {
+	return !!db.select({ r: schema.users.readOnly }).from(schema.users).where(eq(schema.users.id, userId)).get()?.r;
+}
+
 export function accessibleProjectIds(userId: string): string[] {
+	if (isReadOnly(userId)) return db.select({ id: schema.projects.id }).from(schema.projects).all().map((r) => r.id);
 	return db
 		.select({ id: schema.projectMembers.projectId })
 		.from(schema.projectMembers)

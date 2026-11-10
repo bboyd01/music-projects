@@ -32,7 +32,7 @@ export async function POST({ params, request, locals }) {
 	const id = newId();
 	db.transaction((tx) => {
 		tx.insert(schema.comments)
-			.values({ id, projectId: track.projectId, trackId: track.id, authorId: user.id, body: text, timestampSec })
+			.values({ id, projectId: track.projectId, trackId: track.id, authorId: user.id, body: text, timestampSec, createdAt: Date.now() })
 			.run();
 		if (mentioned.length) {
 			tx.insert(schema.commentMentions).values(mentioned.map((m) => ({ commentId: id, userId: m.id }))).run();

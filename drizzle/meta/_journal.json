@@ -15,6 +15,13 @@
       "when": 1794327278937,
       "tag": "0001_separate_inspirations_connections",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1794328882055,
+      "tag": "0002_resolve_comments_readonly_users",
+      "breakpoints": true
     }
   ]
 }

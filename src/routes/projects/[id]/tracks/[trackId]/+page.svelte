@@ -107,15 +107,16 @@
 	</div>
 </header>
 
-<div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
-	<div class="space-y-6">
+<!-- Row 1: audio + description | comments -->
+<div class="grid gap-8 lg:grid-cols-2">
+	<div class="space-y-8">
 		<section class="enter">
-			<h3 class="eyebrow mb-2">Audio</h3>
+			<h3 class="section-title mb-3">Audio</h3>
 			<TrackAudio audio={d.audio} trackId={t.id} projectId={t.projectId} {canEdit} onchange={refresh} />
 		</section>
 
 		<section class="enter">
-			<h3 class="eyebrow mb-2">Description</h3>
+			<h3 class="section-title mb-3">Description</h3>
 			{#if canEdit}
 				<textarea
 					class="input min-h-24"
@@ -128,21 +129,26 @@
 				<p class="whitespace-pre-wrap text-fg-2">{t.description || '—'}</p>
 			{/if}
 		</section>
+	</div>
 
-		<section class="enter">
-			<h3 class="eyebrow mb-2">Comments <span class="tabular ml-1 text-fg-3">{d.comments.length || ''}</span></h3>
+	<section class="enter min-w-0">
+		<h3 class="section-title mb-3">Comments <span class="tabular ml-1 font-normal text-fg-3">{d.comments.length || ''}</span></h3>
+		<div class="card p-4">
 			<CommentsPanel comments={d.comments} trackId={t.id} projectId={t.projectId} members={d.members} role={d.role} onchange={refresh} />
-		</section>
-	</div>
+		</div>
+	</section>
+</div>
 
-	<div class="space-y-6">
-		<section class="card enter p-4">
-			<h3 class="eyebrow mb-3">Todo</h3>
+<!-- Row 2: todo | inspirations -->
+<div class="mt-10 grid gap-8 lg:grid-cols-2">
+	<section class="enter min-w-0">
+		<h3 class="section-title mb-3">Todo</h3>
+		<div class="card p-4">
 			<TodosPanel checklists={d.checklists} trackId={t.id} projectId={t.projectId} {canEdit} onchange={refresh} />
-		</section>
-		<section class="enter">
-			<h3 class="eyebrow mb-2">Inspirations</h3>
-			<InspirationList items={d.inspirations} projectId={t.projectId} trackId={t.id} {canEdit} onchange={refresh} />
-		</section>
-	</div>
+		</div>
+	</section>
+	<section class="enter min-w-0">
+		<h3 class="section-title mb-3">Inspirations</h3>
+		<InspirationList items={d.inspirations} projectId={t.projectId} trackId={t.id} {canEdit} onchange={refresh} />
+	</section>
 </div>
