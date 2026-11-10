@@ -115,7 +115,31 @@ curl -fsSL 'https://YOUR-SERVER/opener/install.sh' | bash -s -- .rpp
 - **Changing or removing it:** run the command again after changing the extension; delete the app to remove it.
 - **Turning the button off:** use the switch in the same Settings card.
 
+## Upload API & REAPER
 
+Create a personal API token in **Settings → API & REAPER**. It's shown once and stored hashed; revoke it there any time. Then upload a WAV or MP3 as the raw request body:
+
+```bash
+curl -X POST -H "Authorization: Bearer mp_…" -H "Content-Type: audio/mpeg" \
+  --data-binary @"New Sketch 14.mp3" \
+  "https://YOUR-SERVER/api/v1/audio?filename=New%20Sketch%2014.mp3"
+```
+
+**Matching:** the file name without its extension is matched to a track title in projects you can edit. Case, extra spaces and macOS Unicode file-name forms are ignored. The match replaces that track's audio, waveform included.
+
+**Responses:**
+
+| Status | Meaning |
+|---|---|
+| 200 | Uploaded; the JSON includes the project, track and link |
+| 404 | No track with that name |
+| 409 | Several tracks match; add `&project=<name or id>` |
+| 415 | Not a WAV/MP3 file, or sent as a form upload (send the raw body) |
+| 401 | Missing or revoked token |
+
+**REAPER:** download the ReaScript from the same Settings card. It renders the region under the edit cursor using your saved render format (set MP3 once in File → Render…), names the file after the project, uploads it, and restores your render settings. The first time it runs, it asks for the server address and token.
+
+## Discord
 
 - **Per project:** Project → Settings → Discord → paste a channel webhook URL (Discord: *Channel settings → Integrations → Webhooks*).
 - **Server-wide fallback:** `DISCORD_WEBHOOK_URL`.
