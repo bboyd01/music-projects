@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { db, schema } from './db';
 import { imageUrl } from './images';
 import type { AudioData, ImageData, Role, TextData } from './db/schema';
@@ -26,7 +26,13 @@ export function projectBackdrop(project: schema.Project): Backdrop {
 	const imgs = db
 		.select({ id: schema.inspirations.id, data: schema.inspirations.data })
 		.from(schema.inspirations)
-		.where(and(eq(schema.inspirations.projectId, project.id), eq(schema.inspirations.type, 'image')))
+		.where(
+			and(
+				eq(schema.inspirations.projectId, project.id),
+				isNull(schema.inspirations.trackId),
+				eq(schema.inspirations.type, 'image')
+			)
+		)
 		.orderBy(asc(schema.inspirations.createdAt))
 		.all();
 	const pinned = project.coverInspirationId ? imgs.find((i) => i.id === project.coverInspirationId) : undefined;
@@ -294,10 +300,12 @@ export function toInspirationView(i: schema.Inspiration): InspirationView {
 	return { ...base, type: 'text', data: i.data as TextData };
 }
 
+/** Project canvas items (trackId null) or one track's items — the two never mix. */
 export function listInspirations(projectId: string, trackId?: string): InspirationView[] {
-	const where = trackId
-		? and(eq(schema.inspirations.projectId, projectId), eq(schema.inspirations.trackId, trackId))
-		: eq(schema.inspirations.projectId, projectId);
+	const where = and(
+		eq(schema.inspirations.projectId, projectId),
+		trackId ? eq(schema.inspirations.trackId, trackId) : isNull(schema.inspirations.trackId)
+	);
 	return db
 		.select()
 		.from(schema.inspirations)
@@ -306,6 +314,22 @@ export function listInspirations(projectId: string, trackId?: string): Inspirati
 		.all()
 		.map(toInspirationView);
 }
+
+export function listConnections(projectId: string) {
+	return db
+		.select({
+			id: schema.connections.id,
+			fromId: schema.connections.fromId,
+			fromSide: schema.connections.fromSide,
+			toId: schema.connections.toId,
+			toSide: schema.connections.toSide,
+			style: schema.connections.style
+		})
+		.from(schema.connections)
+		.where(eq(schema.connections.projectId, projectId))
+		.all();
+}
+export type ConnectionView = ReturnType<typeof listConnections>[number];
 
 export function trackAudio(trackId: string) {
 	const a = db.select().from(schema.audioFiles).where(eq(schema.audioFiles.trackId, trackId)).get();

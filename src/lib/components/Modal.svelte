@@ -37,7 +37,7 @@
 			transition:fade
 		></button>
 		<div
-			class="glass-blur relative flex max-h-[88dvh] w-full flex-col rounded-t-2xl sm:rounded-2xl"
+			class="glass-popup relative flex max-h-[88dvh] w-full flex-col rounded-t-2xl sm:rounded-2xl"
 			style:max-width="{width}px"
 			role="dialog"
 			aria-modal="true"

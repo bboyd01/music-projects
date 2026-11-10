@@ -4,6 +4,7 @@ import { db, schema } from '#lib/server/db/index.ts';
 import { requireTrackAccess } from '#lib/server/access.ts';
 import { defined, nullableStr, optDate, optStr, readJson } from '#lib/server/http.ts';
 import { deleteAudio } from '#lib/server/audio.ts';
+import { deleteImage } from '#lib/server/images.ts';
 
 export async function PATCH({ params, request, locals }) {
 	requireTrackAccess(locals.user, params.id, 'editor');
@@ -29,8 +30,14 @@ export async function PATCH({ params, request, locals }) {
 export async function DELETE({ params, locals }) {
 	requireTrackAccess(locals.user, params.id, 'editor');
 	const audio = db.select().from(schema.audioFiles).where(eq(schema.audioFiles.trackId, params.id)).get();
-	// Inspirations stay on the project canvas (track_id is set null), so only audio is removed.
+	// The track's own inspirations are deleted with it (cascade); remove their files too.
+	const insp = db.select().from(schema.inspirations).where(eq(schema.inspirations.trackId, params.id)).all();
 	db.delete(schema.tracks).where(eq(schema.tracks.id, params.id)).run();
 	await deleteAudio(audio?.path);
+	for (const i of insp) {
+		const d = i.data as { file?: string; thumb?: string };
+		await deleteImage(d.file);
+		await deleteImage(d.thumb);
+	}
 	return json({ ok: true });
 }

@@ -32,15 +32,19 @@
 			: [])
 	]);
 
+	// Empty statuses collapse to slim strips so the columns with tracks get the room.
+	const colsDesktop = $derived(columns.map((c) => (c.tracks.length ? 'minmax(150px, 1fr)' : '44px')).join(' '));
+	const colsMobile = $derived(columns.map((c) => (c.tracks.length ? '272px' : '44px')).join(' '));
+
 	let dragId = $state<string | null>(null);
 	let overCol = $state<string | null>(null);
 </script>
 
-<div class="scroll-thin -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-4 sm:-mx-8 sm:px-8">
+<div class="board scroll-thin pb-4" style:--cols-d={colsDesktop} style:--cols-m={colsMobile}>
 	{#each columns as col (col.status?.id ?? 'none')}
 		{@const id = col.status?.id ?? 'none'}
 		<section
-			class="column glass flex w-[272px] shrink-0 snap-start flex-col rounded-2xl"
+			class="column glass flex min-w-0 snap-start flex-col rounded-2xl"
 			class:over={overCol === id && dragId}
 			aria-label={col.status?.name ?? 'No status'}
 			ondragover={(e) => {
@@ -58,11 +62,18 @@
 				dragId = overCol = null;
 			}}
 		>
+			{#if col.tracks.length === 0}
+				<header class="flex flex-col items-center gap-2 py-3" title="{col.status?.name ?? 'No status'} (empty)">
+					<span class="size-2 shrink-0 rounded-full" style:background={col.status?.color ?? 'var(--fg-3)'}></span>
+					<h3 class="text-[12.5px] font-semibold whitespace-nowrap text-fg-2 [writing-mode:vertical-rl]">{col.status?.name ?? 'No status'}</h3>
+				</header>
+			{:else}
 			<header class="flex items-center gap-2 px-3.5 pt-3 pb-2">
-				<span class="size-2 rounded-full" style:background={col.status?.color ?? 'var(--fg-3)'}></span>
-				<h3 class="text-[13px] font-semibold">{col.status?.name ?? 'No status'}</h3>
+				<span class="size-2 shrink-0 rounded-full" style:background={col.status?.color ?? 'var(--fg-3)'}></span>
+				<h3 class="truncate text-[13px] font-semibold">{col.status?.name ?? 'No status'}</h3>
 				<span class="tabular text-[12px] text-fg-3">{col.tracks.length}</span>
 			</header>
+			{/if}
 			<div class="flex min-h-16 flex-col gap-2 px-2 pb-2">
 				{#each col.tracks as t (t.id)}
 					<a
@@ -103,6 +114,28 @@
 </div>
 
 <style>
+	/* Phones: swipe between full-size columns. */
+	.board {
+		display: grid;
+		grid-template-columns: var(--cols-m);
+		gap: 0.75rem;
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+		margin-inline: -1rem;
+		padding-inline: 1rem;
+	}
+	/* Desktop: 85% of the area beside the sidebar, centered; columns share the width
+	   and only scroll when they'd get narrower than 150px. */
+	@media (min-width: 768px) {
+		.board {
+			--area: calc(100vw - 232px);
+			width: calc(var(--area) * 0.85);
+			margin-inline: 0;
+			margin-left: calc(50% - var(--area) * 0.425);
+			padding-inline: 0;
+			grid-template-columns: var(--cols-d);
+		}
+	}
 	.column {
 		transition: background-color var(--dur-fade) var(--ease);
 	}

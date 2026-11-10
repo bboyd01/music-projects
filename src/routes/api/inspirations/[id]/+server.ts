@@ -31,18 +31,6 @@ export async function PATCH({ params, request, locals }) {
 	if (w !== undefined) update.w = w;
 	if (h !== undefined) update.h = h;
 	if (z !== undefined) update.z = Math.round(z);
-	if (body.trackId !== undefined) {
-		if (body.trackId === null || body.trackId === '') update.trackId = null;
-		else {
-			const t = db
-				.select({ id: schema.tracks.id })
-				.from(schema.tracks)
-				.where(and(eq(schema.tracks.id, String(body.trackId)), eq(schema.tracks.projectId, i.projectId)))
-				.get();
-			if (!t) error(400, 'Track is not in this project');
-			update.trackId = t.id;
-		}
-	}
 	if (body.text !== undefined) {
 		if (i.type !== 'text') error(400, 'Only text inspirations have text');
 		update.data = { text: str(body.text, 'Text', { max: 10_000 }) } satisfies TextData;

@@ -211,7 +211,8 @@ export const inspirations = sqliteTable(
 		projectId: text('project_id')
 			.notNull()
 			.references(() => projects.id, { onDelete: 'cascade' }),
-		trackId: text('track_id').references(() => tracks.id, { onDelete: 'set null' }),
+		// null = belongs to the project canvas; set = belongs to that track only.
+		trackId: text('track_id').references(() => tracks.id, { onDelete: 'cascade' }),
 		type: text('type', { enum: ['text', 'image', 'audio'] }).notNull(),
 		data: text('data', { mode: 'json' }).$type<InspirationData>().notNull(),
 		x: real('x').notNull().default(40),
@@ -224,6 +225,31 @@ export const inspirations = sqliteTable(
 	(t) => [index('inspirations_project_idx').on(t.projectId), index('inspirations_track_idx').on(t.trackId)]
 );
 
+export type ConnectionSide = 'top' | 'right' | 'bottom' | 'left';
+export type ConnectionStyle = 'line' | 'dotted' | 'arrow' | 'both';
+
+/** Lines drawn between items on the project inspiration canvas. */
+export const connections = sqliteTable(
+	'connections',
+	{
+		id: text('id').primaryKey(),
+		projectId: text('project_id')
+			.notNull()
+			.references(() => projects.id, { onDelete: 'cascade' }),
+		fromId: text('from_id')
+			.notNull()
+			.references(() => inspirations.id, { onDelete: 'cascade' }),
+		fromSide: text('from_side', { enum: ['top', 'right', 'bottom', 'left'] }).notNull(),
+		toId: text('to_id')
+			.notNull()
+			.references(() => inspirations.id, { onDelete: 'cascade' }),
+		toSide: text('to_side', { enum: ['top', 'right', 'bottom', 'left'] }).notNull(),
+		style: text('style', { enum: ['line', 'dotted', 'arrow', 'both'] }).notNull().default('line'),
+		createdAt: createdAt()
+	},
+	(t) => [index('connections_project_idx').on(t.projectId)]
+);
+
 export type User = typeof users.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Track = typeof tracks.$inferSelect;
@@ -233,4 +259,5 @@ export type Checklist = typeof checklists.$inferSelect;
 export type Todo = typeof todos.$inferSelect;
 export type Inspiration = typeof inspirations.$inferSelect;
 export type AudioFile = typeof audioFiles.$inferSelect;
+export type Connection = typeof connections.$inferSelect;
 export type Role = 'owner' | 'editor' | 'viewer';

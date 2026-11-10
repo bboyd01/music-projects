@@ -22,6 +22,19 @@
 - [x] **6. Inspirations**: canvas (drag/resize/pan/zoom), text/image/audio, 200ms music autosearch + Apple Music/Spotify links, track linking, fullscreen collage
 - [x] **7. Polish**: mobile tab bar + sheets, themes, animation setting, default backgrounds, README
 
+## Round 2 (feedback from first deploy)
+
+- [x] Hover time tooltip on the progress line (mouse only)
+- [x] Comment actions (make todo, delete) sit right after the time and timestamp
+- [x] Popups (menus, dialogs, toasts) roughly twice as opaque
+- [x] Image inspirations stored up to 1280×720 (was 300px wide)
+- [x] Project and track inspirations fully separate: the canvas holds project items only, tracks have their own list, deleting a track deletes its inspirations
+- [x] Project page shows Tracks and Inspirations under headings; Settings is its own page (gear button); project status moved to Settings
+- [x] Lighter background overlay
+- [x] Board view spans 85% of the area beside the sidebar; empty statuses collapse to slim strips; scrolls only when columns would drop below 150px
+- [x] Canvas connections from each item's four edge dots, styled as line / dotted / arrow / two-way arrow, reversible, deletable
+- [x] Removed the breadcrumb/status row and tabs; a track page shows just a link back to its project
+
 ## Verification done
 
 - `npm run check` (0 errors) and unit tests (time math, link parsing, mentions, roles)

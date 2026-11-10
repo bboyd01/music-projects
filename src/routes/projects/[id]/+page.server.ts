@@ -1,6 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
-import { listTracks } from '#lib/server/queries.ts';
+import { listConnections, listInspirations, listTracks } from '#lib/server/queries.ts';
 
 export async function load({ params, locals, parent }) {
 	await parent(); // access check happens in the layout
@@ -12,6 +12,8 @@ export async function load({ params, locals, parent }) {
 	return {
 		tracks: listTracks(params.id),
 		view: prefs?.view ?? 'table',
-		visibleFields: prefs?.visibleFields ?? null
+		visibleFields: prefs?.visibleFields ?? null,
+		inspirations: listInspirations(params.id),
+		connections: listConnections(params.id)
 	};
 }
