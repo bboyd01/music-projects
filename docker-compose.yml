@@ -1,0 +1,24 @@
+# Coolify: use the "Docker Compose" build pack and point it at this file.
+# Set the domain on the `app` service (port 3000) and fill in the variables below.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    expose:
+      - '3000'
+    environment:
+      # Public URL of the app, e.g. https://music.example.com (required behind a proxy for form posts).
+      ORIGIN: ${ORIGIN:?Set ORIGIN to the public URL, e.g. https://music.example.com}
+      # Creates the first admin account on first start (ignored once any user exists).
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_NAME: ${ADMIN_NAME:-Admin}
+      # Optional fallback Discord webhook for projects without their own.
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL:-}
+      # Largest audio upload in MB.
+      MAX_AUDIO_MB: ${MAX_AUDIO_MB:-500}
+    volumes:
+      - music-data:/data
+
+volumes:
+  music-data:

@@ -1,0 +1,7 @@
+# Local run: docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+services:
+  app:
+    ports:
+      - '3000:3000'
+    environment:
+      ORIGIN: http://localhost:3000
