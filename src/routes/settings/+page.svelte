@@ -13,6 +13,7 @@
 	import { setMotion, setTheme } from '#lib/state/ui.svelte.ts';
 	import StatusManager from '#lib/components/settings/StatusManager.svelte';
 	import BackgroundPicker from '#lib/components/settings/BackgroundPicker.svelte';
+	import ApiCard from '#lib/components/settings/ApiCard.svelte';
 	import type { Status } from '#lib/server/db/schema.ts';
 
 	let { data, form } = $props();
@@ -194,6 +195,8 @@
 				{/if}
 			</div>
 		</section>
+
+		{#if !me.readOnly}<ApiCard tokens={data.apiTokens} />{/if}
 
 		{#if me.readOnly}
 			<section class="card enter p-5">

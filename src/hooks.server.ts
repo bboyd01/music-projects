@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit/hooks';
 import { bootstrap } from '#lib/server/bootstrap.ts';
 import { SESSION_COOKIE, toSafeUser, validateSession } from '#lib/server/auth.ts';
+import { userForBearer } from '#lib/server/tokens.ts';
 
 const PUBLIC_PATHS = ['/login', '/api/health'];
 
@@ -11,8 +12,18 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const token = event.cookies.get(SESSION_COOKIE);
 	const user = validateSession(token);
 	event.locals.user = user ? toSafeUser(user) : null;
+	event.locals.authVia = user ? 'session' : null;
 
 	const path = event.url.pathname;
+
+	// Scripts (e.g. the REAPER uploader) authenticate API calls with a personal token.
+	if (!event.locals.user && path.startsWith('/api/')) {
+		const tokenUser = userForBearer(event.request.headers.get('authorization'));
+		if (tokenUser) {
+			event.locals.user = toSafeUser(tokenUser);
+			event.locals.authVia = 'token';
+		}
+	}
 	const isPublic =
 		PUBLIC_PATHS.some((p) => path === p || path.startsWith(p + '/')) ||
 		path.startsWith('/backgrounds/') ||
