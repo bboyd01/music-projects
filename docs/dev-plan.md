@@ -18,7 +18,7 @@
 - [x] **2. Auth & access**: login/logout, hashed sessions, admin bootstrap, user admin, project membership, access helpers
 - [x] **3. Projects & tracks**: CRUD, customizable statuses, Table / List / Board views, field show/hide per project, track page, icon picker (Lucide + custom instrument icons)
 - [x] **4. Audio**: streamed upload/replace, range streaming, durations, persistent player (mini + fullscreen), prev/next within the project, Media Session
-- [x] **5. Comments & todos**: general + timestamped (−3s) comments, @mentions, comment → todo, multiple checklists, sort by added/timestamp, Comments tab with mention filter, Discord webhook
+- [x] **5. Comments & todos**: general + timestamped comments, @mentions, comment → todo, multiple checklists, sort by added/timestamp, Comments tab with mention filter, Discord webhook
 - [x] **6. Inspirations**: canvas (drag/resize/pan/zoom), text/image/audio, 200ms music autosearch + Apple Music/Spotify links, track linking, fullscreen collage
 - [x] **7. Polish**: mobile tab bar + sheets, themes, animation setting, default backgrounds, README
 

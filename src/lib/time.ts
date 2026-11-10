@@ -9,12 +9,10 @@ export function formatTime(sec: number | null | undefined): string {
 	return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
 }
 
-/** Timestamped comments start this many seconds before the click. */
-export const COMMENT_LEAD_SEC = 3;
-
-export function commentTimestamp(currentTime: number, lead = COMMENT_LEAD_SEC): number {
+/** Timestamp for a comment or todo: the current playhead, rounded to tenths of a second. */
+export function commentTimestamp(currentTime: number): number {
 	if (!Number.isFinite(currentTime)) return 0;
-	return Math.max(0, Math.round((currentTime - lead) * 10) / 10);
+	return Math.max(0, Math.round(currentTime * 10) / 10);
 }
 
 export function relativeTime(ms: number, now = Date.now()): string {

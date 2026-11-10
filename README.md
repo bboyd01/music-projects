@@ -6,7 +6,7 @@ A self-hosted workspace for music composition projects: tracks, sketches, creati
 - **Track list** in Table, List or Board view, with show/hide fields saved per project
 - **Persistent audio player**: a mini player stays on screen on every page, and there is a fullscreen Listen view with an inspiration collage
 - **Waveform**: SoundCloud-style bars in the mini player, fullscreen and Listen views. Users can switch to a plain playhead line in Settings → Appearance → Player timeline
-- **Timestamped comments**: one tap to comment at the playhead (−3s), `@mentions`, one click to turn a comment into a todo
+- **Timestamped comments**: one tap to comment at the playhead, `@mentions`, one click to turn a comment into a todo
 - **Todos**: multiple checklists per track, optional timestamps, sort by added order or timestamp
 - **Inspirations**: each project has a canvas where you drag, drop and resize text, images and songs, and connect items with lines (plain, dotted, arrow, two-way). Each track has its own separate list. Search songs as you type, or paste an Apple Music / Spotify link
 - **Discord**: new comments are posted to a channel webhook, and @mentioned people are pinged
