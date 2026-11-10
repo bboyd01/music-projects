@@ -21,7 +21,7 @@ class Composer {
 		this.#open(t.id, t.title, null);
 	}
 
-	/** Timestamped comment, starting 3 seconds before the click. */
+	/** Timestamped comment at the current playhead. */
 	timestamped() {
 		const t = player.current;
 		if (!t) return;

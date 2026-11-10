@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { commentTimestamp, formatTime, COMMENT_LEAD_SEC } from './time';
+import { commentTimestamp, formatTime } from './time';
 
 describe('formatTime', () => {
 	it('formats minutes and seconds', () => {
@@ -18,15 +18,14 @@ describe('formatTime', () => {
 });
 
 describe('commentTimestamp', () => {
-	it('starts 3 seconds before the playhead', () => {
-		expect(COMMENT_LEAD_SEC).toBe(3);
-		expect(commentTimestamp(42.5)).toBe(39.5);
+	it('uses the exact playhead position', () => {
+		expect(commentTimestamp(42.5)).toBe(42.5);
+		expect(commentTimestamp(1.2)).toBe(1.2);
 	});
-	it('never goes below zero', () => {
-		expect(commentTimestamp(1.2)).toBe(0);
+	it('rounds to tenths and never goes below zero', () => {
+		expect(commentTimestamp(10.06)).toBe(10.1);
 		expect(commentTimestamp(0)).toBe(0);
-	});
-	it('rounds to tenths', () => {
-		expect(commentTimestamp(10.06)).toBe(7.1);
+		expect(commentTimestamp(-1)).toBe(0);
+		expect(commentTimestamp(NaN)).toBe(0);
 	});
 });

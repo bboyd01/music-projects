@@ -21,7 +21,7 @@
 	<button
 		type="button"
 		class="icon-btn text-accent hover:text-accent"
-		title="Add comment at playhead (−3s)"
+		title="Add comment at playhead"
 		aria-label="Add a timestamped comment at the playhead"
 		onclick={() => composer.timestamped()}
 	>
