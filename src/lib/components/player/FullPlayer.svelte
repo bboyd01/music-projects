@@ -3,6 +3,7 @@
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import ArrowUpRight from '@lucide/svelte/icons/arrow-up-right';
 	import { player } from '#lib/state/player.svelte.ts';
+	import { composer } from '#lib/state/composer.svelte.ts';
 	import { slide } from '#lib/transitions.ts';
 	import ProgressLine from './ProgressLine.svelte';
 	import Transport from './Transport.svelte';
@@ -80,7 +81,8 @@
 	const hint = $derived(dragging && start ? (start.left ? 'Minimize' : 'Open track') : null);
 </script>
 
-<svelte:window onkeydown={(e) => e.key === 'Escape' && minimize()} />
+<!-- Escape minimizes, unless a dialog (e.g. the comment box) is open on top — that closes first. -->
+<svelte:window onkeydown={(e) => e.key === 'Escape' && !e.defaultPrevented && !composer.open && minimize()} />
 
 <div
 	bind:this={root}

@@ -71,8 +71,8 @@
 			{@render children()}
 		</main>
 	</div>
-	{#if showMini}<MiniPlayer />{/if}
-	<TabBar />
+	{#if showMini && !ui.keyboardOpen}<MiniPlayer />{/if}
+	{#if !ui.keyboardOpen}<TabBar />{/if}
 	<CommentComposer />
 	<AudioEngine />
 {:else}

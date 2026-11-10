@@ -9,6 +9,8 @@ class UiState {
 	motion = $state<'on' | 'mobile-off' | 'off'>('on');
 	reducedMotion = $state(false);
 	small = $state(false);
+	/** On-screen keyboard is up (phones): hide bottom bars so they don't cover inputs. */
+	keyboardOpen = $state(false);
 }
 
 export const ui = new UiState();
@@ -21,6 +23,18 @@ if (browser) {
 	rm.addEventListener('change', (e) => (ui.reducedMotion = e.matches));
 	sm.addEventListener('change', (e) => (ui.small = e.matches));
 	ui.motion = (document.documentElement.dataset.motion as UiState['motion']) ?? 'on';
+
+	// The visual viewport shrinks when the keyboard opens; the layout viewport doesn't.
+	// Expose its height as --vvh so sheets can size themselves above the keyboard.
+	const vv = window.visualViewport;
+	if (vv) {
+		const update = () => {
+			document.documentElement.style.setProperty('--vvh', `${vv.height}px`);
+			ui.keyboardOpen = ui.small && vv.height < window.innerHeight - 140;
+		};
+		vv.addEventListener('resize', update);
+		update();
+	}
 }
 
 let nextId = 1;
