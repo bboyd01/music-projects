@@ -57,7 +57,9 @@ export async function POST({ params, request, locals }) {
 		const img = await saveInspirationImage(Buffer.from(await file.arrayBuffer()));
 		type = 'image';
 		data = { file: img.file, width: img.width, height: img.height };
-		size = { w: img.width, h: img.height };
+		// Stored up to 1280×720 for sharpness; placed on the canvas at a comfortable size.
+		const w = Math.min(img.width, 320);
+		size = { w, h: Math.round((w / img.width) * img.height) };
 		pos = { x: num(Number(form.get('x')) || undefined), y: num(Number(form.get('y')) || undefined) };
 	} else {
 		const body = await readJson(request);

@@ -7,6 +7,8 @@
 	let bar: HTMLDivElement;
 	let dragging = $state(false);
 	let dragTime = $state(0);
+	/** Mouse hover position (0–1) for the time tooltip; null when not hovering. */
+	let hover = $state<number | null>(null);
 
 	const shown = $derived(dragging ? dragTime : player.time);
 	const total = $derived(player.duration || player.current?.duration || 0);
@@ -27,6 +29,10 @@
 	}
 	function move(e: PointerEvent) {
 		if (dragging) dragTime = timeAt(e.clientX);
+		if (e.pointerType === 'mouse' && total) {
+			const r = bar.getBoundingClientRect();
+			hover = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+		}
 	}
 	function up() {
 		if (!dragging) return;
@@ -56,8 +62,17 @@
 		onpointermove={move}
 		onpointerup={up}
 		onpointercancel={up}
+		onpointerleave={() => (hover = null)}
 		onkeydown={key}
 	>
+		{#if hover !== null}
+			<span
+				class="tip tabular pointer-events-none absolute bottom-full mb-1.5 -translate-x-1/2 rounded-md px-2 py-0.5 text-[11.5px] font-medium"
+				style:left="clamp(1.25rem, {hover * 100}%, calc(100% - 1.25rem))"
+			>
+				{formatTime(dragging ? dragTime : hover * total)}
+			</span>
+		{/if}
 		<div class="relative h-[3px] w-full overflow-hidden rounded-full bg-line-strong">
 			<div class="absolute inset-y-0 left-0 rounded-full bg-accent" style:width="{pct}%"></div>
 		</div>
@@ -84,6 +99,13 @@
 </div>
 
 <style>
+	.tip {
+		background: var(--glass-popup);
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow);
+		color: var(--fg);
+		white-space: nowrap;
+	}
 	.thumb {
 		transition: transform var(--dur-fade) var(--ease);
 	}

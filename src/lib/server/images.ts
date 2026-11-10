@@ -12,7 +12,7 @@ import { newToken } from './id';
  */
 
 export const imageVariants = {
-	inspiration: { width: 300, quality: 80 },
+	inspiration: { width: 1280, height: 720, quality: 82 },
 	coverFull: { longEdge: 1600, quality: 78 },
 	coverBackdrop: { width: 480, quality: 60 },
 	thumb: { square: 100, quality: 80 }
@@ -51,7 +51,11 @@ async function write(img: ReturnType<typeof sharp>, quality: number): Promise<Sa
 export async function saveInspirationImage(input: Buffer) {
 	await validate(input);
 	const v = imageVariants.inspiration;
-	return write(pipeline(input).resize({ width: v.width, withoutEnlargement: true }), v.quality);
+	// Fit inside 1280×720 (keeps aspect ratio, never upscales).
+	return write(
+		pipeline(input).resize({ width: v.width, height: v.height, fit: 'inside', withoutEnlargement: true }),
+		v.quality
+	);
 }
 
 export async function saveCover(input: Buffer) {

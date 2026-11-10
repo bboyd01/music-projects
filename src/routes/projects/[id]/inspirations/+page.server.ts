@@ -1,16 +1,6 @@
-import { asc, eq } from 'drizzle-orm';
-import { db, schema } from '#lib/server/db/index.ts';
-import { listInspirations } from '#lib/server/queries.ts';
+import { redirect } from '@sveltejs/kit';
 
-export async function load({ params, parent }) {
-	await parent();
-	return {
-		items: listInspirations(params.id),
-		tracks: db
-			.select({ id: schema.tracks.id, title: schema.tracks.title, icon: schema.tracks.icon })
-			.from(schema.tracks)
-			.where(eq(schema.tracks.projectId, params.id))
-			.orderBy(asc(schema.tracks.sortOrder))
-			.all()
-	};
+/** The canvas now lives on the project page; keep old links working. */
+export function load({ params }) {
+	redirect(308, `/projects/${params.id}#inspirations`);
 }

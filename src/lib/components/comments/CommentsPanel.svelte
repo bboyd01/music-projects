@@ -99,7 +99,7 @@
 						{formatTime(c.timestampSec)}
 					</button>
 				{/if}
-				<div class="ml-auto flex opacity-100 md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
+				<div class="-my-1 flex opacity-100 md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
 					{#if role !== 'viewer'}
 						<button
 							type="button"

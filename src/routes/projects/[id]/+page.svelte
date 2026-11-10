@@ -11,6 +11,7 @@
 	import ListView from '#lib/components/tracks/ListView.svelte';
 	import BoardView from '#lib/components/tracks/BoardView.svelte';
 	import FieldsMenu from '#lib/components/tracks/FieldsMenu.svelte';
+	import Canvas from '#lib/components/inspirations/Canvas.svelte';
 	import type { TrackRow } from '#lib/server/queries.ts';
 
 	let { data } = $props();
@@ -62,6 +63,8 @@
 	}
 </script>
 
+<section aria-labelledby="tracks-heading" class="mb-12">
+<h2 id="tracks-heading" class="serif mb-3 text-2xl">Tracks</h2>
 <div class="mb-4 flex flex-wrap items-center gap-2">
 	<div class="glass flex rounded-lg p-0.5" role="tablist" aria-label="View">
 		{#each views as v (v.id)}
@@ -132,3 +135,9 @@
 {:else}
 	<BoardView {tracks} projectId={data.project.id} {canEdit} onpatch={patch} />
 {/if}
+</section>
+
+<section id="inspirations" aria-labelledby="inspirations-heading" class="scroll-mt-6">
+	<h2 id="inspirations-heading" class="serif mb-3 text-2xl">Inspirations</h2>
+	<Canvas items={data.inspirations} connections={data.connections} projectId={data.project.id} {canEdit} />
+</section>

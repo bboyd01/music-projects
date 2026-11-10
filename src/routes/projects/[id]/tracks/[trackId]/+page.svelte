@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import Headphones from '@lucide/svelte/icons/headphones';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { api } from '#lib/api.ts';
@@ -55,8 +54,6 @@
 </script>
 
 <svelte:head><title>{t.title} · Music Projects</title></svelte:head>
-
-<a href={base} class="mb-4 inline-flex items-center gap-1.5 text-[13px] text-fg-3 hover:text-fg-2"><ArrowLeft size={14} /> All tracks</a>
 
 <header class="mb-6 flex flex-wrap items-start gap-4">
 	<IconPicker value={t.icon} disabled={!canEdit} onchange={(icon) => patch({ icon })} />

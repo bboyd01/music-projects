@@ -9,6 +9,7 @@
 	import { api, uploadWithProgress } from '#lib/api.ts';
 	import { toast } from '#lib/state/ui.svelte.ts';
 	import { player } from '#lib/state/player.svelte.ts';
+	import StatusSelect from '#lib/components/StatusSelect.svelte';
 
 	let { data } = $props();
 	const isOwner = $derived(data.role === 'owner');
@@ -91,7 +92,10 @@
 
 <div class="max-w-3xl space-y-6">
 	<section class="card p-5">
-		<h2 class="serif mb-3 text-2xl">About</h2>
+		<div class="mb-3 flex items-center justify-between gap-3">
+			<h2 class="serif text-2xl">About</h2>
+			<StatusSelect scope="project" value={data.project.statusId} disabled={!canEdit} onchange={(statusId) => patch({ statusId })} />
+		</div>
 		<textarea
 			class="input min-h-20 [field-sizing:content]"
 			placeholder="What is this project? Brief, client, deadline, notes…"

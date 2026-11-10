@@ -1,7 +1,6 @@
 <script lang="ts">
 	import MoreHorizontal from '@lucide/svelte/icons/ellipsis';
 	import Pencil from '@lucide/svelte/icons/pencil';
-	import Unlink from '@lucide/svelte/icons/unlink';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import type { InspirationView } from '#lib/server/queries.ts';
 	import { api } from '#lib/api.ts';
@@ -21,12 +20,8 @@
 	let editing = $state<InspirationView | null>(null);
 	let editOpen = $state(false);
 
-	async function unlink(i: InspirationView) {
-		await api('PATCH', `/api/inspirations/${i.id}`, { trackId: null });
-		onchange();
-	}
 	async function remove(i: InspirationView) {
-		if (!confirm('Delete this inspiration from the project?')) return;
+		if (!confirm('Delete this inspiration?')) return;
 		await api('DELETE', `/api/inspirations/${i.id}`);
 		onchange();
 	}
@@ -49,7 +44,6 @@
 					{#if i.type === 'text'}
 						<button class="menu-item" onclick={() => { close(); editing = i; editOpen = true; }}><Pencil size={14} /> Edit text</button>
 					{/if}
-					<button class="menu-item" onclick={() => { close(); unlink(i); }}><Unlink size={14} /> Remove from track</button>
 					<button class="menu-item !text-danger" onclick={() => { close(); remove(i); }}><Trash2 size={14} /> Delete</button>
 				{/snippet}
 			</Popover>
@@ -80,7 +74,7 @@
 		</div>
 	{/if}
 	{#if !items.length}
-		<p class="text-[13px] text-fg-3">No inspirations linked to this track yet. Add some here or on the project canvas.</p>
+		<p class="text-[13px] text-fg-3">No inspirations for this track yet. These are separate from the project’s canvas.</p>
 	{/if}
 </div>
 
