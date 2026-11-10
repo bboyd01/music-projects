@@ -4,13 +4,8 @@
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import Settings from '@lucide/svelte/icons/settings';
 	import { api } from '#lib/api.ts';
-	import { ui } from '#lib/state/ui.svelte.ts';
 
 	let { data, children } = $props();
-
-	$effect(() => {
-		ui.backdrop = data.backdrop.backdrop;
-	});
 
 	const base = $derived(`/projects/${data.project.id}`);
 	const route = $derived(page.route.id ?? '');

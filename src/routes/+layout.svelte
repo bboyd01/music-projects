@@ -17,6 +17,39 @@
 		ui.motion = data.user?.settings.motion ?? 'on';
 	});
 
+	// ── Backdrop: one place decides what's behind everything ──
+	type Bg = { id: string; backdrop: string };
+	let randomPick = $state<Bg | null>(null);
+	$effect(() => {
+		// Random: pick once per browser session so it doesn't change on every navigation.
+		const pool = data.background.pool as Bg[];
+		if (data.background.selected || !pool.length) return;
+		let id: string | null = null;
+		try {
+			id = sessionStorage.getItem('mp.bg');
+		} catch {
+			/* storage unavailable */
+		}
+		let pick = pool.find((b) => b.id === id);
+		if (!pick) {
+			pick = pool[Math.floor(Math.random() * pool.length)];
+			try {
+				sessionStorage.setItem('mp.bg', pick.id);
+			} catch {
+				/* ignore */
+			}
+		}
+		randomPick = pick;
+	});
+	const globalBackdrop = $derived(data.background.selected?.backdrop ?? randomPick?.backdrop ?? '/backgrounds/bg-01.webp');
+	$effect(() => {
+		const route = page.route.id ?? '';
+		const projectBg = (page.data as { backdrop?: { backdrop: string } }).backdrop?.backdrop;
+		if (route.startsWith('/projects/[id]') && projectBg) ui.backdrop = projectBg;
+		else if (route === '/listen' && player.project) ui.backdrop = player.project.backdrop.backdrop;
+		else ui.backdrop = globalBackdrop;
+	});
+
 	const onListenFull = $derived(page.url.pathname === '/listen' && player.mode === 'full');
 	const showMini = $derived(!!player.current && !onListenFull);
 </script>

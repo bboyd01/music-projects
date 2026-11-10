@@ -54,7 +54,7 @@
 <div class="space-y-3">
 	{#if canEdit}<AddInspiration {projectId} {trackId} compact onadded={onchange} />{/if}
 	{#if others.length}
-		<ul class="space-y-2">
+		<ul class="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
 			{#each others as i (i.id)}
 				<li class="card group relative overflow-hidden {i.type === 'text' ? 'max-h-48' : ''}">
 					<InspirationContent item={i} />
@@ -64,7 +64,7 @@
 		</ul>
 	{/if}
 	{#if images.length}
-		<div class="columns-2 gap-2 sm:columns-3">
+		<div class="columns-2 gap-2 sm:columns-3 lg:columns-4">
 			{#each images as i (i.id)}
 				<div class="group relative mb-2 break-inside-avoid overflow-hidden rounded-lg border border-line">
 					<InspirationContent item={i} />

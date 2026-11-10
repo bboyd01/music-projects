@@ -25,7 +25,9 @@
 	--on-accent: #17140e;
 	--danger: #d07a6a;
 	--shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 18px 50px -20px rgb(0 0 0 / 0.65);
-	--overlay: linear-gradient(180deg, rgb(11 11 12 / 0.44), rgb(11 11 12 / 0.56) 55%, rgb(11 11 12 / 0.68));
+	--overlay: linear-gradient(180deg, rgb(11 11 12 / 0.52), rgb(11 11 12 / 0.66) 55%, rgb(11 11 12 / 0.8));
+	/* Scrim on project cards (Projects page) so titles stay readable over the photo. */
+	--card-scrim: linear-gradient(0deg, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.29) 50%, rgb(0 0 0 / 0.08));
 	--photo-filter: blur(44px) saturate(0.9) brightness(1);
 	--blur: 20px;
 
@@ -46,6 +48,7 @@
 	--glass: rgb(255 255 255 / 0.52);
 	--glass-strong: rgb(250 249 246 / 0.82);
 	--glass-popup: rgb(250 249 246 / 0.91);
+	--card-scrim: linear-gradient(0deg, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0.35) 50%, rgb(0 0 0 / 0.1));
 	--glass-solid: #fbfaf7;
 	--hover: rgb(26 25 24 / 0.05);
 	--press: rgb(26 25 24 / 0.09);
@@ -70,6 +73,7 @@
 		--glass: rgb(255 255 255 / 0.52);
 		--glass-strong: rgb(250 249 246 / 0.82);
 		--glass-popup: rgb(250 249 246 / 0.91);
+		--card-scrim: linear-gradient(0deg, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0.35) 50%, rgb(0 0 0 / 0.1));
 		--glass-solid: #fbfaf7;
 		--hover: rgb(26 25 24 / 0.05);
 		--press: rgb(26 25 24 / 0.09);

@@ -32,7 +32,6 @@
 <div class="mx-auto max-w-3xl px-4 pt-8 sm:px-8 md:pt-12">
 	<header class="enter mb-6 flex flex-wrap items-end justify-between gap-4">
 		<div>
-			<p class="eyebrow mb-2">Feedback</p>
 			<h1 class="serif text-4xl sm:text-5xl">Comments</h1>
 		</div>
 		<Popover label="Filter comments" width={240} align="end" triggerClass="btn btn-outline">

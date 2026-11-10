@@ -3,7 +3,6 @@
 	import Plus from '@lucide/svelte/icons/plus';
 	import Music from '@lucide/svelte/icons/music';
 	import { api } from '#lib/api.ts';
-	import { ui } from '#lib/state/ui.svelte.ts';
 	import Modal from '#lib/components/Modal.svelte';
 	import StatusSelect from '#lib/components/StatusSelect.svelte';
 
@@ -11,10 +10,6 @@
 	let creating = $state(false);
 	let name = $state('');
 	let busy = $state(false);
-
-	$effect(() => {
-		ui.backdrop = data.list[0]?.backdrop ?? '/backgrounds/bg-01.webp';
-	});
 
 	async function create() {
 		if (!name.trim()) return;
@@ -41,7 +36,6 @@
 <div class="mx-auto max-w-6xl px-4 pt-8 sm:px-8 md:pt-12">
 	<header class="enter mb-8 flex items-end justify-between gap-4">
 		<div>
-			<p class="eyebrow mb-2">Workspace</p>
 			<h1 class="serif text-4xl sm:text-5xl">Projects</h1>
 		</div>
 		{#if !data.user?.readOnly}
@@ -64,7 +58,7 @@
 				<div class="project-card enter group relative overflow-hidden rounded-2xl" style:animation-delay="{Math.min(i, 8) * 18}ms">
 					<a href="/projects/{p.id}" class="absolute inset-0 z-0" aria-label="Open {p.name}"></a>
 					<div class="cover pointer-events-none absolute inset-0" style:background-image="url('{p.backdrop}')"></div>
-					<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/10"></div>
+					<div class="pointer-events-none absolute inset-0" style:background="var(--card-scrim)"></div>
 					<div class="pointer-events-none relative flex h-48 flex-col justify-between p-5 text-white">
 						<div class="pointer-events-auto relative z-10 self-start">
 							<StatusSelect scope="project" value={p.statusId} size="sm" disabled={p.role === 'viewer'} onchange={(s) => setStatus(p.id, s)} />

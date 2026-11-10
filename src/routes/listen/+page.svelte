@@ -3,15 +3,10 @@
 	import Headphones from '@lucide/svelte/icons/headphones';
 	import Maximize2 from '@lucide/svelte/icons/maximize-2';
 	import { player } from '#lib/state/player.svelte.ts';
-	import { ui } from '#lib/state/ui.svelte.ts';
 	import FullPlayer from '#lib/components/player/FullPlayer.svelte';
 	import CommentsPanel from '#lib/components/comments/CommentsPanel.svelte';
 	import TodosPanel from '#lib/components/todos/TodosPanel.svelte';
 	import TrackIcon from '#lib/components/TrackIcon.svelte';
-
-	$effect(() => {
-		if (player.project) ui.backdrop = player.project.backdrop.backdrop;
-	});
 
 	const d = $derived(player.detail);
 
