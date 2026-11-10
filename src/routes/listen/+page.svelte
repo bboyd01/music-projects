@@ -53,15 +53,23 @@
 
 		{#if d && d.track.id === player.current.id}
 			<div class="grid gap-6 lg:grid-cols-2">
-				<section class="card enter flex max-h-[min(70dvh,720px)] min-h-64 flex-col p-4">
-					<h2 class="eyebrow mb-3">Comments <span class="tabular ml-1">{d.comments.length || ''}</span></h2>
-					<div class="scroll-thin -mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-						<CommentsPanel comments={d.comments} trackId={d.track.id} projectId={d.track.projectId} members={d.members} role={d.role} onchange={refresh} />
+				<section class="enter min-w-0">
+					<h2 class="section-title mb-3">Comments <span class="tabular ml-1 font-normal text-fg-3">{d.comments.length || ''}</span></h2>
+					<div class="card p-4">
+						<CommentsPanel
+							comments={d.comments}
+							trackId={d.track.id}
+							projectId={d.track.projectId}
+							members={d.members}
+							role={d.role}
+							onchange={refresh}
+							listClass="max-h-[min(50dvh,480px)]"
+						/>
 					</div>
 				</section>
-				<section class="card enter flex max-h-[min(70dvh,720px)] min-h-64 flex-col p-4">
-					<h2 class="eyebrow mb-3">Todo</h2>
-					<div class="scroll-thin -mx-1 min-h-0 flex-1 overflow-y-auto px-1">
+				<section class="enter min-w-0">
+					<h2 class="section-title mb-3">Todo</h2>
+					<div class="card scroll-thin max-h-[min(70dvh,720px)] overflow-y-auto p-4">
 						<TodosPanel checklists={d.checklists} trackId={d.track.id} projectId={d.track.projectId} canEdit={d.role !== 'viewer'} onchange={refresh} />
 					</div>
 				</section>

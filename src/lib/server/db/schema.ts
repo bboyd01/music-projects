@@ -19,11 +19,14 @@ export type UserSettings = {
 
 export const users = sqliteTable('users', {
 	id: text('id').primaryKey(),
-	email: text('email').notNull().unique(),
+	/** Optional: the read-only test account has none. Sign-in accepts email or username. */
+	email: text('email').unique(),
 	username: text('username').notNull().unique(),
 	name: text('name').notNull(),
 	passwordHash: text('password_hash').notNull(),
 	isAdmin: integer('is_admin', { mode: 'boolean' }).notNull().default(false),
+	/** Read-only accounts can view every project but change nothing. */
+	readOnly: integer('read_only', { mode: 'boolean' }).notNull().default(false),
 	discordUserId: text('discord_user_id'),
 	settings: text('settings', { mode: 'json' }).$type<UserSettings>().notNull().default({}),
 	createdAt: createdAt()
@@ -143,6 +146,8 @@ export const comments = sqliteTable(
 			.references(() => users.id),
 		body: text('body').notNull(),
 		timestampSec: real('timestamp_sec'),
+		resolvedAt: integer('resolved_at', { mode: 'number' }),
+		resolvedBy: text('resolved_by').references(() => users.id, { onDelete: 'set null' }),
 		createdAt: createdAt()
 	},
 	(t) => [

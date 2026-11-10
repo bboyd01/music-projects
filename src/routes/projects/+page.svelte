@@ -44,7 +44,9 @@
 			<p class="eyebrow mb-2">Workspace</p>
 			<h1 class="serif text-4xl sm:text-5xl">Projects</h1>
 		</div>
-		<button class="btn btn-primary" onclick={() => (creating = true)}><Plus size={16} /> New project</button>
+		{#if !data.user?.readOnly}
+			<button class="btn btn-primary" onclick={() => (creating = true)}><Plus size={16} /> New project</button>
+		{/if}
 	</header>
 
 	{#if data.list.length === 0}
@@ -52,7 +54,9 @@
 			<Music size={28} class="mb-4 text-fg-3" strokeWidth={1.5} />
 			<h2 class="serif mb-2 text-2xl">Start your first project</h2>
 			<p class="mb-6 max-w-sm text-fg-2">Projects hold your tracks, sketches, inspirations and feedback.</p>
-			<button class="btn btn-primary" onclick={() => (creating = true)}><Plus size={16} /> New project</button>
+			{#if !data.user?.readOnly}
+				<button class="btn btn-primary" onclick={() => (creating = true)}><Plus size={16} /> New project</button>
+			{/if}
 		</div>
 	{:else}
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

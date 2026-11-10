@@ -17,7 +17,8 @@ export async function POST({ params, request, locals }) {
 			id,
 			checklistId: l.id,
 			text: str(body.text, 'Todo', { min: 1, max: 2000 }),
-			timestampSec: ts == null ? null : Math.max(0, ts)
+			timestampSec: ts == null ? null : Math.max(0, ts),
+			createdAt: Date.now()
 		})
 		.run();
 	return json({ id }, { status: 201 });

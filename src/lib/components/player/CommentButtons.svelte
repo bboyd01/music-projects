@@ -2,10 +2,12 @@
 	import MessageSquarePlus from '@lucide/svelte/icons/message-square-plus';
 	import MessageSquareDot from '@lucide/svelte/icons/message-square-dot';
 	import { composer } from '#lib/state/composer.svelte.ts';
+	import { page } from '$app/state';
 
 	let { size = 18 }: { size?: number } = $props();
 </script>
 
+{#if !page.data.user?.readOnly}
 <div class="flex items-center gap-0.5">
 	<button
 		type="button"
@@ -26,3 +28,4 @@
 		<MessageSquareDot {size} strokeWidth={1.7} />
 	</button>
 </div>
+{/if}

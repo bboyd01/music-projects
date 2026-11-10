@@ -28,6 +28,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 		redirect(303, `/login?next=${encodeURIComponent(path + event.url.search)}`);
 	}
 
+	// Read-only accounts can't change anything except their own view settings.
+	if (event.locals.user?.readOnly && !['GET', 'HEAD', 'OPTIONS'].includes(event.request.method)) {
+		const allowed = path === '/logout' || path === '/api/me/settings' || /^\/api\/projects\/[^/]+\/prefs$/.test(path);
+		if (!allowed) {
+			return new Response(JSON.stringify({ message: 'This is a read-only account' }), {
+				status: 403,
+				headers: { 'content-type': 'application/json' }
+			});
+		}
+	}
+
 	const settings = event.locals.user?.settings ?? {};
 	const theme = settings.theme ?? 'system';
 	const motion = settings.motion ?? 'on';

@@ -44,6 +44,7 @@ export function load({ locals, url }) {
 			id: schema.comments.id,
 			body: schema.comments.body,
 			timestampSec: schema.comments.timestampSec,
+			resolvedAt: schema.comments.resolvedAt,
 			createdAt: schema.comments.createdAt,
 			trackId: schema.tracks.id,
 			trackTitle: schema.tracks.title,

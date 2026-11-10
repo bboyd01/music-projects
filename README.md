@@ -9,7 +9,7 @@ A self-hosted workspace for music composition projects: tracks, sketches, creati
 - **Todos**: multiple checklists per track, optional timestamps, sort by added order or timestamp
 - **Inspirations**: each project has a canvas where you drag, drop and resize text, images and songs, and connect items with lines (plain, dotted, arrow, two-way). Each track has its own separate list. Search songs as you type, or paste an Apple Music / Spotify link
 - **Discord**: new comments are posted to a channel webhook, and @mentioned people are pinged
-- **Accounts**: password login, admin-managed users, per-project sharing (owner / editor / viewer)
+- **Accounts**: sign in with email or username; admin-managed users; per-project sharing (owner / editor / viewer); optional read-only `test` account
 - **Dark & light themes**, subtle animations (≤130ms) with an option to turn them off on mobile
 
 ## Deploy with Coolify
@@ -26,6 +26,7 @@ A self-hosted workspace for music composition projects: tracks, sketches, creati
    | `ADMIN_NAME` | no | Display name for the first admin (default `Admin`). |
    | `DISCORD_WEBHOOK_URL` | no | Fallback webhook for projects that don't set their own. |
    | `MAX_AUDIO_MB` | no | Largest audio upload, in MB (default `500`). |
+   | `INCLUDE_TEST_USER` | no | Read-only demo account `test` / `test` that can view (not change) every project. Default `true`; set `false` to remove it. Anyone who can reach your site can use it. |
 
 4. Deploy. All data lives in the `music-data` volume mounted at `/data`: the SQLite database plus uploaded audio and images. Back up that volume.
 

@@ -74,10 +74,11 @@ export function purgeExpiredSessions() {
 
 export type SafeUser = {
 	id: string;
-	email: string;
+	email: string | null;
 	username: string;
 	name: string;
 	isAdmin: boolean;
+	readOnly: boolean;
 	discordUserId: string | null;
 	settings: schema.UserSettings;
 };
@@ -89,6 +90,7 @@ export function toSafeUser(u: schema.User): SafeUser {
 		username: u.username,
 		name: u.name,
 		isAdmin: u.isAdmin,
+		readOnly: u.readOnly,
 		discordUserId: u.discordUserId,
 		settings: u.settings ?? {}
 	};

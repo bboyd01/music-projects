@@ -25,7 +25,16 @@ export function POST({ params, locals }) {
 	}
 	const id = newId();
 	db.insert(schema.todos)
-		.values({ id, checklistId: list.id, text: c.body, timestampSec: c.timestampSec, sourceCommentId: c.id })
+		.values({ id, checklistId: list.id, text: c.body, timestampSec: c.timestampSec, sourceCommentId: c.id, createdAt: Date.now() })
 		.run();
 	return json({ id }, { status: 201 });
+}
+
+/** Undo "Make todo": remove the todo(s) created from this comment. */
+export function DELETE({ params, locals }) {
+	const c = db.select().from(schema.comments).where(eq(schema.comments.id, params.id)).get();
+	if (!c) error(404, 'Comment not found');
+	requireProjectAccess(locals.user, c.projectId, 'editor');
+	db.delete(schema.todos).where(eq(schema.todos.sourceCommentId, c.id)).run();
+	return json({ ok: true });
 }
