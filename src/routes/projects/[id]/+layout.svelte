@@ -36,7 +36,7 @@
 
 <svelte:head><title>{data.project.name} · Music Projects</title></svelte:head>
 
-<div class="mx-auto max-w-6xl px-4 pt-6 sm:px-8 md:pt-10">
+<div class="mx-auto max-w-6xl px-4 pt-8 sm:px-8 md:pt-10">
 	{#if onTrack}
 		<!-- A track is self-contained: just a way back to its project. -->
 		<a href={base} class="mb-4 inline-flex items-center gap-1.5 text-[13px] text-fg-3 hover:text-fg-2">

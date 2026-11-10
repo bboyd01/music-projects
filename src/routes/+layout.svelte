@@ -31,7 +31,7 @@
 	<div class="flex min-h-dvh">
 		<Sidebar />
 		<main
-			class="min-w-0 flex-1 pb-[calc(env(safe-area-inset-bottom)+4.5rem)] md:pb-6"
+			class="min-w-0 flex-1 pt-[env(safe-area-inset-top)] pb-[calc(env(safe-area-inset-bottom)+4.5rem)] md:pb-6"
 			class:has-mini={showMini}
 			style:--mini-h={showMini ? '5rem' : '0px'}
 		>

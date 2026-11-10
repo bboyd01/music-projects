@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { autogrow } from '#lib/actions.ts';
 	import Plus from '@lucide/svelte/icons/plus';
 	import AddTodo from './AddTodo.svelte';
 	import Check from '@lucide/svelte/icons/check';
@@ -156,9 +157,10 @@
 						<div class="min-w-0 flex-1">
 							{#if canEdit}
 								<textarea
-									class="input-bare block w-full resize-none px-1 text-[13.5px] leading-snug [field-sizing:content] {t.done ? 'text-fg-3 line-through' : ''}"
+									class="input-bare block w-full resize-none px-1 text-[13.5px] leading-snug {t.done ? 'text-fg-3 line-through' : ''}"
 									rows="1"
 									value={t.text}
+									use:autogrow={t.text}
 									aria-label="Todo text"
 									onblur={(e) => editText(t.id, e.currentTarget.value, t.text)}
 									onkeydown={(e) => {

@@ -21,14 +21,14 @@
 >
 	<div class="glass-blur rounded-2xl px-3 pt-1 pb-2 md:px-4">
 		<ProgressLine compact />
-		<div class="flex items-center gap-3">
+		<div class="flex items-center gap-1.5 sm:gap-3">
 			<span class="hidden size-9 shrink-0 items-center justify-center rounded-lg bg-hover text-fg-2 sm:flex">
 				<TrackIcon icon={player.current?.icon ?? 'note'} size={17} />
 			</span>
 			<!-- Tapping the title goes to the track page; the player stays minimized. -->
 			<a
 				href="/projects/{player.project?.id}/tracks/{player.current?.id}"
-				class="min-w-0 flex-1 leading-tight"
+				class="ml-1 min-w-0 flex-1 leading-tight sm:ml-0"
 				title="Open track"
 			>
 				<p class="truncate text-[13.5px] font-semibold">{player.current?.title}</p>
@@ -39,7 +39,7 @@
 			<button type="button" class="icon-btn" aria-label="Expand player" title="Expand" onclick={expand}>
 				<ChevronUp size={18} />
 			</button>
-			<button type="button" class="icon-btn hidden md:inline-flex" aria-label="Close player" title="Close" onclick={() => player.stop()}>
+			<button type="button" class="icon-btn -mr-1 sm:mr-0" aria-label="Close player" title="Close" onclick={() => player.stop()}>
 				<X size={16} />
 			</button>
 		</div>

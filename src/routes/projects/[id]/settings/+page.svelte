@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { autogrow } from '#lib/actions.ts';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import Upload from '@lucide/svelte/icons/upload';
@@ -97,7 +98,8 @@
 			<StatusSelect scope="project" value={data.project.statusId} disabled={!canEdit} onchange={(statusId) => patch({ statusId })} />
 		</div>
 		<textarea
-			class="input min-h-20 [field-sizing:content]"
+			class="input min-h-20"
+			use:autogrow={description}
 			placeholder="What is this project? Brief, client, deadline, notes…"
 			bind:value={description}
 			disabled={!canEdit}
