@@ -107,9 +107,9 @@
 	</div>
 </header>
 
-<!-- Row 1: audio + description | comments -->
+<!-- Row 1: audio, description, todo | comments -->
 <div class="grid gap-8 lg:grid-cols-2">
-	<div class="space-y-8">
+	<div class="min-w-0 space-y-8">
 		<section class="enter">
 			<h3 class="section-title mb-3">Audio</h3>
 			<TrackAudio audio={d.audio} trackId={t.id} projectId={t.projectId} {canEdit} onchange={refresh} />
@@ -129,26 +129,33 @@
 				<p class="whitespace-pre-wrap text-fg-2">{t.description || '—'}</p>
 			{/if}
 		</section>
+
+		<section class="enter">
+			<h3 class="section-title mb-3">Todo</h3>
+			<div class="card p-4">
+				<TodosPanel checklists={d.checklists} trackId={t.id} projectId={t.projectId} {canEdit} onchange={refresh} />
+			</div>
+		</section>
 	</div>
 
 	<section class="enter min-w-0">
 		<h3 class="section-title mb-3">Comments <span class="tabular ml-1 font-normal text-fg-3">{d.comments.length || ''}</span></h3>
 		<div class="card p-4">
-			<CommentsPanel comments={d.comments} trackId={t.id} projectId={t.projectId} members={d.members} role={d.role} onchange={refresh} />
+			<CommentsPanel
+				comments={d.comments}
+				trackId={t.id}
+				projectId={t.projectId}
+				members={d.members}
+				role={d.role}
+				onchange={refresh}
+				listClass="max-h-[min(70dvh,760px)]"
+			/>
 		</div>
 	</section>
 </div>
 
-<!-- Row 2: todo | inspirations -->
-<div class="mt-10 grid gap-8 lg:grid-cols-2">
-	<section class="enter min-w-0">
-		<h3 class="section-title mb-3">Todo</h3>
-		<div class="card p-4">
-			<TodosPanel checklists={d.checklists} trackId={t.id} projectId={t.projectId} {canEdit} onchange={refresh} />
-		</div>
-	</section>
-	<section class="enter min-w-0">
-		<h3 class="section-title mb-3">Inspirations</h3>
-		<InspirationList items={d.inspirations} projectId={t.projectId} trackId={t.id} {canEdit} onchange={refresh} />
-	</section>
-</div>
+<!-- Row 2: inspirations, full width -->
+<section class="enter mt-10">
+	<h3 class="section-title mb-3">Inspirations</h3>
+	<InspirationList items={d.inspirations} projectId={t.projectId} trackId={t.id} {canEdit} onchange={refresh} />
+</section>

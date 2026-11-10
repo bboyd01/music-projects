@@ -255,6 +255,21 @@ export const connections = sqliteTable(
 	(t) => [index('connections_project_idx').on(t.projectId)]
 );
 
+/** Uploaded background photos (compressed: 1600px full + 480px backdrop). */
+export const backgrounds = sqliteTable('backgrounds', {
+	id: text('id').primaryKey(),
+	full: text('full').notNull(),
+	backdrop: text('backdrop').notNull(),
+	uploadedBy: text('uploaded_by').references(() => users.id, { onDelete: 'set null' }),
+	createdAt: createdAt()
+});
+
+/** App-wide key/value settings (e.g. the global background). */
+export const appSettings = sqliteTable('app_settings', {
+	key: text('key').primaryKey(),
+	value: text('value', { mode: 'json' }).notNull()
+});
+
 export type User = typeof users.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Track = typeof tracks.$inferSelect;

@@ -11,6 +11,7 @@
 	import { api } from '#lib/api.ts';
 	import { setMotion, setTheme } from '#lib/state/ui.svelte.ts';
 	import StatusManager from '#lib/components/settings/StatusManager.svelte';
+	import BackgroundPicker from '#lib/components/settings/BackgroundPicker.svelte';
 	import type { Status } from '#lib/server/db/schema.ts';
 
 	let { data, form } = $props();
@@ -74,7 +75,6 @@
 
 <div class="mx-auto max-w-3xl px-4 pt-8 sm:px-8 md:pt-12">
 	<header class="enter mb-8">
-		<p class="eyebrow mb-2">Preferences</p>
 		<h1 class="serif text-4xl sm:text-5xl">Settings</h1>
 	</header>
 
@@ -147,6 +147,14 @@
 		{/if}
 
 		{#if me.isAdmin}
+			<section class="card enter p-5">
+				<h2 class="serif mb-1 text-2xl">Background</h2>
+				<p class="mb-4 text-[12.5px] text-fg-3">
+					Shown behind pages outside a project, and behind projects that don’t have their own cover or images. Random picks one per visit. Uploads are compressed (1600px + a small blurred copy).
+				</p>
+				<BackgroundPicker />
+			</section>
+
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">Statuses</h2>
 				<p class="mb-4 text-[12.5px] text-fg-3">Shared by all projects. Colors come from a muted palette so everything stays harmonious.</p>

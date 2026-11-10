@@ -1,20 +1,8 @@
 import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { db, schema } from './db';
 import { imageUrl } from './images';
+import { fallbackForProject } from './backgrounds';
 import type { AudioData, ImageData, Role, TextData } from './db/schema';
-
-export const DEFAULT_BACKGROUNDS = 8;
-
-function hash(str: string) {
-	let h = 2166136261;
-	for (let i = 0; i < str.length; i++) h = Math.imul(h ^ str.charCodeAt(i), 16777619);
-	return h >>> 0;
-}
-
-export function defaultBackground(seed: string) {
-	const n = String((hash(seed) % DEFAULT_BACKGROUNDS) + 1).padStart(2, '0');
-	return { backdrop: `/backgrounds/bg-${n}.webp`, full: `/backgrounds/bg-${n}-full.webp` };
-}
 
 export type Backdrop = { backdrop: string; full: string; source: 'cover' | 'inspiration' | 'default' };
 
@@ -41,7 +29,7 @@ export function projectBackdrop(project: schema.Project): Backdrop {
 		const url = imageUrl((pick.data as ImageData).file)!;
 		return { backdrop: url, full: url, source: 'inspiration' };
 	}
-	return { ...defaultBackground(project.id), source: 'default' };
+	return { ...fallbackForProject(project.id), source: 'default' };
 }
 
 export function listProjects(userId: string) {
