@@ -13,9 +13,27 @@
 	const shown = $derived(dragging ? dragTime : player.time);
 	const total = $derived(player.duration || player.current?.duration || 0);
 	const pct = $derived(total ? Math.min(100, (shown / total) * 100) : 0);
-	const markers = $derived(
-		(player.detail?.comments ?? []).filter((c) => c.timestampSec != null).map((c) => c.timestampSec as number)
+	// Only use comment details that belong to the track that's playing.
+	const timed = $derived(
+		player.detail && player.detail.track.id === player.current?.id
+			? player.detail.comments.filter((c) => c.timestampSec != null)
+			: []
 	);
+	const markers = $derived(timed.map((c) => c.timestampSec as number));
+
+	/** Pixels from a marker within which hovering previews its comment(s). */
+	const NEAR_PX = 8;
+	let barWidth = $state(0);
+	const near = $derived.by(() => {
+		if (hover === null || dragging || !total || !barWidth) return [];
+		const x = hover * barWidth;
+		const hits = timed
+			.map((c) => ({ c, d: Math.abs(((c.timestampSec as number) / total) * barWidth - x) }))
+			.filter((h) => h.d <= NEAR_PX)
+			.sort((a, b) => a.d - b.d || a.c.createdAt - b.c.createdAt);
+		return hits.map((h) => h.c);
+	});
+	const nearPct = $derived(near.length && total ? ((near[0].timestampSec as number) / total) * 100 : 0);
 
 	function timeAt(clientX: number) {
 		const r = bar.getBoundingClientRect();
@@ -31,6 +49,7 @@
 		if (dragging) dragTime = timeAt(e.clientX);
 		if (e.pointerType === 'mouse' && total) {
 			const r = bar.getBoundingClientRect();
+			barWidth = r.width;
 			hover = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
 		}
 	}
@@ -65,6 +84,22 @@
 		onpointerleave={() => (hover = null)}
 		onkeydown={key}
 	>
+		{#if near.length}
+			{@const c = near[0]}
+			<!-- Comment preview, above the time tooltip, anchored to the comment's marker. -->
+			<div
+				class="tip comment-tip pointer-events-none absolute bottom-full mb-9 w-max max-w-[min(280px,90%)] -translate-x-1/2 rounded-lg px-2.5 py-1.5 text-left text-[12px] leading-snug"
+				style:left="clamp(min(140px, 45%), {nearPct}%, calc(100% - min(140px, 45%)))"
+			>
+				<p class="mb-0.5 flex items-center gap-1.5 text-[11px] text-fg-3">
+					<span class="font-semibold text-fg-2">{c.author.name}</span>
+					<span class="ts-chip !h-4 !px-1 !text-[10px]">{formatTime(c.timestampSec)}</span>
+					{#if c.resolvedAt}<span class="text-accent">✓ Resolved</span>{/if}
+				</p>
+				<p class="line-clamp-3 whitespace-pre-wrap text-fg">{c.body}</p>
+				{#if near.length > 1}<p class="mt-0.5 text-[11px] text-fg-3">+{near.length - 1} more here</p>{/if}
+			</div>
+		{/if}
 		{#if hover !== null}
 			<span
 				class="tip tabular pointer-events-none absolute bottom-full mb-1.5 -translate-x-1/2 rounded-md px-2 py-0.5 text-[11.5px] font-medium"
@@ -99,6 +134,9 @@
 </div>
 
 <style>
+	.tip.comment-tip {
+		white-space: normal;
+	}
 	.tip {
 		background: var(--glass-popup);
 		border: 1px solid var(--line);
