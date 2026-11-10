@@ -8,6 +8,8 @@ export type QueueTrack = {
 	filename: string;
 	duration: number | null;
 	url: string;
+	/** Waveform peaks (0–255), or null when unavailable. */
+	peaks: number[] | null;
 };
 
 type QueueResponse = {

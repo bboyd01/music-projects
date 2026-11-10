@@ -36,6 +36,10 @@
 		{ value: 'mobile-off', label: 'Off on mobile' },
 		{ value: 'off', label: 'Off' }
 	];
+	const timelines = [
+		{ value: 'line', label: 'Line' },
+		{ value: 'waveform', label: 'Waveform' }
+	];
 	const services = [
 		{ value: 'apple', label: 'Apple Music' },
 		{ value: 'spotify', label: 'Spotify' }
@@ -95,6 +99,13 @@
 						<p class="text-[12.5px] text-fg-3">Subtle motion on panels and views (130ms max).</p>
 					</div>
 					{@render segmented(motions, settings.motion ?? 'on', (v) => save({ motion: v }), 'Animations')}
+				</div>
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<div>
+						<p class="font-medium">Player timeline</p>
+						<p class="text-[12.5px] text-fg-3">A simple playhead line, or the track’s waveform.</p>
+					</div>
+					{@render segmented(timelines, settings.timeline ?? 'line', (v) => save({ timeline: v }), 'Player timeline')}
 				</div>
 			</div>
 		</section>

@@ -43,10 +43,15 @@
 - Image pipeline: 300px WebP, no EXIF/ICC in output
 - Docker image built and run: first-boot admin, upload, data persisted across restart, healthcheck healthy, runs as non-root
 
+## Waveform (opt-in)
+
+- [x] Peaks computed on upload: WAV/AIFF parser + `mpg123-decoder` (WebAssembly, under 1 MB) for MP3; browser fallback for other formats; background backfill for existing files
+- [x] Canvas renderer: rounded bars, small gaps, brass for the played part, hover preview; comment markers as dots
+- [x] Shown in the mini player, fullscreen and the Listen page when Settings → Appearance → Player timeline = Waveform (default: Line)
+
 ## Roadmap / ideas
 
 - Audio inspirations from uploaded files (spec: future enhancement)
-- Waveform display on the progress line
 - Version history for track audio (keep previous mixes instead of overwriting)
 - Two-way Discord (bot that syncs replies back into the app)
 - Drag-and-drop reordering on the Board and List views (Table supports it today)

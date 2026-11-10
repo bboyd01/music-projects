@@ -7,6 +7,7 @@
 	import { formatTime, relativeTime } from '#lib/time.ts';
 	import { toast } from '#lib/state/ui.svelte.ts';
 	import { player } from '#lib/state/player.svelte.ts';
+	import { PeakBuilder } from '#lib/waveform.ts';
 	import PlayButton from './PlayButton.svelte';
 
 	type Audio = { filename: string; duration: number | null; size: number; uploadedAt: number } | null;
@@ -32,13 +33,15 @@
 		}
 		progress = 0;
 		try {
-			await uploadWithProgress(
+			const res = (await uploadWithProgress(
 				'PUT',
 				`/api/tracks/${trackId}/audio`,
 				file,
 				{ 'x-filename': encodeURIComponent(file.name), 'content-type': file.type || 'application/octet-stream' },
 				(f) => (progress = f)
-			);
+			)) as { peaks?: boolean };
+			// The server reads MP3/WAV/AIFF; for other formats the browser builds the waveform from the local file.
+			if (res?.peaks === false) void browserPeaks(file);
 			toast(audio ? 'Audio replaced' : 'Audio uploaded');
 			onchange();
 			if (player.project?.id === projectId) void player.refreshQueue();
@@ -47,6 +50,24 @@
 		} finally {
 			progress = null;
 			input.value = '';
+		}
+	}
+
+	async function browserPeaks(file: File) {
+		if (file.size > 300 * 1024 * 1024) return; // too big to decode comfortably in a browser
+		try {
+			const ctx = new AudioContext();
+			const audio = await ctx.decodeAudioData(await file.arrayBuffer());
+			void ctx.close();
+			const builder = new PeakBuilder();
+			const channels = Array.from({ length: audio.numberOfChannels }, (_, c) => audio.getChannelData(c));
+			builder.pushChannels(channels, audio.length);
+			const peaks = builder.finish();
+			if (!peaks) return;
+			await api('POST', `/api/tracks/${trackId}/audio/peaks`, { peaks }, { quiet: true });
+			if (player.project?.id === projectId) void player.refreshQueue();
+		} catch {
+			/* waveform is optional — the playhead line is used instead */
 		}
 	}
 

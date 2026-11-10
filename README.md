@@ -5,6 +5,7 @@ A self-hosted workspace for music composition projects: tracks, sketches, creati
 - **Projects → Tracks → Inspirations**, with customizable statuses
 - **Track list** in Table, List or Board view, with show/hide fields saved per project
 - **Persistent audio player**: a mini player stays on screen on every page, and there is a fullscreen Listen view with an inspiration collage
+- **Optional waveform**: SoundCloud-style bars in the mini player, fullscreen and Listen views (Settings → Appearance → Player timeline). The plain playhead line is the default
 - **Timestamped comments**: one tap to comment at the playhead (−3s), `@mentions`, one click to turn a comment into a todo
 - **Todos**: multiple checklists per track, optional timestamps, sort by added order or timestamp
 - **Inspirations**: each project has a canvas where you drag, drop and resize text, images and songs, and connect items with lines (plain, dotted, arrow, two-way). Each track has its own separate list. Search songs as you type, or paste an Apple Music / Spotify link
@@ -68,6 +69,7 @@ Data goes to `./data` (override with `DATA_DIR`). Migrations run automatically o
 - **Stack:** SvelteKit 3 (Svelte 5, adapter-node), SQLite via Drizzle ORM (better-sqlite3, WAL mode), Tailwind CSS 4, `sharp` for images, `music-metadata` for durations, argon2 password hashing.
 - **One container, one volume.** No external database or services are required.
 - **Persistent player:** a single `<audio>` element lives in the root layout (`src/lib/components/player/AudioEngine.svelte`) and is driven by a global state object (`src/lib/state/player.svelte.ts`). Client-side navigation never unmounts it, so playback continues anywhere in the app. Lock-screen controls use the Media Session API.
+- **Waveforms** are computed once on the server after upload (WAV/AIFF parsed directly, MP3 decoded with the small WebAssembly `mpg123-decoder`; no ffmpeg) and stored as ~1,200 peaks per track. Other formats get peaks from the uploader's browser. Existing files are backfilled in the background on start.
 - **Audio** streams to disk on upload (it's never held whole in memory) and is served with HTTP Range support for seeking. Each track has one audio file, and uploading a new one replaces it.
 - **Images** are processed in memory and only compressed WebP output is saved. EXIF orientation is applied, then all metadata (including GPS) is stripped.
 
