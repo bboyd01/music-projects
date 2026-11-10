@@ -48,7 +48,7 @@
 			</button>
 		</header>
 
-		{#if page.data.user?.settings?.timeline === 'waveform' && player.current.peaks?.length}
+		{#if (page.data.user?.settings?.timeline ?? 'waveform') === 'waveform' && player.current.peaks?.length}
 			<!-- Waveform view (opt-in): seek and preview comments from here too. -->
 			<section class="card enter mb-6 px-4 pt-8 pb-3 sm:px-5">
 				<ProgressLine waveHeight={56} />

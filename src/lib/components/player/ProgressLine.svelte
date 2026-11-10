@@ -6,9 +6,9 @@
 
 	let { compact = false, waveHeight = compact ? 24 : 64 }: { compact?: boolean; waveHeight?: number } = $props();
 
-	// Opt-in per user (Settings → Appearance); falls back to the line when a track has no peaks.
+	// On by default; users can pick the plain line in Settings → Appearance. Falls back to the line without peaks.
 	const peaks = $derived(player.current?.peaks ?? null);
-	const useWave = $derived(page.data.user?.settings?.timeline === 'waveform' && !!peaks?.length);
+	const useWave = $derived((page.data.user?.settings?.timeline ?? 'waveform') === 'waveform' && !!peaks?.length);
 
 	let bar: HTMLDivElement;
 	let dragging = $state(false);

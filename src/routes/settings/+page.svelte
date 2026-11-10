@@ -105,7 +105,7 @@
 						<p class="font-medium">Player timeline</p>
 						<p class="text-[12.5px] text-fg-3">A simple playhead line, or the track’s waveform.</p>
 					</div>
-					{@render segmented(timelines, settings.timeline ?? 'line', (v) => save({ timeline: v }), 'Player timeline')}
+					{@render segmented(timelines, settings.timeline ?? 'waveform', (v) => save({ timeline: v }), 'Player timeline')}
 				</div>
 			</div>
 		</section>

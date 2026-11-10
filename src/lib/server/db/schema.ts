@@ -15,7 +15,7 @@ export type UserSettings = {
 	theme?: 'system' | 'dark' | 'light';
 	motion?: 'on' | 'mobile-off' | 'off';
 	musicService?: 'apple' | 'spotify';
-	/** Player timeline style: the plain line (default) or a waveform. */
+	/** Player timeline style: a waveform (default) or the plain line. */
 	timeline?: 'line' | 'waveform';
 };
 
