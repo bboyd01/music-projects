@@ -4,6 +4,8 @@
 	import Maximize2 from '@lucide/svelte/icons/maximize-2';
 	import { player } from '#lib/state/player.svelte.ts';
 	import FullPlayer from '#lib/components/player/FullPlayer.svelte';
+	import ProgressLine from '#lib/components/player/ProgressLine.svelte';
+	import { page } from '$app/state';
 	import CommentsPanel from '#lib/components/comments/CommentsPanel.svelte';
 	import TodosPanel from '#lib/components/todos/TodosPanel.svelte';
 	import TrackIcon from '#lib/components/TrackIcon.svelte';
@@ -45,6 +47,13 @@
 				<Maximize2 size={15} /><span class="hidden sm:inline">Fullscreen</span>
 			</button>
 		</header>
+
+		{#if (page.data.user?.settings?.timeline ?? 'waveform') === 'waveform' && player.current.peaks?.length}
+			<!-- Waveform view (opt-in): seek and preview comments from here too. -->
+			<section class="card enter mb-6 px-4 pt-8 pb-3 sm:px-5">
+				<ProgressLine waveHeight={56} />
+			</section>
+		{/if}
 
 		{#if d && d.track.id === player.current.id}
 			<div class="grid gap-6 lg:grid-cols-2">

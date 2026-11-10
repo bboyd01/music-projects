@@ -22,6 +22,7 @@
     "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^26.6.6",
     "drizzle-kit": "^0.31.11",
+    "lamejs": "^1.2.1",
     "svelte": "^5.57.3",
     "svelte-check": "^4.7.8",
     "tailwindcss": "^4.3.5",
@@ -36,6 +37,7 @@
     "@node-rs/argon2": "^2.2.2",
     "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.4",
+    "mpg123-decoder": "^1.0.3",
     "music-metadata": "^12.3.5",
     "sharp": "^0.35.5"
   },

@@ -15,6 +15,8 @@ export type UserSettings = {
 	theme?: 'system' | 'dark' | 'light';
 	motion?: 'on' | 'mobile-off' | 'off';
 	musicService?: 'apple' | 'spotify';
+	/** Player timeline style: a waveform (default) or the plain line. */
+	timeline?: 'line' | 'waveform';
 };
 
 export const users = sqliteTable('users', {
@@ -128,6 +130,8 @@ export const audioFiles = sqliteTable('audio_files', {
 	mime: text('mime').notNull(),
 	duration: real('duration'),
 	size: integer('size').notNull(),
+	/** Waveform peaks (JSON array of 0–255), computed once after upload. Null = not available. */
+	peaks: text('peaks', { mode: 'json' }).$type<number[]>(),
 	uploadedAt: createdAt()
 });
 

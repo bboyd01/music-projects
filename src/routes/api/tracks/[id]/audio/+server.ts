@@ -3,7 +3,8 @@ import { eq } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
 import { newId } from '#lib/server/id.ts';
 import { requireTrackAccess } from '#lib/server/access.ts';
-import { deleteAudio, resolveAudioType, saveAudioStream } from '#lib/server/audio.ts';
+import { audioPath, deleteAudio, resolveAudioType, saveAudioStream } from '#lib/server/audio.ts';
+import { computePeaks } from '#lib/server/waveform.ts';
 
 /**
  * Upload (or replace) the track's single audio file.
@@ -17,6 +18,8 @@ export async function PUT({ params, request, locals }) {
 	if (!request.body) error(400, 'No file');
 
 	const saved = await saveAudioStream(request.body, type.ext);
+	// Waveform peaks (WAV/AIFF/MP3 on the server); null for other formats — the browser can send them.
+	const peaks = await computePeaks(audioPath(saved.file));
 	const previous = db.select().from(schema.audioFiles).where(eq(schema.audioFiles.trackId, params.id)).get();
 	const row = {
 		id: newId(),
@@ -26,6 +29,7 @@ export async function PUT({ params, request, locals }) {
 		mime: type.mime,
 		duration: saved.duration,
 		size: saved.size,
+		peaks,
 		uploadedAt: Date.now()
 	};
 	db.transaction((tx) => {
@@ -33,7 +37,7 @@ export async function PUT({ params, request, locals }) {
 		tx.insert(schema.audioFiles).values(row).run();
 	});
 	await deleteAudio(previous?.path);
-	return json({ ok: true, duration: saved.duration });
+	return json({ ok: true, duration: saved.duration, peaks: !!peaks });
 }
 
 export async function DELETE({ params, locals }) {

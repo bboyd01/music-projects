@@ -1,7 +1,9 @@
-import { count, eq } from 'drizzle-orm';
+import { count, eq, isNull } from 'drizzle-orm';
 import { db, runMigrations, schema } from './db';
 import { config } from './config';
 import { newId } from './id';
+import { computePeaks } from './waveform';
+import { audioPath } from './audio';
 import { hashPassword, purgeExpiredSessions } from './auth';
 import { defaultProjectStatuses, defaultTrackStatuses } from '#lib/palette.ts';
 
@@ -47,6 +49,7 @@ export async function bootstrap() {
 	if (config.includeTestUser) testHash = await hashPassword('test');
 	syncTestUser();
 	purgeExpiredSessions();
+	backfillPeaks();
 }
 
 /** The read-only "test" account exists only while INCLUDE_TEST_USER is on. */
@@ -66,4 +69,32 @@ function syncTestUser() {
 		db.delete(schema.users).where(eq(schema.users.id, existing.id)).run();
 		console.log('[music-projects] Removed the read-only test account (INCLUDE_TEST_USER is off).');
 	}
+}
+
+/**
+ * Compute waveform peaks for audio uploaded before waveforms existed.
+ * Runs in the background one file at a time, so startup and requests aren't blocked.
+ */
+function backfillPeaks() {
+	const pending = db
+		.select({ id: schema.audioFiles.id, path: schema.audioFiles.path })
+		.from(schema.audioFiles)
+		.where(isNull(schema.audioFiles.peaks))
+		.all();
+	if (!pending.length) return;
+	let done = 0;
+	const next = async () => {
+		const item = pending.shift();
+		if (!item) {
+			if (done) console.log(`[music-projects] Waveforms ready for ${done} existing audio file(s).`);
+			return;
+		}
+		const peaks = await computePeaks(audioPath(item.path)).catch(() => null);
+		if (peaks) {
+			db.update(schema.audioFiles).set({ peaks }).where(eq(schema.audioFiles.id, item.id)).run();
+			done++;
+		}
+		setTimeout(next, 50);
+	};
+	setTimeout(next, 2000);
 }

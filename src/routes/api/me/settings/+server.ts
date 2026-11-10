@@ -13,7 +13,8 @@ export async function PATCH({ request, locals }) {
 		...defined({
 			theme: oneOf(body.theme, 'Theme', ['system', 'dark', 'light'] as const),
 			motion: oneOf(body.motion, 'Animations', ['on', 'mobile-off', 'off'] as const),
-			musicService: oneOf(body.musicService, 'Music service', ['apple', 'spotify'] as const)
+			musicService: oneOf(body.musicService, 'Music service', ['apple', 'spotify'] as const),
+			timeline: oneOf(body.timeline, 'Player timeline', ['line', 'waveform'] as const)
 		})
 	};
 	db.update(schema.users).set({ settings: next }).where(eq(schema.users.id, user.id)).run();

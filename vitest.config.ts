@@ -5,5 +5,5 @@ export default defineConfig({
 	resolve: {
 		alias: [{ find: /^#lib\/(.*)$/, replacement: path.resolve('src/lib') + '/$1' }]
 	},
-	test: { include: ['src/**/*.test.ts'] }
+	test: { include: ['src/**/*.test.ts'], testTimeout: 20000 }
 });

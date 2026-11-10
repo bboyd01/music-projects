@@ -345,7 +345,7 @@ export type ConnectionView = ReturnType<typeof listConnections>[number];
 export function trackAudio(trackId: string) {
 	const a = db.select().from(schema.audioFiles).where(eq(schema.audioFiles.trackId, trackId)).get();
 	return a
-		? { id: a.id, filename: a.filename, duration: a.duration, size: a.size, uploadedAt: a.uploadedAt, url: `/files/audio/${trackId}?v=${a.id}` }
+		? { id: a.id, filename: a.filename, duration: a.duration, size: a.size, uploadedAt: a.uploadedAt, hasPeaks: !!a.peaks, url: `/files/audio/${trackId}?v=${a.id}` }
 		: null;
 }
 
@@ -372,7 +372,8 @@ export function projectQueue(projectId: string) {
 			icon: schema.tracks.icon,
 			filename: schema.audioFiles.filename,
 			duration: schema.audioFiles.duration,
-			audioId: schema.audioFiles.id
+			audioId: schema.audioFiles.id,
+			peaks: schema.audioFiles.peaks
 		})
 		.from(schema.tracks)
 		.innerJoin(schema.audioFiles, eq(schema.audioFiles.trackId, schema.tracks.id))

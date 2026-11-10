@@ -128,7 +128,7 @@
 				</div>
 				<div class="col-span-1 flex justify-end"><CommentButtons size={20} /></div>
 			</div>
-			<div class="mt-4"><ProgressLine /></div>
+			<div class="mt-4"><ProgressLine waveHeight={72} /></div>
 			<div class="mt-3"><Transport size="lg" /></div>
 		</div>
 	</div>
