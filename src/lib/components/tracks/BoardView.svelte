@@ -8,7 +8,7 @@
 	import type { Status } from '#lib/server/db/schema.ts';
 	import { formatDate, formatTime } from '#lib/time.ts';
 	import { dur } from '#lib/state/ui.svelte.ts';
-	import TrackIcon from '../TrackIcon.svelte';
+	import TrackIconButton from './TrackIconButton.svelte';
 	import StatusSelect from '../StatusSelect.svelte';
 	import PlayButton from './PlayButton.svelte';
 
@@ -89,7 +89,7 @@
 						animate:flip={{ duration: dur('panel') }}
 					>
 						<div class="flex items-start gap-2">
-							{#if t.icon}<span class="mt-0.5 text-fg-2"><TrackIcon icon={t.icon} size={15} /></span>{/if}
+							<TrackIconButton title={t.title} icon={t.icon} size={15} class="-m-1 mt-0 p-1" />
 							<p class="min-w-0 flex-1 text-[13.5px] leading-snug font-medium">{t.title}</p>
 							<span class="-mt-1 -mr-1"><PlayButton {projectId} trackId={t.id} disabled={!t.audio} /></span>
 						</div>

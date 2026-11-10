@@ -7,7 +7,7 @@
 	import type { TrackRow } from '#lib/server/queries.ts';
 	import type { TrackFieldId } from '#lib/track-fields.ts';
 	import { formatDate, formatTime } from '#lib/time.ts';
-	import TrackIcon from '../TrackIcon.svelte';
+	import TrackIconButton from './TrackIconButton.svelte';
 	import StatusSelect from '../StatusSelect.svelte';
 	import PlayButton from './PlayButton.svelte';
 
@@ -92,7 +92,7 @@
 					<td class="tabular !px-1 text-right text-[13px] text-fg-3">{i + 1}</td>
 					<td>
 						<div class="flex min-w-0 items-center gap-2.5">
-							{#if t.icon}<span class="text-fg-2"><TrackIcon icon={t.icon} size={16} /></span>{/if}
+							<TrackIconButton title={t.title} icon={t.icon} size={16} class="-m-1 p-1" />
 							<span class="truncate font-medium">{t.title}</span>
 						</div>
 					</td>

@@ -6,7 +6,7 @@
 	import type { TrackRow } from '#lib/server/queries.ts';
 	import type { TrackFieldId } from '#lib/track-fields.ts';
 	import { formatDate, formatTime } from '#lib/time.ts';
-	import TrackIcon from '../TrackIcon.svelte';
+	import TrackIconButton from './TrackIconButton.svelte';
 	import StatusSelect from '../StatusSelect.svelte';
 	import PlayButton from './PlayButton.svelte';
 
@@ -33,9 +33,13 @@
 			<a href="/projects/{projectId}/tracks/{t.id}" class="item card flex items-center gap-3 px-3 py-3 sm:px-4">
 				<span class="tabular w-5 shrink-0 text-right text-[13px] text-fg-3">{i + 1}</span>
 				<PlayButton {projectId} trackId={t.id} disabled={!t.audio} />
-				<span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-hover text-fg-2">
-					<TrackIcon icon={t.icon ?? 'note'} size={17} />
-				</span>
+				<TrackIconButton
+					title={t.title}
+					icon={t.icon}
+					size={17}
+					placeholder
+					class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-hover text-fg-2"
+				/>
 				<div class="min-w-0 flex-1">
 					<p class="truncate font-medium">{t.title}</p>
 					<div class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[12px] text-fg-3">
