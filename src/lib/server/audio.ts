@@ -6,7 +6,9 @@ import { pipeline } from 'node:stream/promises';
 import { parseFile } from 'music-metadata';
 import { error } from '@sveltejs/kit';
 import { config } from './config';
-import { newToken } from './id';
+import { newId, newToken } from './id';
+import { eq } from 'drizzle-orm';
+import { db, schema } from './db';
 
 const EXT_BY_MIME: Record<string, string> = {
 	'audio/mpeg': 'mp3',
@@ -83,4 +85,59 @@ export function audioPath(file: string) {
 export async function deleteAudio(file: string | null | undefined) {
 	if (!file) return;
 	await fsp.rm(audioPath(file), { force: true });
+}
+
+/** Check a saved file really is WAV or MP3 by its first bytes. */
+export async function sniffAudio(file: string): Promise<'wav' | 'mp3' | null> {
+	const fh = await fsp.open(audioPath(file), 'r');
+	try {
+		const b = Buffer.alloc(12);
+		await fh.read(b, 0, 12, 0);
+		if (b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WAVE') return 'wav';
+		if (b.toString('ascii', 0, 3) === 'ID3' || (b[0] === 0xff && (b[1] & 0xe0) === 0xe0)) return 'mp3';
+		return null;
+	} finally {
+		await fh.close();
+	}
+}
+
+/**
+ * Store (or replace) a track's single audio file: stream to disk, compute waveform peaks,
+ * swap the row, then delete the previous file. Shared by the browser upload and the API.
+ */
+export async function storeTrackAudio(
+	trackId: string,
+	body: ReadableStream<Uint8Array>,
+	filename: string,
+	type: { ext: string; mime: string },
+	opts: { require?: ('wav' | 'mp3')[] } = {}
+) {
+	const saved = await saveAudioStream(body, type.ext);
+	if (opts.require) {
+		const kind = await sniffAudio(saved.file).catch(() => null);
+		if (!kind || !opts.require.includes(kind)) {
+			await deleteAudio(saved.file);
+			error(415, 'The file isn’t a valid WAV or MP3.');
+		}
+	}
+	const { computePeaks } = await import('./waveform');
+	const peaks = await computePeaks(audioPath(saved.file));
+	const previous = db.select().from(schema.audioFiles).where(eq(schema.audioFiles.trackId, trackId)).get();
+	const row = {
+		id: newId(),
+		trackId,
+		filename,
+		path: saved.file,
+		mime: type.mime,
+		duration: saved.duration,
+		size: saved.size,
+		peaks,
+		uploadedAt: Date.now()
+	};
+	db.transaction((tx) => {
+		tx.delete(schema.audioFiles).where(eq(schema.audioFiles.trackId, trackId)).run();
+		tx.insert(schema.audioFiles).values(row).run();
+	});
+	await deleteAudio(previous?.path);
+	return { duration: saved.duration, peaks: !!peaks, size: saved.size };
 }

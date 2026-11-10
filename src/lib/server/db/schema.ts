@@ -280,6 +280,22 @@ export const appSettings = sqliteTable('app_settings', {
 	value: text('value', { mode: 'json' }).notNull()
 });
 
+/** Personal API tokens (scripts like the REAPER uploader). Only a hash is stored. */
+export const apiTokens = sqliteTable(
+	'api_tokens',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => users.id, { onDelete: 'cascade' }),
+		name: text('name').notNull(),
+		tokenHash: text('token_hash').notNull().unique(),
+		createdAt: createdAt(),
+		lastUsedAt: integer('last_used_at', { mode: 'number' })
+	},
+	(t) => [index('api_tokens_user_idx').on(t.userId)]
+);
+
 export type User = typeof users.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Track = typeof tracks.$inferSelect;

@@ -2,6 +2,7 @@ import { fail } from '@sveltejs/kit';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { config } from '#lib/server/config.ts';
+import { listApiTokens } from '#lib/server/tokens.ts';
 import { and, asc, eq, ne, or } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
 import { newId } from '#lib/server/id.ts';
@@ -55,7 +56,8 @@ export async function load({ locals }) {
 					.sort((a, b) => rank(a) - rank(b))
 			: [],
 		storage: me.isAdmin ? await storageUsage() : null,
-		globalWebhook: !!process.env.DISCORD_WEBHOOK_URL
+		globalWebhook: !!process.env.DISCORD_WEBHOOK_URL,
+		apiTokens: me.readOnly ? [] : listApiTokens(me.id)
 	};
 }
 
