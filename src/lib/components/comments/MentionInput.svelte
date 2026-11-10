@@ -94,6 +94,13 @@
 		use:autogrow={value}
 		oninput={detect}
 		onclick={detect}
+		onfocus={(e) => {
+			// Phones: once the keyboard has opened, bring the box into the visible area.
+			const el = e.currentTarget;
+			if (matchMedia('(max-width: 767px), (pointer: coarse)').matches) {
+				setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 350);
+			}
+		}}
 		onkeydown={key}
 		onblur={() => setTimeout(() => (query = null), 120)}
 	></textarea>

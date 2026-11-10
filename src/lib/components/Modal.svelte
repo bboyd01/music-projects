@@ -25,10 +25,18 @@
 	}
 </script>
 
-<svelte:window onkeydown={(e) => open && e.key === 'Escape' && close()} />
+<svelte:window
+	onkeydown={(e) => {
+		if (open && e.key === 'Escape') {
+			e.preventDefault(); // handled — nothing underneath should react to this Escape
+			close();
+		}
+	}}
+/>
 
 {#if open}
-	<div class="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6">
+	<!-- Phones: pinned to the top so the keyboard never covers it. Larger screens: centered. -->
+	<div class="fixed inset-0 z-[60] flex items-start justify-center px-2 pt-[max(0.5rem,env(safe-area-inset-top))] sm:items-center sm:p-6">
 		<button
 			type="button"
 			class="absolute inset-0 bg-black/50"
@@ -37,12 +45,12 @@
 			transition:fade
 		></button>
 		<div
-			class="glass-popup relative flex max-h-[88dvh] w-full flex-col rounded-t-2xl sm:rounded-2xl"
+			class="glass-popup relative flex max-h-[calc(var(--vvh,100dvh)-1rem-env(safe-area-inset-top))] w-full flex-col rounded-2xl sm:max-h-[88dvh]"
 			style:max-width="{width}px"
 			role="dialog"
 			aria-modal="true"
 			aria-label={title}
-			transition:slide={{ y: 12 }}
+			transition:slide={{ y: -10 }}
 		>
 			{#if title}
 				<header class="flex items-center justify-between gap-4 px-5 pt-4 pb-2">
@@ -54,7 +62,7 @@
 				{@render children()}
 			</div>
 			{#if footer}
-				<footer class="flex justify-end gap-2 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+				<footer class="flex justify-end gap-2 border-t border-line px-5 py-3">
 					{@render footer()}
 				</footer>
 			{/if}

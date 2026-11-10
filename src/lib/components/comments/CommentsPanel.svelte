@@ -91,11 +91,21 @@
 		onchange();
 	}
 
+	// Two-tap delete: the first tap arms (red icon), a second tap within 5s deletes.
+	let armed = $state<string | null>(null);
+	let disarm: ReturnType<typeof setTimeout> | undefined;
 	async function remove(c: CommentView) {
-		if (!confirm('Delete this comment?')) return;
+		clearTimeout(disarm);
+		if (armed !== c.id) {
+			armed = c.id;
+			disarm = setTimeout(() => (armed = null), 5000);
+			return;
+		}
+		armed = null;
 		await api('DELETE', `/api/comments/${c.id}`);
 		onchange();
 	}
+	$effect(() => () => clearTimeout(disarm));
 
 	const canResolve = (c: CommentView) => !readOnly && (role !== 'viewer' || c.author.id === me?.id);
 </script>
@@ -146,12 +156,22 @@
 									{#if c.hasTodo}<ListChecks size={14} />{:else}<ListPlus size={14} />{/if}
 								</button>
 							{/if}
-							{#if !readOnly && (c.author.id === me?.id || role === 'owner')}
-								<button type="button" class="icon-btn size-7 hover:text-danger" aria-label="Delete comment" onclick={() => remove(c)}>
-									<Trash2 size={13} />
-								</button>
-							{/if}
 						</div>
+						{#if !readOnly && (c.author.id === me?.id || role === 'owner')}
+							{@const isArmed = armed === c.id}
+							<button
+								type="button"
+								class="delete icon-btn size-7 {isArmed
+									? 'armed !text-danger'
+									: 'hover:text-danger md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100'}"
+								aria-label={isArmed ? 'Tap again to delete' : 'Delete comment'}
+								title={isArmed ? 'Tap again to delete' : 'Delete'}
+								onclick={() => remove(c)}
+							>
+								<Trash2 size={13} />
+							</button>
+							{#if isArmed}<span class="text-[11.5px] text-danger" aria-live="polite">Tap again to delete</span>{/if}
+						{/if}
 					</div>
 				</header>
 				<div class="body pl-8"><CommentBody body={c.body} /></div>
@@ -183,6 +203,15 @@
 </div>
 
 <style>
+	.delete {
+		transition:
+			background-color var(--dur-fade) var(--ease),
+			color var(--dur-fade) var(--ease),
+			opacity var(--dur-fade) var(--ease);
+	}
+	.delete.armed {
+		background: color-mix(in srgb, var(--danger) 16%, transparent);
+	}
 	.resolved .body {
 		opacity: 0.6;
 	}
