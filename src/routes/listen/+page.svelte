@@ -46,7 +46,9 @@
 					<a href="/projects/{player.project?.id}/tracks/{player.current.id}" class="hover:text-fg-2">{player.current.title}</a>
 				</h1>
 			</div>
-			<button class="btn btn-outline" onclick={() => (player.mode = 'full')}><Maximize2 size={14} /> Fullscreen</button>
+			<button class="btn btn-outline shrink-0 px-2.5 sm:px-3.5" aria-label="Fullscreen" onclick={() => (player.mode = 'full')}>
+				<Maximize2 size={15} /><span class="hidden sm:inline">Fullscreen</span>
+			</button>
 		</header>
 
 		{#if d && d.track.id === player.current.id}

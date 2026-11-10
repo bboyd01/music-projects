@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { autogrow } from '#lib/actions.ts';
 	import type { Member } from '#lib/state/composer.svelte.ts';
 
 	let {
@@ -90,6 +91,7 @@
 		{rows}
 		{placeholder}
 		class="input resize-none"
+		use:autogrow={value}
 		oninput={detect}
 		onclick={detect}
 		onkeydown={key}

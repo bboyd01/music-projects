@@ -6,6 +6,8 @@
 	import { player } from '#lib/state/player.svelte.ts';
 	import IconPicker from '#lib/components/IconPicker.svelte';
 	import StatusSelect from '#lib/components/StatusSelect.svelte';
+	import DateChip from '#lib/components/DateChip.svelte';
+	import { autogrow } from '#lib/actions.ts';
 	import TrackAudio from '#lib/components/tracks/TrackAudio.svelte';
 	import CommentsPanel from '#lib/components/comments/CommentsPanel.svelte';
 	import TodosPanel from '#lib/components/todos/TodosPanel.svelte';
@@ -55,38 +57,52 @@
 
 <svelte:head><title>{t.title} · Music Projects</title></svelte:head>
 
-<header class="mb-6 flex flex-wrap items-start gap-4">
-	<IconPicker value={t.icon} disabled={!canEdit} onchange={(icon) => patch({ icon })} />
-	<div class="min-w-0 flex-1">
-		{#if canEdit}
-			<input
-				class="serif input-bare -ml-1.5 w-full px-1.5 text-3xl leading-tight sm:text-4xl"
-				bind:value={title}
-				aria-label="Track title"
-				onblur={() => (title.trim() && title.trim() !== t.title ? patch({ title: title.trim() }) : (title = t.title))}
-				onkeydown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-			/>
-		{:else}
-			<h2 class="serif text-3xl leading-tight sm:text-4xl">{t.title}</h2>
-		{/if}
-		<div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
-			<StatusSelect scope="track" value={t.statusId} disabled={!canEdit} onchange={(statusId) => patch({ statusId })} />
-			<label class="flex items-center gap-2 text-fg-3">
-				Start
-				<input type="date" class="input h-7 w-auto px-2 text-[12.5px]" value={t.startDate ?? ''} disabled={!canEdit} onchange={(e) => patch({ startDate: e.currentTarget.value || null })} />
-			</label>
-			<label class="flex items-center gap-2 text-fg-3">
-				Due
-				<input type="date" class="input h-7 w-auto px-2 text-[12.5px]" value={t.dueDate ?? ''} disabled={!canEdit} onchange={(e) => patch({ dueDate: e.currentTarget.value || null })} />
-			</label>
+{#snippet meta()}
+	<StatusSelect scope="track" value={t.statusId} disabled={!canEdit} onchange={(statusId) => patch({ statusId })} />
+	<DateChip label="Start" value={t.startDate} disabled={!canEdit} onchange={(startDate) => patch({ startDate })} />
+	<DateChip label="Due" value={t.dueDate} disabled={!canEdit} onchange={(dueDate) => patch({ dueDate })} />
+{/snippet}
+
+<header class="mb-8">
+	<div class="flex items-start gap-3 sm:gap-4">
+		<IconPicker value={t.icon} disabled={!canEdit} onchange={(icon) => patch({ icon })} />
+		<div class="min-w-0 flex-1">
+			{#if canEdit}
+				<textarea
+					class="serif input-bare -ml-1.5 block w-full resize-none px-1.5 text-3xl leading-tight sm:text-4xl"
+					rows="1"
+					bind:value={title}
+					use:autogrow={title}
+					aria-label="Track title"
+					onblur={() => (title.trim() && title.trim() !== t.title ? patch({ title: title.trim() }) : (title = t.title))}
+					onkeydown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							e.currentTarget.blur();
+						}
+					}}
+				></textarea>
+			{:else}
+				<h2 class="serif text-3xl leading-tight sm:text-4xl">{t.title}</h2>
+			{/if}
+			<div class="mt-2.5 hidden flex-wrap items-center gap-2 sm:flex">{@render meta()}</div>
+		</div>
+		<!-- Desktop actions sit beside the title… -->
+		<div class="hidden items-center gap-1 sm:flex">
+			<button class="btn btn-accent" disabled={!d.audio} title={d.audio ? 'Open in the Listen tab' : 'Upload audio first'} onclick={listen}>
+				<Headphones size={16} /> Listen
+			</button>
+			{#if canEdit}
+				<button class="icon-btn hover:text-danger" title="Delete track" aria-label="Delete track" onclick={del}><Trash2 size={16} /></button>
+			{/if}
 		</div>
 	</div>
-	<div class="order-last flex w-full items-center gap-2 sm:order-none sm:w-auto">
-		<button class="btn btn-accent flex-1 sm:flex-none" disabled={!d.audio} title={d.audio ? 'Open in the Listen tab' : 'Upload audio first'} onclick={listen}>
-			<Headphones size={16} /> Listen
-		</button>
+	<!-- …on phones, details and actions get full-width rows. -->
+	<div class="mt-3 flex flex-wrap items-center gap-2 sm:hidden">{@render meta()}</div>
+	<div class="mt-4 flex items-center gap-2 sm:hidden">
+		<button class="btn btn-accent h-10 flex-1" disabled={!d.audio} onclick={listen}><Headphones size={16} /> Listen</button>
 		{#if canEdit}
-			<button class="icon-btn hover:text-danger" title="Delete track" aria-label="Delete track" onclick={del}><Trash2 size={16} /></button>
+			<button class="icon-btn size-10 hover:text-danger" aria-label="Delete track" onclick={del}><Trash2 size={17} /></button>
 		{/if}
 	</div>
 </header>
@@ -102,7 +118,8 @@
 			<h3 class="eyebrow mb-2">Description</h3>
 			{#if canEdit}
 				<textarea
-					class="input min-h-24 [field-sizing:content]"
+					class="input min-h-24"
+					use:autogrow={description}
 					placeholder="Ideas, structure, key, tempo, references…"
 					bind:value={description}
 					onblur={() => description !== t.description && patch({ description })}

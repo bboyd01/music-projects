@@ -314,6 +314,8 @@
 
 	.menu {
 		@apply z-50 min-w-44 rounded-xl p-1;
+		overscroll-behavior: contain;
+		-webkit-overflow-scrolling: touch;
 		background: var(--glass-popup);
 		border: 1px solid var(--line);
 		box-shadow: var(--shadow);
@@ -347,9 +349,12 @@
 		opacity: 0;
 	}
 }
+/* `backwards` (not `both`): once finished, the animation leaves no lasting
+   transform/opacity, so it doesn't trap menus and dialogs in its own layer
+   (which put them under the mini player and tab bar). */
 .enter {
-	animation: rise var(--dur-panel) var(--ease) both;
+	animation: rise var(--dur-panel) var(--ease) backwards;
 }
 .enter-fade {
-	animation: fade var(--dur-panel) var(--ease) both;
+	animation: fade var(--dur-panel) var(--ease) backwards;
 }
