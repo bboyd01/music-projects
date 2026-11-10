@@ -46,6 +46,7 @@
 		<thead>
 			<tr class="eyebrow border-b border-line [&>th]:px-3 [&>th]:py-2.5 [&>th]:font-medium">
 				<th class="w-8"></th>
+				<th class="w-8 !px-1 text-right">#</th>
 				<th>Track</th>
 				{#if has('status')}<th class="w-40">Status</th>{/if}
 				{#if has('startDate')}<th class="w-24">Start</th>{/if}
@@ -88,6 +89,7 @@
 							<PlayButton {projectId} trackId={t.id} disabled={!t.audio} />
 						</div>
 					</td>
+					<td class="tabular !px-1 text-right text-[13px] text-fg-3">{i + 1}</td>
 					<td>
 						<div class="flex min-w-0 items-center gap-2.5">
 							{#if t.icon}<span class="text-fg-2"><TrackIcon icon={t.icon} size={16} /></span>{/if}

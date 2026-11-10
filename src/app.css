@@ -345,6 +345,18 @@
 	}
 }
 
+/* Wide sections on the project page (Board view, Inspirations): 85% of the area beside
+   the sidebar, centered on the page, on desktop. Normal width on phones. */
+@media (min-width: 768px) {
+	.breakout-wide {
+		/* Never narrower than the normal content column. */
+		--w: max(100%, calc((100vw - 232px) * 0.85));
+		width: var(--w);
+		max-width: none;
+		margin-left: calc((100% - var(--w)) / 2);
+	}
+}
+
 /* Entrance used for page content and large blocks. */
 @keyframes rise {
 	from {
