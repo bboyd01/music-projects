@@ -31,6 +31,7 @@
 	{#each tracks as t, i (t.id)}
 		<li class="enter" style:animation-delay="{Math.min(i, 12) * 12}ms">
 			<a href="/projects/{projectId}/tracks/{t.id}" class="item card flex items-center gap-3 px-3 py-3 sm:px-4">
+				<span class="tabular w-5 shrink-0 text-right text-[13px] text-fg-3">{i + 1}</span>
 				<PlayButton {projectId} trackId={t.id} disabled={!t.audio} />
 				<span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-hover text-fg-2">
 					<TrackIcon icon={t.icon ?? 'note'} size={17} />

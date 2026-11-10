@@ -139,5 +139,7 @@
 
 <section id="inspirations" aria-labelledby="inspirations-heading" class="scroll-mt-6">
 	<h2 id="inspirations-heading" class="serif mb-3 text-2xl">Inspirations</h2>
+	<div class="breakout-wide">
 	<Canvas items={data.inspirations} connections={data.connections} projectId={data.project.id} {canEdit} />
+	</div>
 </section>

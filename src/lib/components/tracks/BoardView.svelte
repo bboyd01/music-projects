@@ -127,11 +127,12 @@
 	/* Desktop: 85% of the area beside the sidebar, centered; columns share the width
 	   and only scroll when they'd get narrower than 150px. */
 	@media (min-width: 768px) {
+		/* Same width as .breakout-wide (kept here: the phone rule above sets margins). */
 		.board {
-			--area: calc(100vw - 232px);
-			width: calc(var(--area) * 0.85);
+			--w: max(100%, calc((100vw - 232px) * 0.85));
+			width: var(--w);
 			margin-inline: 0;
-			margin-left: calc(50% - var(--area) * 0.425);
+			margin-left: calc((100% - var(--w)) / 2);
 			padding-inline: 0;
 			grid-template-columns: var(--cols-d);
 		}
