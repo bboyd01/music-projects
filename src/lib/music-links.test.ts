@@ -34,3 +34,31 @@ describe('openUrlFor', () => {
 		expect(openUrlFor(song, 'spotify')).toBe('https://open.spotify.com/search/Reckoner%20Radiohead');
 	});
 });
+
+describe('YouTube links', () => {
+	const id = 'dQw4w9WgXcQ';
+	const watch = `https://www.youtube.com/watch?v=${id}`;
+	it.each([
+		`https://www.youtube.com/watch?v=${id}`,
+		`https://youtube.com/watch?v=${id}&t=42s&si=abc&list=PL123`,
+		`https://m.youtube.com/watch?v=${id}`,
+		`https://music.youtube.com/watch?v=${id}&feature=share`,
+		`https://youtu.be/${id}?si=xyz`,
+		`https://www.youtube.com/shorts/${id}`,
+		`https://www.youtube.com/embed/${id}`,
+		`https://www.youtube.com/live/${id}?feature=shared`
+	])('parses %s', (link) => {
+		expect(parseMusicLink(link)).toEqual({ service: 'youtube', kind: 'video', id, url: watch });
+	});
+	it('rejects non-video and malformed links', () => {
+		expect(parseMusicLink('https://www.youtube.com/@somechannel')).toBeNull();
+		expect(parseMusicLink('https://www.youtube.com/watch?v=short')).toBeNull();
+		expect(parseMusicLink('https://youtu.be/')).toBeNull();
+		expect(parseMusicLink('https://notyoutube.com/watch?v=dQw4w9WgXcQ')).toBeNull();
+	});
+	it('always opens YouTube inspirations on YouTube', () => {
+		const data = { title: 'Song', youtubeUrl: watch, appleUrl: 'https://music.apple.com/x' };
+		expect(openUrlFor(data, 'apple')).toBe(watch);
+		expect(openUrlFor(data, 'spotify')).toBe(watch);
+	});
+});
