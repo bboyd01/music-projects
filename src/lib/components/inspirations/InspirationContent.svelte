@@ -25,7 +25,7 @@
 		target="_blank"
 		rel="noopener noreferrer"
 		class="flex h-full items-center gap-3 p-2.5 pr-3"
-		title="Open in {service === 'spotify' ? 'Spotify' : 'Apple Music'}"
+		title="Open in {item.data.youtubeUrl ? 'YouTube' : service === 'spotify' ? 'Spotify' : 'Apple Music'}"
 		draggable="false"
 	>
 		{#if item.data.thumbUrl}

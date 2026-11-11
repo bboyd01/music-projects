@@ -78,6 +78,7 @@ export async function POST({ params, request, locals }) {
 				album: typeof body.album === 'string' ? body.album.slice(0, 300) : undefined,
 				appleUrl: safeUrl(body.appleUrl),
 				spotifyUrl: safeUrl(body.spotifyUrl),
+				youtubeUrl: safeUrl(body.youtubeUrl),
 				thumb: artwork ? await saveThumbFromUrl(artwork) : undefined
 			};
 			data = audio;

@@ -7,6 +7,7 @@ export type MusicResult = {
 	artwork?: string;
 	appleUrl?: string;
 	spotifyUrl?: string;
+	youtubeUrl?: string;
 };
 
 type ItunesItem = {
@@ -51,6 +52,14 @@ export async function searchMusic(term: string, country = 'us'): Promise<MusicRe
 export async function lookupLink(input: string): Promise<MusicResult | null> {
 	const link = parseMusicLink(input);
 	if (!link) return null;
+	if (link.service === 'youtube') {
+		// Public oEmbed (no API key). mqdefault is 16:9 without letterbox bars, so the square crop looks right.
+		const artwork = `https://i.ytimg.com/vi/${link.id}/mqdefault.jpg`;
+		const o = await getJson<{ title?: string; author_name?: string }>(
+			`https://www.youtube.com/oembed?url=${encodeURIComponent(link.url)}&format=json`
+		);
+		return { title: o?.title ?? 'YouTube video', artist: o?.author_name, artwork, youtubeUrl: link.url };
+	}
 	if (link.service === 'apple') {
 		const data = await getJson<{ results: ItunesItem[] }>(
 			`https://itunes.apple.com/lookup?id=${link.id}&entity=song`

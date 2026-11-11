@@ -215,6 +215,7 @@ export type AudioData = {
 	album?: string;
 	appleUrl?: string;
 	spotifyUrl?: string;
+	youtubeUrl?: string;
 	thumb?: string;
 };
 export type InspirationData = TextData | ImageData | AudioData;
