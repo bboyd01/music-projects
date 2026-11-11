@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { player } from '#lib/state/player.svelte.ts';
+	import { page } from '$app/state';
 
 	let el: HTMLAudioElement;
 	const reported = new Set<string>();
@@ -36,8 +37,10 @@
 
 <svelte:window onkeydown={onKey} />
 
+<!-- The read-only test account hears nothing (everything else works as usual). -->
 <audio
 	bind:this={el}
+	muted={!!page.data.user?.readOnly}
 	preload="metadata"
 	onplay={() => (player.playing = true)}
 	onpause={() => (player.playing = false)}
