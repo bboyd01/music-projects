@@ -6,6 +6,7 @@
 	import Kanban from '@lucide/svelte/icons/square-kanban';
 	import Music from '@lucide/svelte/icons/music';
 	import { api } from '#lib/api.ts';
+	import { formatTime } from '#lib/time.ts';
 	import { defaultFields, type TrackFieldId } from '#lib/track-fields.ts';
 	import TableView from '#lib/components/tracks/TableView.svelte';
 	import ListView from '#lib/components/tracks/ListView.svelte';
@@ -29,6 +30,8 @@
 	});
 
 	const canEdit = $derived(data.role !== 'viewer');
+	// Combined length of every track with audio.
+	const totalSeconds = $derived(tracks.reduce((sum, t) => sum + (t.audio?.duration ?? 0), 0));
 	let newTitle = $state('');
 	let adding = $state(false);
 
@@ -64,7 +67,11 @@
 </script>
 
 <section aria-labelledby="tracks-heading" class="mb-12">
-<h2 id="tracks-heading" class="serif mb-3 text-2xl">Tracks</h2>
+<div class="mb-3 flex items-baseline gap-3">
+	<h2 id="tracks-heading" class="serif text-2xl">Tracks</h2>
+	<!-- Same style as the Length column, de-emphasized next to the heading. -->
+	{#if totalSeconds > 0}<span class="tabular text-[13px] text-fg-2">{formatTime(totalSeconds)} total</span>{/if}
+</div>
 <div class="mb-4 flex flex-wrap items-center gap-2">
 	<div class="glass flex rounded-lg p-0.5" role="tablist" aria-label="View">
 		{#each views as v (v.id)}
