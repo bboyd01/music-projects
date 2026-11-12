@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/montserrat';
-@import '@fontsource-variable/montserrat/wght-italic.css';
+@import '@fontsource-variable/nunito-sans';
+@import '@fontsource-variable/nunito-sans/wght-italic.css';
 @import '@fontsource/cardo/400.css';
 @import '@fontsource/cardo/400-italic.css';
 @import '@fontsource/cardo/700.css';
@@ -131,7 +131,7 @@
 	--color-accent-soft: var(--accent-soft);
 	--color-on-accent: var(--on-accent);
 	--color-danger: var(--danger);
-	--font-sans: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-sans: 'Nunito Sans Variable', ui-sans-serif, system-ui, sans-serif;
 	--font-serif: 'Cardo', ui-serif, Georgia, serif;
 	--ease-out: var(--ease);
 }
@@ -146,7 +146,7 @@
 	}
 	/* No body background: the fixed photo backdrop (z-index -10) must show through. */
 	body {
-		@apply font-sans text-[15px] font-light leading-relaxed;
+		@apply font-sans text-[15px] leading-relaxed;
 		min-height: 100dvh;
 	}
 	::selection {
@@ -212,13 +212,13 @@
 	}
 	/* Section headings on track and listen views: larger than .eyebrow. */
 	.section-title {
-		@apply text-[14px] font-bold tracking-[0.09em] text-fg-2 uppercase;
+		@apply text-[14px] font-semibold tracking-[0.09em] text-fg-2 uppercase;
 	}
 	.tabular {
 		font-variant-numeric: tabular-nums;
 	}
 	.eyebrow {
-		@apply text-[12px] font-semibold tracking-[0.08em] text-fg-3 uppercase;
+		@apply text-[12px] font-medium tracking-[0.08em] text-fg-3 uppercase;
 	}
 
 	.btn {
