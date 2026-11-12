@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { page } from '$app/state';
 	import { invalidateAll } from '$app/navigation';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import Settings from '@lucide/svelte/icons/settings';
 	import { api } from '#lib/api.ts';
+	import { autogrow } from '#lib/actions.ts';
 
 	let { data, children } = $props();
 
@@ -14,11 +16,21 @@
 	const canEdit = $derived(data.role !== 'viewer');
 
 	let name = $state('');
+	// The title shows clamped to two lines; clicking it swaps in a full-height textarea.
+	let editing = $state(false);
+	let field = $state<HTMLTextAreaElement>();
+	async function startEditing() {
+		editing = true;
+		await tick();
+		field?.focus();
+		field?.setSelectionRange(name.length, name.length);
+	}
 	$effect(() => {
 		name = data.project.name;
 	});
 
 	async function saveName() {
+		editing = false;
 		const v = name.trim();
 		if (!v || v === data.project.name) {
 			name = data.project.name;
@@ -46,16 +58,37 @@
 						<ArrowLeft size={14} /> Back to project
 					</a>
 				{/if}
-				{#if canEdit && !onSettings}
-					<input
-						class="serif input-bare -ml-1.5 w-full px-1.5 text-4xl leading-tight sm:text-5xl"
+				{#if canEdit && !onSettings && editing}
+					<textarea
+						bind:this={field}
+						class="serif input-bare -ml-1.5 block w-full resize-none px-1.5 text-4xl leading-tight break-words sm:text-5xl"
+						rows="1"
 						bind:value={name}
+						use:autogrow={name}
 						aria-label="Project name"
 						onblur={saveName}
-						onkeydown={(e) => e.key === 'Enter' && (e.currentTarget as HTMLInputElement).blur()}
-					/>
+						onkeydown={(e) => {
+							if (e.key === 'Enter' || e.key === 'Escape') {
+								e.preventDefault();
+								if (e.key === 'Escape') name = data.project.name;
+								e.currentTarget.blur();
+							}
+						}}
+					></textarea>
+				{:else if canEdit && !onSettings}
+					<h1 class="serif text-4xl leading-tight sm:text-5xl">
+						<button
+							type="button"
+							class="input-bare -ml-1.5 line-clamp-2 w-full cursor-text px-1.5 text-left break-words"
+							title={data.project.name}
+							aria-label="Edit project name: {data.project.name}"
+							onclick={startEditing}>{name}</button
+						>
+					</h1>
 				{:else}
-					<h1 class="serif text-4xl leading-tight sm:text-5xl">{data.project.name}{onSettings ? ' · Settings' : ''}</h1>
+					<h1 class="serif line-clamp-2 text-4xl leading-tight break-words sm:text-5xl" title={data.project.name}>
+						{data.project.name}{onSettings ? ' · Settings' : ''}
+					</h1>
 				{/if}
 			</div>
 			{#if !onSettings}
