@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/montserrat';
-@import '@fontsource-variable/montserrat/wght-italic.css';
+@import '@fontsource-variable/nunito-sans';
+@import '@fontsource-variable/nunito-sans/wght-italic.css';
 @import '@fontsource/cardo/400.css';
 @import '@fontsource/cardo/400-italic.css';
 @import '@fontsource/cardo/700.css';
@@ -131,7 +131,7 @@
 	--color-accent-soft: var(--accent-soft);
 	--color-on-accent: var(--on-accent);
 	--color-danger: var(--danger);
-	--font-sans: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-sans: 'Nunito Sans Variable', ui-sans-serif, system-ui, sans-serif;
 	--font-serif: 'Cardo', ui-serif, Georgia, serif;
 	--ease-out: var(--ease);
 }
