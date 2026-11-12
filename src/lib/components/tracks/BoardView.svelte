@@ -65,13 +65,13 @@
 			{#if col.tracks.length === 0}
 				<header class="flex flex-col items-center gap-2 py-3" title="{col.status?.name ?? 'No status'} (empty)">
 					<span class="size-2 shrink-0 rounded-full" style:background={col.status?.color ?? 'var(--fg-3)'}></span>
-					<h3 class="text-[12.5px] font-semibold whitespace-nowrap text-fg-2 [writing-mode:vertical-rl]">{col.status?.name ?? 'No status'}</h3>
+					<h3 class="text-[13.5px] font-semibold whitespace-nowrap text-fg-2 [writing-mode:vertical-rl]">{col.status?.name ?? 'No status'}</h3>
 				</header>
 			{:else}
 			<header class="flex items-center gap-2 px-3.5 pt-3 pb-2">
 				<span class="size-2 shrink-0 rounded-full" style:background={col.status?.color ?? 'var(--fg-3)'}></span>
-				<h3 class="truncate text-[13px] font-semibold">{col.status?.name ?? 'No status'}</h3>
-				<span class="tabular text-[12px] text-fg-3">{col.tracks.length}</span>
+				<h3 class="truncate text-[14px] font-semibold">{col.status?.name ?? 'No status'}</h3>
+				<span class="tabular text-[13px] text-fg-3">{col.tracks.length}</span>
 			</header>
 			{/if}
 			<div class="flex min-h-16 flex-col gap-2 px-2 pb-2">
@@ -90,10 +90,10 @@
 					>
 						<div class="flex items-start gap-2">
 							<TrackIconButton title={t.title} icon={t.icon} size={15} class="-m-1 mt-0 p-1" />
-							<p class="min-w-0 flex-1 text-[13.5px] leading-snug font-medium">{t.title}</p>
+							<p class="min-w-0 flex-1 text-[14.5px] leading-snug font-medium">{t.title}</p>
 							<span class="-mt-1 -mr-1"><PlayButton {projectId} trackId={t.id} disabled={!t.audio} /></span>
 						</div>
-						<div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-fg-3">
+						<div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-fg-3">
 							{#if t.audio}<span class="tabular">{formatTime(t.audio.duration)}</span>{/if}
 							{#if t.dueDate}<span class="inline-flex items-center gap-1"><CalendarClock size={11} />{formatDate(t.dueDate)}</span>{/if}
 							{#if t.commentCount}<span class="inline-flex items-center gap-1"><MessageSquare size={11} />{t.commentCount}</span>{/if}

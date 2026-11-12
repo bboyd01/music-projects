@@ -89,7 +89,7 @@
 
 {#if progress !== null}
 	<div class="card p-4">
-		<p class="mb-2 text-[13px] text-fg-2">Uploading… {Math.round(progress * 100)}%</p>
+		<p class="mb-2 text-[14px] text-fg-2">Uploading… {Math.round(progress * 100)}%</p>
 		<div class="h-[3px] overflow-hidden rounded-full bg-line-strong">
 			<div class="h-full bg-accent" style:width="{progress * 100}%" style:transition="width var(--dur-fade) linear"></div>
 		</div>
@@ -99,8 +99,8 @@
 		<PlayButton {projectId} {trackId} />
 		<FileAudio size={18} class="shrink-0 text-fg-3" strokeWidth={1.6} />
 		<div class="min-w-0 flex-1 leading-tight">
-			<p class="truncate text-[13.5px] font-medium">{audio.filename}</p>
-			<p class="tabular text-[12px] text-fg-3">
+			<p class="truncate text-[14.5px] font-medium">{audio.filename}</p>
+			<p class="tabular text-[13px] text-fg-3">
 				{formatTime(audio.duration)} · {mb(audio.size)} · {relativeTime(audio.uploadedAt)}
 			</p>
 		</div>
@@ -128,11 +128,11 @@
 		}}
 	>
 		<Upload size={18} class="text-fg-3" />
-		<span class="text-[13px] font-medium">Upload audio</span>
-		<span class="text-[12px] text-fg-3">Drop a file or click · MP3, WAV, FLAC, M4A, OGG, AIFF</span>
+		<span class="text-[14px] font-medium">Upload audio</span>
+		<span class="text-[13px] text-fg-3">Drop a file or click · MP3, WAV, FLAC, M4A, OGG, AIFF</span>
 	</button>
 {:else}
-	<p class="text-[13px] text-fg-3">No audio yet.</p>
+	<p class="text-[14px] text-fg-3">No audio yet.</p>
 {/if}
 
 <style>

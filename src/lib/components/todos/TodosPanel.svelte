@@ -105,7 +105,7 @@
 </script>
 
 <div class="space-y-5">
-	<div class="flex items-center gap-1 text-[12px] text-fg-3">
+	<div class="flex items-center gap-1 text-[13px] text-fg-3">
 		<ArrowDownUp size={13} class="mr-1" />
 		<button type="button" class="rounded px-1.5 py-0.5 {sort === 'added' ? 'bg-hover text-fg' : 'hover:text-fg-2'}" onclick={() => setSort('added')}>Added order</button>
 		<button type="button" class="rounded px-1.5 py-0.5 {sort === 'timestamp' ? 'bg-hover text-fg' : 'hover:text-fg-2'}" onclick={() => setSort('timestamp')}>Timestamp</button>
@@ -117,16 +117,16 @@
 			<header class="mb-1.5 flex items-center gap-2">
 				{#if canEdit}
 					<input
-						class="input-bare -ml-1.5 min-w-0 flex-1 px-1.5 py-0.5 text-[13.5px] font-semibold"
+						class="input-bare -ml-1.5 min-w-0 flex-1 px-1.5 py-0.5 text-[14.5px] font-semibold"
 						value={l.title}
 						aria-label="Checklist title"
 						onblur={(e) => renameList(l.id, e.currentTarget.value, l.title)}
 						onkeydown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
 					/>
 				{:else}
-					<h4 class="flex-1 text-[13.5px] font-semibold">{l.title}</h4>
+					<h4 class="flex-1 text-[14.5px] font-semibold">{l.title}</h4>
 				{/if}
-				<span class="tabular text-[12px] text-fg-3">{done}/{l.todos.length}</span>
+				<span class="tabular text-[13px] text-fg-3">{done}/{l.todos.length}</span>
 				{#if canEdit && lists.length > 1}
 					<button class="icon-btn size-7 opacity-0 group-hover/list:opacity-100 hover:text-danger focus:opacity-100" aria-label="Delete checklist" onclick={() => removeList(l)}>
 						<Trash2 size={13} />
@@ -157,7 +157,7 @@
 						<div class="min-w-0 flex-1">
 							{#if canEdit}
 								<textarea
-									class="input-bare block w-full resize-none px-1 text-[13.5px] leading-snug {t.done ? 'text-fg-3 line-through' : ''}"
+									class="input-bare block w-full resize-none px-1 text-[14.5px] leading-snug {t.done ? 'text-fg-3 line-through' : ''}"
 									rows="1"
 									value={t.text}
 									use:autogrow={t.text}
@@ -171,7 +171,7 @@
 									}}
 								></textarea>
 							{:else}
-								<p class="px-1 text-[13.5px] leading-snug {t.done ? 'text-fg-3 line-through' : ''}">{t.text}</p>
+								<p class="px-1 text-[14.5px] leading-snug {t.done ? 'text-fg-3 line-through' : ''}">{t.text}</p>
 							{/if}
 						</div>
 						{#if t.sourceCommentId}<span title="From a comment" class="mt-1 text-fg-3"><MessageSquare size={12} /></span>{/if}

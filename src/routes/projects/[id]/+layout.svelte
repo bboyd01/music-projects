@@ -34,7 +34,7 @@
 <div class="mx-auto max-w-6xl px-4 pt-8 sm:px-8 md:pt-10">
 	{#if onTrack}
 		<!-- A track is self-contained: just a way back to its project. -->
-		<a href={base} class="mb-4 inline-flex items-center gap-1.5 text-[13px] text-fg-3 hover:text-fg-2">
+		<a href={base} class="mb-4 inline-flex items-center gap-1.5 text-[14px] text-fg-3 hover:text-fg-2">
 			<ArrowLeft size={14} />
 			{data.project.name}
 		</a>
@@ -42,7 +42,7 @@
 		<header class="enter mb-8 flex items-start gap-3">
 			<div class="min-w-0 flex-1">
 				{#if onSettings}
-					<a href={base} class="mb-2 inline-flex items-center gap-1.5 text-[13px] text-fg-3 hover:text-fg-2">
+					<a href={base} class="mb-2 inline-flex items-center gap-1.5 text-[14px] text-fg-3 hover:text-fg-2">
 						<ArrowLeft size={14} /> Back to project
 					</a>
 				{/if}

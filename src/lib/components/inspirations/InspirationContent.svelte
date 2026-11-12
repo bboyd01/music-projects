@@ -18,7 +18,7 @@
 		loading="lazy"
 	/>
 {:else if item.type === 'text'}
-	<p class="h-full overflow-auto px-3.5 py-3 text-[13.5px] leading-relaxed whitespace-pre-wrap">{item.data.text}</p>
+	<p class="h-full overflow-auto px-3.5 py-3 text-[14.5px] leading-relaxed whitespace-pre-wrap">{item.data.text}</p>
 {:else}
 	<a
 		href={openUrlFor(item.data, service)}
@@ -34,8 +34,8 @@
 			<span class="flex size-[50px] shrink-0 items-center justify-center rounded-md bg-hover text-fg-3"><Music size={18} /></span>
 		{/if}
 		<span class="min-w-0 flex-1 leading-tight">
-			<span class="block truncate text-[13.5px] font-medium">{item.data.title}</span>
-			<span class="block truncate text-[12px] text-fg-3">{item.data.artist ?? ''}</span>
+			<span class="block truncate text-[14.5px] font-medium">{item.data.title}</span>
+			<span class="block truncate text-[13px] text-fg-3">{item.data.artist ?? ''}</span>
 		</span>
 		<ExternalLink size={13} class="shrink-0 text-fg-3" />
 	</a>

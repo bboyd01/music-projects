@@ -89,7 +89,7 @@
 							<PlayButton {projectId} trackId={t.id} disabled={!t.audio} />
 						</div>
 					</td>
-					<td class="tabular !px-1 text-right text-[13px] text-fg-3">{i + 1}</td>
+					<td class="tabular !px-1 text-right text-[14px] text-fg-3">{i + 1}</td>
 					<td>
 						<div class="flex min-w-0 items-center gap-2.5">
 							<TrackIconButton title={t.title} icon={t.icon} size={16} class="-m-1 p-1" />
@@ -101,15 +101,15 @@
 							<StatusSelect scope="track" value={t.statusId} size="sm" disabled={!canEdit} onchange={(s) => onpatch(t.id, { statusId: s })} />
 						</td>
 					{/if}
-					{#if has('startDate')}<td class="tabular text-[13px] text-fg-2">{formatDate(t.startDate)}</td>{/if}
-					{#if has('dueDate')}<td class="tabular text-[13px] text-fg-2">{formatDate(t.dueDate)}</td>{/if}
-					{#if has('audio')}<td class="tabular text-[13px] text-fg-2">{t.audio ? formatTime(t.audio.duration) : '—'}</td>{/if}
-					{#if has('comments')}<td class="tabular text-center text-[13px] text-fg-2">{t.commentCount || ''}</td>{/if}
+					{#if has('startDate')}<td class="tabular text-[14px] text-fg-2">{formatDate(t.startDate)}</td>{/if}
+					{#if has('dueDate')}<td class="tabular text-[14px] text-fg-2">{formatDate(t.dueDate)}</td>{/if}
+					{#if has('audio')}<td class="tabular text-[14px] text-fg-2">{t.audio ? formatTime(t.audio.duration) : '—'}</td>{/if}
+					{#if has('comments')}<td class="tabular text-center text-[14px] text-fg-2">{t.commentCount || ''}</td>{/if}
 					{#if has('todos')}
-						<td class="tabular text-center text-[13px] text-fg-2">{t.todoTotal ? `${t.todoDone}/${t.todoTotal}` : ''}</td>
+						<td class="tabular text-center text-[14px] text-fg-2">{t.todoTotal ? `${t.todoDone}/${t.todoTotal}` : ''}</td>
 					{/if}
-					{#if has('inspirations')}<td class="tabular text-center text-[13px] text-fg-2">{t.inspirationCount || ''}</td>{/if}
-					{#if has('description')}<td class="max-w-64 truncate text-[13px] text-fg-3">{t.description}</td>{/if}
+					{#if has('inspirations')}<td class="tabular text-center text-[14px] text-fg-2">{t.inspirationCount || ''}</td>{/if}
+					{#if has('description')}<td class="max-w-64 truncate text-[14px] text-fg-3">{t.description}</td>{/if}
 				</tr>
 			{/each}
 		</tbody>

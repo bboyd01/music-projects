@@ -370,7 +370,7 @@
 	<div class="flex-1"></div>
 	<div class="glass flex rounded-lg p-0.5">
 		<button class="icon-btn size-7" aria-label="Zoom out" onclick={() => zoomAt(zoom / 1.2)}><ZoomOut size={15} /></button>
-		<button class="tabular w-11 text-[12px] text-fg-2" onclick={() => zoomAt(1)} title="Reset zoom">{Math.round(zoom * 100)}%</button>
+		<button class="tabular w-11 text-[13px] text-fg-2" onclick={() => zoomAt(1)} title="Reset zoom">{Math.round(zoom * 100)}%</button>
 		<button class="icon-btn size-7" aria-label="Zoom in" onclick={() => zoomAt(zoom * 1.2)}><ZoomIn size={15} /></button>
 		<button class="icon-btn size-7" aria-label="Fit to content" title="Fit" onclick={fit}><Scan size={15} /></button>
 	</div>
@@ -465,7 +465,7 @@
 					{#if editing === it.id && it.type === 'text'}
 						<!-- svelte-ignore a11y_autofocus -->
 						<textarea
-							class="h-full w-full resize-none bg-transparent px-3.5 py-3 text-[13.5px] leading-relaxed outline-none"
+							class="h-full w-full resize-none bg-transparent px-3.5 py-3 text-[14.5px] leading-relaxed outline-none"
 							value={it.data.text}
 							autofocus
 							onpointerdown={(e) => e.stopPropagation()}
@@ -523,7 +523,7 @@
 		</div>
 	{/if}
 </div>
-<p class="mt-2 hidden text-[12px] text-fg-3 md:block">
+<p class="mt-2 hidden text-[13px] text-fg-3 md:block">
 	Drag the background to pan · Ctrl/⌘ + scroll or pinch to zoom · drag an edge dot onto another item to connect · click a line to style it · double-click text to edit
 </p>
 

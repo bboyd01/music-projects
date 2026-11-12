@@ -74,7 +74,7 @@
 		</div>
 	{/if}
 	{#if !items.length}
-		<p class="text-[13px] text-fg-3">No inspirations for this track yet. These are separate from the project’s canvas.</p>
+		<p class="text-[14px] text-fg-3">No inspirations for this track yet. These are separate from the project’s canvas.</p>
 	{/if}
 </div>
 

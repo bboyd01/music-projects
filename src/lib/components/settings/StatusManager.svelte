@@ -74,7 +74,7 @@
 				onblur={(e) => e.currentTarget.value.trim() && e.currentTarget.value.trim() !== s.name && patch(s.id, { name: e.currentTarget.value.trim() })}
 				onkeydown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
 			/>
-			<label class="flex items-center gap-1.5 text-[12px] text-fg-3" title="Counts as finished">
+			<label class="flex items-center gap-1.5 text-[13px] text-fg-3" title="Counts as finished">
 				<input type="checkbox" checked={s.isDone} onchange={(e) => patch(s.id, { isDone: e.currentTarget.checked })} class="accent-[var(--accent)]" />
 				Done
 			</label>

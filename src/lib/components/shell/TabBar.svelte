@@ -11,7 +11,7 @@
 		{@const active = isActive(page.url.pathname, item.href)}
 		<a
 			href={item.href}
-			class="flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[10.5px] font-medium {active
+			class="flex h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[11.5px] font-medium {active
 				? 'text-accent'
 				: 'text-fg-3'}"
 			aria-current={active ? 'page' : undefined}

@@ -38,7 +38,7 @@
 					<img src={v.data.url} alt="" class="h-full w-full object-cover" />
 				{:else if v.type === 'text'}
 					<div class="glass flex h-full items-center rounded-xl p-4 sm:p-5">
-						<p class="serif line-clamp-6 text-[17px] leading-snug whitespace-pre-wrap sm:text-xl">{v.data.text}</p>
+						<p class="serif line-clamp-6 text-[20px] leading-snug whitespace-pre-wrap sm:text-xl">{v.data.text}</p>
 					</div>
 				{/if}
 			</div>

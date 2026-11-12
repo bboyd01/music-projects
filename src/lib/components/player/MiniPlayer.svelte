@@ -33,8 +33,8 @@
 					class="ml-1 min-w-0 flex-1 leading-tight sm:ml-0"
 					title="Open track"
 				>
-					<p class="truncate text-[13.5px] font-semibold">{player.current?.title}</p>
-					<p class="truncate text-[12px] text-fg-3">{player.current?.filename}</p>
+					<p class="truncate text-[14.5px] font-semibold">{player.current?.title}</p>
+					<p class="truncate text-[13px] text-fg-3">{player.current?.filename}</p>
 				</a>
 			</div>
 			<div class="flex shrink-0 items-center gap-1.5 sm:gap-3 md:justify-center">

@@ -80,7 +80,7 @@
 				type="button"
 				role="radio"
 				aria-checked={value === o.value}
-				class="flex h-8 items-center gap-1.5 rounded-md px-3 text-[13px] font-medium {value === o.value ? 'bg-hover text-fg' : 'text-fg-3 hover:text-fg-2'}"
+				class="flex h-8 items-center gap-1.5 rounded-md px-3 text-[14px] font-medium {value === o.value ? 'bg-hover text-fg' : 'text-fg-3 hover:text-fg-2'}"
 				onclick={() => onpick(o.value)}
 			>
 				{#if o.icon}<o.icon size={14} />{/if}{o.label}
@@ -92,7 +92,7 @@
 {#snippet status(section: string)}
 	{@const m = msg(section)}
 	{#if m}
-		<p class="text-[13px] {m.message ? 'text-danger' : 'text-fg-2'}">{m.message ?? m.ok}</p>
+		<p class="text-[14px] {m.message ? 'text-danger' : 'text-fg-2'}">{m.message ?? m.ok}</p>
 	{/if}
 {/snippet}
 
@@ -108,21 +108,21 @@
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<div>
 						<p class="font-medium">Theme</p>
-						<p class="text-[12.5px] text-fg-3">System follows your device.</p>
+						<p class="text-[13.5px] text-fg-3">System follows your device.</p>
 					</div>
 					{@render segmented(themes, settings.theme ?? 'system', (v) => save({ theme: v }), 'Theme')}
 				</div>
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<div>
 						<p class="font-medium">Animations</p>
-						<p class="text-[12.5px] text-fg-3">Subtle motion on panels and views (130ms max).</p>
+						<p class="text-[13.5px] text-fg-3">Subtle motion on panels and views (130ms max).</p>
 					</div>
 					{@render segmented(motions, settings.motion ?? 'on', (v) => save({ motion: v }), 'Animations')}
 				</div>
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<div>
 						<p class="font-medium">Player timeline</p>
-						<p class="text-[12.5px] text-fg-3">A simple playhead line, or the track’s waveform.</p>
+						<p class="text-[13.5px] text-fg-3">A simple playhead line, or the track’s waveform.</p>
 					</div>
 					{@render segmented(timelines, settings.timeline ?? 'waveform', (v) => save({ timeline: v }), 'Player timeline')}
 				</div>
@@ -134,7 +134,7 @@
 			<div class="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<p class="font-medium">Open audio inspirations in</p>
-					<p class="text-[12.5px] text-fg-3">Falls back to a search when a direct link isn’t available.</p>
+					<p class="text-[13.5px] text-fg-3">Falls back to a search when a direct link isn’t available.</p>
 				</div>
 				{@render segmented(services, settings.musicService ?? 'apple', (v) => save({ musicService: v }), 'Music service')}
 			</div>
@@ -142,7 +142,7 @@
 
 		<section class="card enter p-5">
 			<h2 class="serif mb-1 text-2xl">Open in DAW</h2>
-			<p class="mb-4 text-[12.5px] text-fg-3">Adds an Open Project button to each track that opens its project file in your DAW.</p>
+			<p class="mb-4 text-[13.5px] text-fg-3">Adds an Open Project button to each track that opens its project file in your DAW.</p>
 			<div class="space-y-4">
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<p class="font-medium">Open Project button</p>
@@ -151,9 +151,9 @@
 				{#if settings.dawEnabled !== false}
 					<div class="grid gap-3 sm:grid-cols-[1fr_9rem]">
 						<label class="block">
-							<span class="mb-1 block text-[12px] text-fg-2">Project folder</span>
+							<span class="mb-1 block text-[13px] text-fg-2">Project folder</span>
 							<input
-								class="input font-mono text-[12.5px]"
+								class="input font-mono text-[13.5px]"
 								placeholder="/Users/you/Documents/REAPER Media/PROJECTS/"
 								value={settings.projectFolder ?? ''}
 								spellcheck="false"
@@ -162,9 +162,9 @@
 							/>
 						</label>
 						<label class="block">
-							<span class="mb-1 block text-[12px] text-fg-2">File extension</span>
+							<span class="mb-1 block text-[13px] text-fg-2">File extension</span>
 							<input
-								class="input font-mono text-[12.5px]"
+								class="input font-mono text-[13.5px]"
 								placeholder=".rpp"
 								value={settings.projectExt ?? ''}
 								spellcheck="false"
@@ -175,20 +175,20 @@
 					</div>
 					<div class="rounded-xl bg-hover px-3 py-2.5">
 						<p class="eyebrow mb-1">Example: a track called “New Sketch 14”</p>
-						<p class="font-mono text-[12px] break-all text-fg-2">
+						<p class="font-mono text-[13px] break-all text-fg-2">
 							{examplePath ?? 'Set a folder and extension to see the path.'}
 						</p>
 					</div>
 					<div>
-						<p class="mb-1.5 text-[13px] font-medium">One-time setup on your Mac</p>
-						<p class="mb-2 text-[12.5px] text-fg-3">
+						<p class="mb-1.5 text-[14px] font-medium">One-time setup on your Mac</p>
+						<p class="mb-2 text-[13.5px] text-fg-3">
 							Browsers can’t open local files directly, so a tiny helper (no Dock icon) handles the button. Open Terminal and run:
 						</p>
 						<div class="flex items-stretch gap-2">
-							<code class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[12px] whitespace-nowrap">{installCmd}</code>
+							<code class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[13px] whitespace-nowrap">{installCmd}</code>
 							<button class="btn btn-outline h-auto" onclick={copyInstall}>{copied ? 'Copied' : 'Copy'}</button>
 						</div>
-						<p class="mt-2 text-[12px] text-fg-3">
+						<p class="mt-2 text-[13px] text-fg-3">
 							It only opens existing {ext || '.rpp'} files. The first time, your browser asks to allow opening “Music Projects Opener”. Run it again if you change the extension; delete ~/Applications/Music Projects Opener.app to remove it.
 						</p>
 					</div>
@@ -201,17 +201,17 @@
 		{#if me.readOnly}
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">Read-only account</h2>
-				<p class="text-[13px] text-fg-2">You can browse and listen to every project, but not change anything. Appearance and music-link settings above still apply to you.</p>
+				<p class="text-[14px] text-fg-2">You can browse and listen to every project, but not change anything. Appearance and music-link settings above still apply to you.</p>
 			</section>
 		{:else}
 		<section class="card enter p-5">
 			<h2 class="serif mb-4 text-2xl">Profile</h2>
 			<form method="POST" action="?/profile" class="grid gap-3 sm:grid-cols-2" use:enhance={submit}>
-				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Name</span><input class="input" name="name" value={me.name} required /></label>
-				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Username (for @mentions)</span><input class="input" name="username" value={me.username} required /></label>
-				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Email</span><input class="input" type="email" name="email" value={me.email ?? ''} required /></label>
+				<label class="block"><span class="mb-1 block text-[13px] text-fg-2">Name</span><input class="input" name="name" value={me.name} required /></label>
+				<label class="block"><span class="mb-1 block text-[13px] text-fg-2">Username (for @mentions)</span><input class="input" name="username" value={me.username} required /></label>
+				<label class="block"><span class="mb-1 block text-[13px] text-fg-2">Email</span><input class="input" type="email" name="email" value={me.email ?? ''} required /></label>
 				<label class="block">
-					<span class="mb-1 block text-[12px] text-fg-2">Discord user ID <span class="text-fg-3">(optional)</span></span>
+					<span class="mb-1 block text-[13px] text-fg-2">Discord user ID <span class="text-fg-3">(optional)</span></span>
 					<input class="input" name="discordUserId" value={me.discordUserId ?? ''} inputmode="numeric" placeholder="Pings you on Discord when mentioned" />
 				</label>
 				<div class="flex items-center gap-3 sm:col-span-2">
@@ -224,8 +224,8 @@
 		<section class="card enter p-5">
 			<h2 class="serif mb-4 text-2xl">Password</h2>
 			<form method="POST" action="?/password" class="grid gap-3 sm:grid-cols-2" use:enhance>
-				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">Current password</span><input class="input" type="password" name="current" autocomplete="current-password" required /></label>
-				<label class="block"><span class="mb-1 block text-[12px] text-fg-2">New password</span><input class="input" type="password" name="next" autocomplete="new-password" minlength="8" required /></label>
+				<label class="block"><span class="mb-1 block text-[13px] text-fg-2">Current password</span><input class="input" type="password" name="current" autocomplete="current-password" required /></label>
+				<label class="block"><span class="mb-1 block text-[13px] text-fg-2">New password</span><input class="input" type="password" name="next" autocomplete="new-password" minlength="8" required /></label>
 				<div class="flex items-center gap-3 sm:col-span-2">
 					<button class="btn btn-outline">Change password</button>
 					{@render status('password')}
@@ -237,7 +237,7 @@
 		{#if me.isAdmin}
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">Background</h2>
-				<p class="mb-4 text-[12.5px] text-fg-3">
+				<p class="mb-4 text-[13.5px] text-fg-3">
 					Shown behind pages outside a project, and behind projects that don’t have their own cover or images. Random picks one per visit. Uploads are compressed (1600px + a small blurred copy).
 				</p>
 				<BackgroundPicker />
@@ -245,7 +245,7 @@
 
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">Statuses</h2>
-				<p class="mb-4 text-[12.5px] text-fg-3">Shared by all projects. Colors come from a muted palette so everything stays harmonious.</p>
+				<p class="mb-4 text-[13.5px] text-fg-3">Shared by all projects. Colors come from a muted palette so everything stays harmonious.</p>
 				<div class="grid gap-6 md:grid-cols-2">
 					<div>
 						<h3 class="eyebrow mb-2">Project statuses</h3>
@@ -260,18 +260,18 @@
 
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">People</h2>
-				<p class="mb-4 text-[12.5px] text-fg-3">Create accounts here, then add people to projects from each project’s Settings tab.</p>
+				<p class="mb-4 text-[13.5px] text-fg-3">Create accounts here, then add people to projects from each project’s Settings tab.</p>
 				<ul class="mb-5 divide-y divide-line">
 					{#each data.users as u (u.id)}
 						<li class="flex flex-wrap items-center gap-3 py-2.5">
-							<span class="flex size-8 items-center justify-center rounded-full bg-hover text-[12px] font-semibold">{u.name[0]?.toUpperCase()}</span>
+							<span class="flex size-8 items-center justify-center rounded-full bg-hover text-[13px] font-semibold">{u.name[0]?.toUpperCase()}</span>
 							<div class="min-w-0 flex-1 leading-tight">
 								<p class="truncate font-medium">
 									{u.name}
-									{#if u.isAdmin}<span class="chip ml-1 h-5 text-[11px]">Admin</span>{/if}
-									{#if u.readOnly}<span class="chip ml-1 h-5 text-[11px]">Read-only</span>{/if}
+									{#if u.isAdmin}<span class="chip ml-1 h-5 text-[12px]">Admin</span>{/if}
+									{#if u.readOnly}<span class="chip ml-1 h-5 text-[12px]">Read-only</span>{/if}
 								</p>
-								<p class="truncate text-[12px] text-fg-3">@{u.username}{u.email ? ` · ${u.email}` : ''}{u.readOnly ? ' · password “test” · INCLUDE_TEST_USER' : ''}</p>
+								<p class="truncate text-[13px] text-fg-3">@{u.username}{u.email ? ` · ${u.email}` : ''}{u.readOnly ? ' · password “test” · INCLUDE_TEST_USER' : ''}</p>
 							</div>
 							{#if u.id !== me.id && !u.readOnly}
 								<form
@@ -308,7 +308,7 @@
 					<input class="input" name="username" placeholder="username" required pattern="[a-z0-9_]{'{'}2,32{'}'}" />
 					<input class="input" type="email" name="email" placeholder="Email" required />
 					<input class="input" type="password" name="password" placeholder="Temporary password" minlength="8" required autocomplete="new-password" />
-					<label class="flex items-center gap-2 text-[13px] text-fg-2"><input type="checkbox" name="isAdmin" class="accent-[var(--accent)]" /> Admin</label>
+					<label class="flex items-center gap-2 text-[14px] text-fg-2"><input type="checkbox" name="isAdmin" class="accent-[var(--accent)]" /> Admin</label>
 					<div class="flex items-center gap-3 sm:justify-end">
 						{@render status('users')}
 						<button class="btn btn-primary">Create account</button>
@@ -325,7 +325,7 @@
 							<div class="rounded-xl bg-hover p-3">
 								<dt class="eyebrow mb-1">{row.label}</dt>
 								<dd class="tabular text-xl font-semibold">{fmtBytes(row.bytes)}</dd>
-								<dd class="text-[12px] text-fg-3">{row.note}</dd>
+								<dd class="text-[13px] text-fg-3">{row.note}</dd>
 							</div>
 						{/each}
 					</dl>
@@ -334,7 +334,7 @@
 
 			<section class="card enter p-5">
 				<h2 class="serif mb-1 text-2xl">Discord</h2>
-				<p class="text-[13px] text-fg-2">
+				<p class="text-[14px] text-fg-2">
 					New comments are posted to Discord through a webhook. Set one per project in its Settings tab{data.globalWebhook
 						? '; the server-wide DISCORD_WEBHOOK_URL is used as a fallback.'
 						: ', or set DISCORD_WEBHOOK_URL on the server as a fallback for all projects.'}

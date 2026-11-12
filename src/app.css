@@ -1,6 +1,9 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
-@import '@fontsource-variable/newsreader';
+@import '@fontsource-variable/montserrat';
+@import '@fontsource-variable/montserrat/wght-italic.css';
+@import '@fontsource/cardo/400.css';
+@import '@fontsource/cardo/400-italic.css';
+@import '@fontsource/cardo/700.css';
 
 /* ───────────────────────── Tokens ─────────────────────────
    Dark is the default; light is applied via [data-theme=light]
@@ -105,6 +108,15 @@
 	}
 }
 
+/* Heading scale: Tailwind defaults + 3px (only used for headings / display text). */
+@theme {
+	--text-xl: 1.4375rem; /* 23px */
+	--text-2xl: 1.6875rem; /* 27px */
+	--text-3xl: 2.0625rem; /* 33px */
+	--text-4xl: 2.4375rem; /* 39px */
+	--text-5xl: 3.1875rem; /* 51px */
+}
+
 @theme inline {
 	--color-bg: var(--bg);
 	--color-fg: var(--fg);
@@ -119,8 +131,8 @@
 	--color-accent-soft: var(--accent-soft);
 	--color-on-accent: var(--on-accent);
 	--color-danger: var(--danger);
-	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-	--font-serif: 'Newsreader Variable', ui-serif, Georgia, serif;
+	--font-sans: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-serif: 'Cardo', ui-serif, Georgia, serif;
 	--ease-out: var(--ease);
 }
 
@@ -131,11 +143,10 @@
 		color: var(--fg);
 		-webkit-font-smoothing: antialiased;
 		-webkit-tap-highlight-color: transparent;
-		font-feature-settings: 'cv11', 'ss01';
 	}
 	/* No body background: the fixed photo backdrop (z-index -10) must show through. */
 	body {
-		@apply font-sans text-[14px] leading-relaxed;
+		@apply font-sans text-[15px] leading-relaxed;
 		min-height: 100dvh;
 	}
 	::selection {
@@ -201,17 +212,17 @@
 	}
 	/* Section headings on track and listen views: larger than .eyebrow. */
 	.section-title {
-		@apply text-[13px] font-semibold tracking-[0.09em] text-fg-2 uppercase;
+		@apply text-[14px] font-semibold tracking-[0.09em] text-fg-2 uppercase;
 	}
 	.tabular {
 		font-variant-numeric: tabular-nums;
 	}
 	.eyebrow {
-		@apply text-[11px] font-medium tracking-[0.08em] text-fg-3 uppercase;
+		@apply text-[12px] font-medium tracking-[0.08em] text-fg-3 uppercase;
 	}
 
 	.btn {
-		@apply inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3.5 text-[13px] font-medium whitespace-nowrap select-none;
+		@apply inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3.5 text-[14px] font-medium whitespace-nowrap select-none;
 		transition:
 			background-color var(--dur-fade) var(--ease),
 			color var(--dur-fade) var(--ease),
@@ -270,7 +281,7 @@
 	}
 
 	.input {
-		@apply h-9 w-full rounded-lg px-3 text-[13px];
+		@apply h-9 w-full rounded-lg px-3 text-[14px];
 		background: var(--hover);
 		border: 1px solid var(--line);
 		transition:
@@ -303,13 +314,13 @@
 	}
 
 	.chip {
-		@apply inline-flex h-6 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-medium whitespace-nowrap;
+		@apply inline-flex h-6 items-center gap-1.5 rounded-full px-2.5 text-[13px] font-medium whitespace-nowrap;
 		background: var(--hover);
 		color: var(--fg-2);
 	}
 	.ts-chip {
 		font-variant-numeric: tabular-nums;
-		@apply inline-flex h-5 items-center rounded px-1.5 text-[11px] font-semibold;
+		@apply inline-flex h-5 items-center rounded px-1.5 text-[12px] font-semibold;
 		background: var(--accent-soft);
 		color: var(--accent);
 	}
@@ -331,7 +342,7 @@
 		backdrop-filter: blur(var(--blur)) saturate(1.2);
 	}
 	.menu-item {
-		@apply flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-[13px] text-fg-2;
+		@apply flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-[14px] text-fg-2;
 	}
 	.menu-item:hover,
 	.menu-item[data-active='true'] {

@@ -54,7 +54,7 @@
 <div class="grid grid-cols-3 gap-2 sm:grid-cols-5">
 	<button
 		type="button"
-		class="tile flex flex-col items-center justify-center gap-1 text-[12px] {selectedId === null ? 'active' : ''}"
+		class="tile flex flex-col items-center justify-center gap-1 text-[13px] {selectedId === null ? 'active' : ''}"
 		aria-pressed={selectedId === null}
 		onclick={() => choose({ mode: 'random' })}
 	>
@@ -87,7 +87,7 @@
 	{/each}
 	<button
 		type="button"
-		class="tile flex flex-col items-center justify-center gap-1 border-dashed text-[12px]"
+		class="tile flex flex-col items-center justify-center gap-1 border-dashed text-[13px]"
 		disabled={uploading}
 		onclick={() => input.click()}
 	>

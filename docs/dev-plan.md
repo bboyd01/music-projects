@@ -8,7 +8,7 @@
 | Hosting | Coolify on a VPS (Docker Compose build pack) |
 | Discord | App is the source of truth; new comments and @mentions are pushed to a webhook (one-way) |
 | Users | Admin creates accounts; per-project sharing with owner / editor / viewer roles |
-| Look | Mature, subtly glassy, photo-driven blurred backgrounds; Inter + Newsreader; dark + light themes; warm brass accent; muted status palette |
+| Look | Mature, subtly glassy, photo-driven blurred backgrounds; Montserrat + Cardo; dark + light themes; warm brass accent; muted status palette |
 | Motion | Subtle, on large elements only, 130ms max; setting: On / Off on mobile / Off; respects reduced-motion |
 | Images | Compressed on upload to WebP, metadata stripped, originals never stored |
 
