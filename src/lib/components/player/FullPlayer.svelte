@@ -124,7 +124,7 @@
 			<div class="grid grid-cols-4 items-start gap-3">
 				<div class="col-span-3 min-w-0">
 					<h2 class="truncate text-xl font-bold sm:text-2xl">{player.current?.title}</h2>
-					<p class="truncate text-[13px] text-fg-2">{player.current?.filename}</p>
+					<p class="truncate text-[14px] text-fg-2">{player.current?.filename}</p>
 				</div>
 				<div class="col-span-1 flex justify-end"><CommentButtons size={20} /></div>
 			</div>

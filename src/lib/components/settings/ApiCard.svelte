@@ -55,18 +55,18 @@
 
 <section class="card enter p-5">
 	<h2 class="serif mb-1 text-2xl">API & REAPER</h2>
-	<p class="mb-4 text-[12.5px] text-fg-3">
+	<p class="mb-4 text-[13.5px] text-fg-3">
 		Upload renders straight from REAPER (or any script). A file named like a track — e.g. “New Sketch 14.mp3” — replaces that track’s audio.
 	</p>
 
 	<div class="space-y-5">
 		<div>
-			<h3 class="mb-2 text-[13px] font-medium">API tokens</h3>
+			<h3 class="mb-2 text-[14px] font-medium">API tokens</h3>
 			{#if created}
 				<div class="mb-3 rounded-xl border border-accent/40 bg-accent-soft p-3">
-					<p class="mb-1.5 text-[12.5px] text-fg">Copy “{created.name}” now — it won’t be shown again.</p>
+					<p class="mb-1.5 text-[13.5px] text-fg">Copy “{created.name}” now — it won’t be shown again.</p>
 					<div class="flex items-stretch gap-2">
-						<code class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[12px] whitespace-nowrap">{created.token}</code>
+						<code class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[13px] whitespace-nowrap">{created.token}</code>
 						<button class="btn btn-outline h-auto" onclick={() => copy(created!.token, 'token')}>{copied === 'token' ? 'Copied' : 'Copy'}</button>
 					</div>
 				</div>
@@ -78,10 +78,10 @@
 						<li class="flex items-center gap-3 py-2">
 							<KeyRound size={15} class="shrink-0 text-fg-3" />
 							<div class="min-w-0 flex-1 leading-tight">
-								<p class="truncate text-[13px] font-medium">{t.name}</p>
-								<p class="text-[12px] text-fg-3">Created {relativeTime(t.createdAt)} · {t.lastUsedAt ? `last used ${relativeTime(t.lastUsedAt)}` : 'never used'}</p>
+								<p class="truncate text-[14px] font-medium">{t.name}</p>
+								<p class="text-[13px] text-fg-3">Created {relativeTime(t.createdAt)} · {t.lastUsedAt ? `last used ${relativeTime(t.lastUsedAt)}` : 'never used'}</p>
 							</div>
-							{#if isArmed}<span class="text-[11.5px] text-danger">Tap again to revoke</span>{/if}
+							{#if isArmed}<span class="text-[12.5px] text-danger">Tap again to revoke</span>{/if}
 							<button
 								type="button"
 								class="icon-btn size-8 {isArmed ? '!text-danger bg-[color-mix(in_srgb,var(--danger)_16%,transparent)]' : 'hover:text-danger'}"
@@ -105,10 +105,10 @@
 		</div>
 
 		<div>
-			<h3 class="mb-1 text-[13px] font-medium">REAPER script</h3>
-			<p class="mb-2 text-[12.5px] text-fg-3">Renders the region under the edit cursor and uploads it to the track named like your project.</p>
+			<h3 class="mb-1 text-[14px] font-medium">REAPER script</h3>
+			<p class="mb-2 text-[13.5px] text-fg-3">Renders the region under the edit cursor and uploads it to the track named like your project.</p>
 			<a class="btn btn-outline mb-2" href={scriptUrl} download={scriptName}><Download size={14} /> Download ReaScript</a>
-			<ol class="list-decimal space-y-0.5 pl-5 text-[12.5px] text-fg-2">
+			<ol class="list-decimal space-y-0.5 pl-5 text-[13.5px] text-fg-2">
 				<li>In REAPER: Actions → Show action list → New action → Load ReaScript… and pick the file.</li>
 				<li>File → Render…: choose MP3 (or WAV) once. Save it in your project template so new projects have it.</li>
 				<li>Put the edit cursor in a region and run the action. The first time, enter <span class="font-mono">{origin}</span> and a token.</li>
@@ -116,12 +116,12 @@
 		</div>
 
 		<div>
-			<h3 class="mb-1 text-[13px] font-medium">Other tools</h3>
-			<p class="mb-2 text-[12.5px] text-fg-3">
+			<h3 class="mb-1 text-[14px] font-medium">Other tools</h3>
+			<p class="mb-2 text-[13.5px] text-fg-3">
 				POST the raw file (WAV or MP3) to <span class="font-mono">/api/v1/audio?filename=…</span>. Add <span class="font-mono">&amp;project=…</span> if the same track name exists in several projects.
 			</p>
 			<div class="flex items-stretch gap-2">
-				<pre class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[11.5px] leading-relaxed">{curlExample}</pre>
+				<pre class="min-w-0 flex-1 overflow-x-auto rounded-lg bg-[var(--glass-solid)] px-3 py-2 font-mono text-[12.5px] leading-relaxed">{curlExample}</pre>
 				<button class="btn btn-outline h-auto" onclick={() => copy(curlExample.replace(/\\\n\s+/g, ''), 'curl')}>{copied === 'curl' ? 'Copied' : 'Copy'}</button>
 			</div>
 		</div>

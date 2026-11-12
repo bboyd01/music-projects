@@ -109,7 +109,7 @@
 
 	<section class="card p-5">
 		<h2 class="serif mb-1 text-2xl">Cover & background</h2>
-		<p class="mb-4 text-[12.5px] text-fg-3">
+		<p class="mb-4 text-[13.5px] text-fg-3">
 			Shown blurred behind the project and in the fullscreen player.
 			{coverMode === 'auto' ? 'Currently automatic: the first image inspiration, or a default backdrop.' : coverMode === 'pinned' ? 'Pinned to an image inspiration.' : 'Using an uploaded cover.'}
 		</p>
@@ -149,10 +149,10 @@
 		<ul class="mb-4 divide-y divide-line">
 			{#each data.members as m (m.id)}
 				<li class="flex items-center gap-3 py-2.5">
-					<span class="flex size-8 items-center justify-center rounded-full bg-hover text-[12px] font-semibold">{m.name[0]?.toUpperCase()}</span>
+					<span class="flex size-8 items-center justify-center rounded-full bg-hover text-[13px] font-semibold">{m.name[0]?.toUpperCase()}</span>
 					<div class="min-w-0 flex-1 leading-tight">
 						<p class="truncate font-medium">{m.name}{m.id === me.id ? ' (you)' : ''}</p>
-						<p class="truncate text-[12px] text-fg-3">@{m.username}</p>
+						<p class="truncate text-[13px] text-fg-3">@{m.username}</p>
 					</div>
 					{#if isOwner}
 						<select class="input h-8 w-auto" value={m.role} onchange={(e) => setRole(m.id, e.currentTarget.value)} aria-label="Role for {m.name}">
@@ -185,14 +185,14 @@
 				</select>
 				<button class="btn btn-primary" disabled={!handle.trim()}><UserPlus size={14} /> Add</button>
 			</form>
-			<p class="mt-2 text-[12px] text-fg-3">Editors can change tracks and todos. Viewers can listen and comment.</p>
+			<p class="mt-2 text-[13px] text-fg-3">Editors can change tracks and todos. Viewers can listen and comment.</p>
 		{/if}
 	</section>
 
 	{#if isOwner}
 		<section class="card p-5">
 			<h2 class="serif mb-1 text-2xl">Discord</h2>
-			<p class="mb-3 text-[12.5px] text-fg-3">
+			<p class="mb-3 text-[13.5px] text-fg-3">
 				New comments are posted to this channel webhook (Discord → Channel settings → Integrations → Webhooks). People who set their Discord user ID get pinged when @mentioned.
 			</p>
 			<form
@@ -209,7 +209,7 @@
 
 		<section class="card border-danger/30 p-5">
 			<h2 class="serif mb-1 text-2xl">Delete project</h2>
-			<p class="mb-3 text-[12.5px] text-fg-3">Permanently removes all tracks, audio files, comments, todos and inspirations.</p>
+			<p class="mb-3 text-[13.5px] text-fg-3">Permanently removes all tracks, audio files, comments, todos and inspirations.</p>
 			<button class="btn btn-danger border border-current/30" onclick={del}>Delete project…</button>
 		</section>
 	{/if}

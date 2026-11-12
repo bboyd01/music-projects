@@ -65,7 +65,7 @@
 						</div>
 						<div>
 							<h2 class="serif text-2xl leading-tight">{p.name}</h2>
-							<p class="mt-1 text-[12.5px] text-white/65">
+							<p class="mt-1 text-[13.5px] text-white/65">
 								{p.trackCount} {p.trackCount === 1 ? 'track' : 'tracks'}{p.role !== 'owner' ? ` · ${p.role}` : ''}
 							</p>
 						</div>

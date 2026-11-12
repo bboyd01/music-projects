@@ -95,21 +95,21 @@
 			{@const c = near[0]}
 			<!-- Comment preview, above the time tooltip, anchored to the comment's marker. -->
 			<div
-				class="tip comment-tip pointer-events-none absolute bottom-full mb-9 w-max max-w-[min(280px,90%)] -translate-x-1/2 rounded-lg px-2.5 py-1.5 text-left text-[12px] leading-snug"
+				class="tip comment-tip pointer-events-none absolute bottom-full mb-9 w-max max-w-[min(280px,90%)] -translate-x-1/2 rounded-lg px-2.5 py-1.5 text-left text-[13px] leading-snug"
 				style:left="clamp(min(140px, 45%), {nearPct}%, calc(100% - min(140px, 45%)))"
 			>
-				<p class="mb-0.5 flex items-center gap-1.5 text-[11px] text-fg-3">
+				<p class="mb-0.5 flex items-center gap-1.5 text-[12px] text-fg-3">
 					<span class="font-semibold text-fg-2">{c.author.name}</span>
-					<span class="ts-chip !h-4 !px-1 !text-[10px]">{formatTime(c.timestampSec)}</span>
+					<span class="ts-chip !h-4 !px-1 !text-[11px]">{formatTime(c.timestampSec)}</span>
 					{#if c.resolvedAt}<span class="text-accent">✓ Resolved</span>{/if}
 				</p>
 				<p class="line-clamp-3 whitespace-pre-wrap text-fg">{c.body}</p>
-				{#if near.length > 1}<p class="mt-0.5 text-[11px] text-fg-3">+{near.length - 1} more here</p>{/if}
+				{#if near.length > 1}<p class="mt-0.5 text-[12px] text-fg-3">+{near.length - 1} more here</p>{/if}
 			</div>
 		{/if}
 		{#if hover !== null}
 			<span
-				class="tip tabular pointer-events-none absolute bottom-full mb-1.5 -translate-x-1/2 rounded-md px-2 py-0.5 text-[11.5px] font-medium"
+				class="tip tabular pointer-events-none absolute bottom-full mb-1.5 -translate-x-1/2 rounded-md px-2 py-0.5 text-[12.5px] font-medium"
 				style:left="clamp(1.25rem, {hover * 100}%, calc(100% - 1.25rem))"
 			>
 				{formatTime(dragging ? dragTime : hover * total)}
@@ -143,7 +143,7 @@
 		{/if}
 	</div>
 	{#if !compact}
-		<div class="tabular mt-1 flex items-center justify-between text-[11.5px] text-fg-3">
+		<div class="tabular mt-1 flex items-center justify-between text-[12.5px] text-fg-3">
 			<span>{formatTime(shown)}</span>
 			<span>({formatTime(total)})</span>
 			<span>-{formatTime(Math.max(0, total - shown))}</span>

@@ -24,7 +24,7 @@
 
 {#snippet pill()}
 	<span
-		class="chip {size === 'sm' ? 'h-[22px] px-2 text-[11.5px]' : ''}"
+		class="chip {size === 'sm' ? 'h-[22px] px-2 text-[12.5px]' : ''}"
 		style:background="color-mix(in srgb, {current?.color ?? 'var(--fg-3)'} 16%, transparent)"
 		style:color="color-mix(in srgb, {current?.color ?? 'var(--fg-3)'} 85%, var(--fg))"
 	>

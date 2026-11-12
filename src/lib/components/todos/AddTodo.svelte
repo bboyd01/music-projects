@@ -21,7 +21,7 @@
 
 <form class="mt-1 flex items-center gap-1.5" onsubmit={submit}>
 	<Plus size={14} class="ml-1.5 shrink-0 text-fg-3" />
-	<input class="input-bare h-8 min-w-0 flex-1 px-1.5 text-[13.5px]" placeholder="Add an item" bind:value={text} />
+	<input class="input-bare h-8 min-w-0 flex-1 px-1.5 text-[14.5px]" placeholder="Add an item" bind:value={text} />
 	{#if isPlaying}
 		<button
 			type="button"

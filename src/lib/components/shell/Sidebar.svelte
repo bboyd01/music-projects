@@ -15,7 +15,7 @@
 		<span class="flex size-7 items-center justify-center rounded-lg bg-fg text-bg">
 			<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 14v-4M8 18V6M12 15V9M16 20V4M20 14v-4" /></svg>
 		</span>
-		<span class="serif text-[19px] leading-none">Music Projects</span>
+		<span class="serif text-[22px] leading-none">Music Projects</span>
 	</a>
 
 	<nav class="space-y-0.5 px-3" aria-label="Main">
@@ -23,7 +23,7 @@
 			{@const active = isActive(page.url.pathname, item.href)}
 			<a
 				href={item.href}
-				class="nav-link flex h-9 items-center gap-3 rounded-lg px-2.5 text-[13.5px] {active ? 'active' : ''}"
+				class="nav-link flex h-9 items-center gap-3 rounded-lg px-2.5 text-[14.5px] {active ? 'active' : ''}"
 				aria-current={active ? 'page' : undefined}
 			>
 				<item.icon size={17} strokeWidth={1.7} />
@@ -37,23 +37,23 @@
 		{#each projects as p (p.id)}
 			<a
 				href="/projects/{p.id}"
-				class="nav-link flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-[13px] {currentProject === p.id ? 'active' : ''}"
+				class="nav-link flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-[14px] {currentProject === p.id ? 'active' : ''}"
 			>
 				<span class="size-1.5 shrink-0 rounded-full" style:background={colorOf(p.statusId)}></span>
 				<span class="truncate">{p.name}</span>
 			</a>
 		{:else}
-			<p class="px-2.5 text-[12px] text-fg-3">No projects yet</p>
+			<p class="px-2.5 text-[13px] text-fg-3">No projects yet</p>
 		{/each}
 	</div>
 
 	<div class="flex items-center gap-2 border-t border-line px-4 py-3">
-		<span class="flex size-7 items-center justify-center rounded-full bg-hover text-[12px] font-semibold">
+		<span class="flex size-7 items-center justify-center rounded-full bg-hover text-[13px] font-semibold">
 			{page.data.user?.name?.[0]?.toUpperCase()}
 		</span>
 		<div class="min-w-0 flex-1 leading-tight">
-			<p class="truncate text-[13px]">{page.data.user?.name}</p>
-			<p class="truncate text-[11px] text-fg-3">@{page.data.user?.username}</p>
+			<p class="truncate text-[14px]">{page.data.user?.name}</p>
+			<p class="truncate text-[12px] text-fg-3">@{page.data.user?.username}</p>
 		</div>
 		<form method="POST" action="/logout">
 			<button class="icon-btn size-8" aria-label="Sign out" title="Sign out"><LogOut size={15} /></button>

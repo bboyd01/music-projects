@@ -68,7 +68,7 @@
 				{#each data.comments as c, i (c.id)}
 					<li class="enter" style:animation-delay="{Math.min(i, 10) * 14}ms">
 						<article class="card p-4">
-							<header class="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px]">
+							<header class="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13.5px]">
 								<span class="font-medium">{c.authorName}</span>
 								<span class="text-fg-3">on</span>
 								<a href="/projects/{c.projectId}/tracks/{c.trackId}" class="inline-flex items-center gap-1.5 font-medium hover:text-accent">

@@ -73,7 +73,7 @@
 	</div>
 	<div class="mt-3 min-h-24">
 		{#if loading && !results.length}
-			<p class="py-6 text-center text-[13px] text-fg-3">Searching…</p>
+			<p class="py-6 text-center text-[14px] text-fg-3">Searching…</p>
 		{:else if results.length}
 			<ul class="space-y-0.5">
 				{#each results as r, i}
@@ -86,17 +86,17 @@
 							{/if}
 							<span class="min-w-0 flex-1 leading-tight">
 								<span class="block truncate font-medium text-fg">{r.title}</span>
-								<span class="block truncate text-[12px] text-fg-3">{[r.artist, r.album].filter(Boolean).join(' · ')}</span>
+								<span class="block truncate text-[13px] text-fg-3">{[r.artist, r.album].filter(Boolean).join(' · ')}</span>
 							</span>
-							{#if adding === i}<span class="text-[12px] text-fg-3">Adding…</span>{/if}
+							{#if adding === i}<span class="text-[13px] text-fg-3">Adding…</span>{/if}
 						</button>
 					</li>
 				{/each}
 			</ul>
 		{:else if q.trim().length >= 2}
-			<p class="py-6 text-center text-[13px] text-fg-3">{isLink ? 'Couldn’t read that link.' : 'No matches.'}</p>
+			<p class="py-6 text-center text-[14px] text-fg-3">{isLink ? 'Couldn’t read that link.' : 'No matches.'}</p>
 		{:else}
-			<p class="py-6 text-center text-[13px] text-fg-3">Results appear as you type.</p>
+			<p class="py-6 text-center text-[14px] text-fg-3">Results appear as you type.</p>
 		{/if}
 	</div>
 </Modal>

@@ -9,7 +9,7 @@
 >
 	{#each ui.toasts as t (t.id)}
 		<div
-			class="glass-popup pointer-events-auto max-w-sm rounded-xl px-4 py-2.5 text-[13px] {t.kind === 'error'
+			class="glass-popup pointer-events-auto max-w-sm rounded-xl px-4 py-2.5 text-[14px] {t.kind === 'error'
 				? 'text-danger'
 				: 'text-fg'}"
 			transition:slide={{ y: -6 }}

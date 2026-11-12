@@ -115,9 +115,9 @@
 		{#each ordered as c (c.id)}
 			<article class="group rounded-xl px-1 py-2 {c.resolvedAt ? 'resolved' : ''}">
 				<header class="mb-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-					<span class="flex size-6 items-center justify-center rounded-full bg-hover text-[11px] font-semibold">{c.author.name[0]?.toUpperCase()}</span>
-					<span class="text-[13px] font-medium">{c.author.name}</span>
-					<span class="text-[12px] text-fg-3">{relativeTime(c.createdAt)}</span>
+					<span class="flex size-6 items-center justify-center rounded-full bg-hover text-[12px] font-semibold">{c.author.name[0]?.toUpperCase()}</span>
+					<span class="text-[14px] font-medium">{c.author.name}</span>
+					<span class="text-[13px] text-fg-3">{relativeTime(c.createdAt)}</span>
 					{#if c.timestampSec != null}
 						<button
 							type="button"
@@ -170,14 +170,14 @@
 							>
 								<Trash2 size={13} />
 							</button>
-							{#if isArmed}<span class="text-[11.5px] text-danger" aria-live="polite">Tap again to delete</span>{/if}
+							{#if isArmed}<span class="text-[12.5px] text-danger" aria-live="polite">Tap again to delete</span>{/if}
 						{/if}
 					</div>
 				</header>
 				<div class="body pl-8"><CommentBody body={c.body} /></div>
 			</article>
 		{:else}
-			<p class="py-2 text-[13px] text-fg-3">No comments yet.</p>
+			<p class="py-2 text-[14px] text-fg-3">No comments yet.</p>
 		{/each}
 	</div>
 

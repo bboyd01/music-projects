@@ -35,18 +35,18 @@
 </script>
 
 <Modal bind:open={composer.open} title="Comment" width={460}>
-	<p class="-mt-1 mb-3 flex items-center gap-2 text-[13px] text-fg-2">
+	<p class="-mt-1 mb-3 flex items-center gap-2 text-[14px] text-fg-2">
 		<span class="truncate">{composer.trackTitle}</span>
 		{#if composer.timestampSec != null}
 			<span class="ts-chip">{formatTime(composer.timestampSec)}</span>
-			<button type="button" class="text-[12px] text-fg-3 hover:text-fg" onclick={() => (composer.timestampSec = null)}>
+			<button type="button" class="text-[13px] text-fg-3 hover:text-fg" onclick={() => (composer.timestampSec = null)}>
 				Remove timestamp
 			</button>
 		{/if}
 	</p>
 	<MentionInput bind:value={body} members={composer.members} autofocus rows={4} onsubmit={post} />
 	<div class="mt-3 flex items-center justify-between gap-2">
-		<span class="hidden text-[11.5px] text-fg-3 sm:block">⌘/Ctrl + Enter to post</span>
+		<span class="hidden text-[12.5px] text-fg-3 sm:block">⌘/Ctrl + Enter to post</span>
 		<div class="ml-auto flex gap-2">
 			<button type="button" class="btn btn-ghost" onclick={() => (composer.open = false)}>Cancel</button>
 			<button type="button" class="btn btn-primary" disabled={!body.trim() || busy} onclick={post}>Post</button>

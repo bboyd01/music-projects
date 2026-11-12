@@ -23,18 +23,18 @@
 			}}
 		>
 			<label class="block">
-				<span class="mb-1.5 block text-[12px] text-fg-2">Email or username</span>
+				<span class="mb-1.5 block text-[13px] text-fg-2">Email or username</span>
 				<input class="input h-10" type="text" name="email" autocomplete="username" autocapitalize="none" spellcheck="false" required value={form?.email ?? ''} />
 			</label>
 			<label class="block">
-				<span class="mb-1.5 block text-[12px] text-fg-2">Password</span>
+				<span class="mb-1.5 block text-[13px] text-fg-2">Password</span>
 				<input class="input h-10" type="password" name="password" autocomplete="current-password" required />
 			</label>
-			{#if form?.message}<p class="text-[13px] text-danger">{form.message}</p>{/if}
+			{#if form?.message}<p class="text-[14px] text-danger">{form.message}</p>{/if}
 			<button class="btn btn-primary h-10 w-full" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
 		</form>
 		{#if data.noUsers}
-			<p class="mt-4 text-center text-[12px] text-fg-3">
+			<p class="mt-4 text-center text-[13px] text-fg-3">
 				No accounts yet. Set <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> and restart to create the first admin.
 			</p>
 		{/if}

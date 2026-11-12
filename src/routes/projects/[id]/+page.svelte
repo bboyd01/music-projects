@@ -70,7 +70,7 @@
 <div class="mb-3 flex items-baseline gap-3">
 	<h2 id="tracks-heading" class="serif text-2xl">Tracks</h2>
 	<!-- Same style as the Length column, de-emphasized next to the heading. -->
-	{#if totalSeconds > 0}<span class="tabular text-[13px] text-fg-2">{formatTime(totalSeconds)} total</span>{/if}
+	{#if totalSeconds > 0}<span class="tabular text-[14px] text-fg-2">{formatTime(totalSeconds)} total</span>{/if}
 </div>
 <div class="mb-4 flex flex-wrap items-center gap-2">
 	<div class="glass flex rounded-lg p-0.5" role="tablist" aria-label="View">
@@ -80,7 +80,7 @@
 				role="tab"
 				aria-label={v.label}
 				aria-selected={view === v.id}
-				class="flex h-7 items-center gap-1.5 rounded-md px-2.5 text-[12.5px] font-medium {view === v.id
+				class="flex h-7 items-center gap-1.5 rounded-md px-2.5 text-[13.5px] font-medium {view === v.id
 					? 'bg-hover text-fg'
 					: 'text-fg-3 hover:text-fg-2'}"
 				onclick={() => {
