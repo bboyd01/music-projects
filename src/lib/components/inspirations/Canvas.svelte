@@ -97,12 +97,23 @@
 		viewport.setPointerCapture(e.pointerId);
 	}
 
+	let lastPress: { id: string; t: number; x: number; y: number } | null = null;
 	function onItemDown(e: PointerEvent, it: InspirationView) {
 		e.stopPropagation();
 		lineMenu = null;
 		if (e.button !== 0 || editing === it.id) return;
 		selected = it.id;
 		if (!canEdit) return;
+		// Detect double-press here: the viewport's pointer capture retargets click/dblclick away from the item.
+		const now = performance.now();
+		const dbl = lastPress && lastPress.id === it.id && now - lastPress.t < 400 && Math.hypot(e.clientX - lastPress.x, e.clientY - lastPress.y) < 6;
+		lastPress = { id: it.id, t: now, x: e.clientX, y: e.clientY };
+		if (dbl && it.type === 'text') {
+			lastPress = null;
+			e.preventDefault(); // keep the mousedown from stealing focus from the textarea
+			editing = it.id;
+			return;
+		}
 		bringToFront(it);
 		g = { kind: 'move', id: it.id, sx: e.clientX, sy: e.clientY, ox: it.x, oy: it.y, moved: false };
 		viewport.setPointerCapture(e.pointerId);
@@ -459,7 +470,6 @@
 				aria-label="{it.type} inspiration"
 				onpointerdown={(e) => onItemDown(e, it)}
 				onclickcapture={onItemClickCapture}
-				ondblclick={() => canEdit && it.type === 'text' && (editing = it.id)}
 			>
 				<div class="content h-full w-full overflow-hidden rounded-xl {it.type === 'image' ? '' : 'glass-blur'}">
 					{#if editing === it.id && it.type === 'text'}

@@ -2,7 +2,6 @@
 	import Upload from '@lucide/svelte/icons/upload';
 	import FileAudio from '@lucide/svelte/icons/file-audio';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
-	import RefreshCw from '@lucide/svelte/icons/refresh-cw';
 	import { api, uploadWithProgress } from '#lib/api.ts';
 	import { formatTime, relativeTime } from '#lib/time.ts';
 	import { toast } from '#lib/state/ui.svelte.ts';
@@ -105,7 +104,7 @@
 			</p>
 		</div>
 		{#if canEdit}
-			<button class="icon-btn" title="Replace audio" aria-label="Replace audio" onclick={() => input.click()}><RefreshCw size={15} /></button>
+			<button class="icon-btn" title="Replace audio" aria-label="Replace audio" onclick={() => input.click()}><Upload size={15} /></button>
 			<button class="icon-btn hover:text-danger" title="Remove audio" aria-label="Remove audio" onclick={remove}><Trash2 size={15} /></button>
 		{/if}
 	</div>

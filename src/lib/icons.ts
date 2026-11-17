@@ -80,6 +80,102 @@ import Swords from '@lucide/svelte/icons/swords';
 import Skull from '@lucide/svelte/icons/skull';
 import Cat from '@lucide/svelte/icons/cat';
 import Rabbit from '@lucide/svelte/icons/rabbit';
+import Music2 from '@lucide/svelte/icons/music-2';
+import Music4 from '@lucide/svelte/icons/music-4';
+import Bell from '@lucide/svelte/icons/bell';
+import Disc from '@lucide/svelte/icons/disc';
+import Volume2 from '@lucide/svelte/icons/volume-2';
+import Podcast from '@lucide/svelte/icons/podcast';
+import RadioTower from '@lucide/svelte/icons/radio-tower';
+import Activity from '@lucide/svelte/icons/activity';
+import Keyboard from '@lucide/svelte/icons/keyboard';
+import CloudLightning from '@lucide/svelte/icons/cloud-lightning';
+import CloudSun from '@lucide/svelte/icons/cloud-sun';
+import CloudSnow from '@lucide/svelte/icons/cloud-snow';
+import CloudFog from '@lucide/svelte/icons/cloud-fog';
+import Tornado from '@lucide/svelte/icons/tornado';
+import MoonStar from '@lucide/svelte/icons/moon-star';
+import Droplets from '@lucide/svelte/icons/droplets';
+import Flower from '@lucide/svelte/icons/flower';
+import Clover from '@lucide/svelte/icons/clover';
+import Shrub from '@lucide/svelte/icons/shrub';
+import TreePalm from '@lucide/svelte/icons/tree-palm';
+import Snail from '@lucide/svelte/icons/snail';
+import Turtle from '@lucide/svelte/icons/turtle';
+import Bug from '@lucide/svelte/icons/bug';
+import Squirrel from '@lucide/svelte/icons/squirrel';
+import Dog from '@lucide/svelte/icons/dog';
+import PawPrint from '@lucide/svelte/icons/paw-print';
+import Earth from '@lucide/svelte/icons/earth';
+import Umbrella from '@lucide/svelte/icons/umbrella';
+import Tent from '@lucide/svelte/icons/tent';
+import MapIcon from '@lucide/svelte/icons/map';
+import MapPin from '@lucide/svelte/icons/map-pin';
+import Anchor from '@lucide/svelte/icons/anchor';
+import Sailboat from '@lucide/svelte/icons/sailboat';
+import Car from '@lucide/svelte/icons/car';
+import Bike from '@lucide/svelte/icons/bike';
+import Bus from '@lucide/svelte/icons/bus';
+import Store from '@lucide/svelte/icons/store';
+import FerrisWheel from '@lucide/svelte/icons/ferris-wheel';
+import Satellite from '@lucide/svelte/icons/satellite';
+import Camera from '@lucide/svelte/icons/camera';
+import Palette from '@lucide/svelte/icons/palette';
+import PenTool from '@lucide/svelte/icons/pen-tool';
+import Scroll from '@lucide/svelte/icons/scroll';
+import Clock from '@lucide/svelte/icons/clock';
+import AlarmClock from '@lucide/svelte/icons/alarm-clock';
+import Phone from '@lucide/svelte/icons/phone';
+import Tv from '@lucide/svelte/icons/tv';
+import Joystick from '@lucide/svelte/icons/joystick';
+import Ticket from '@lucide/svelte/icons/ticket';
+import Mail from '@lucide/svelte/icons/mail';
+import Gift from '@lucide/svelte/icons/gift';
+import Glasses from '@lucide/svelte/icons/glasses';
+import Shirt from '@lucide/svelte/icons/shirt';
+import Hammer from '@lucide/svelte/icons/hammer';
+import Wrench from '@lucide/svelte/icons/wrench';
+import Scissors from '@lucide/svelte/icons/scissors';
+import Magnet from '@lucide/svelte/icons/magnet';
+import FlaskConical from '@lucide/svelte/icons/flask-conical';
+import Microscope from '@lucide/svelte/icons/microscope';
+import Thermometer from '@lucide/svelte/icons/thermometer';
+import Apple from '@lucide/svelte/icons/apple';
+import Cherry from '@lucide/svelte/icons/cherry';
+import Grape from '@lucide/svelte/icons/grape';
+import Citrus from '@lucide/svelte/icons/citrus';
+import Pizza from '@lucide/svelte/icons/pizza';
+import Cake from '@lucide/svelte/icons/cake';
+import Cookie from '@lucide/svelte/icons/cookie';
+import Candy from '@lucide/svelte/icons/candy';
+import IceCream from '@lucide/svelte/icons/ice-cream-cone';
+import Beer from '@lucide/svelte/icons/beer';
+import Martini from '@lucide/svelte/icons/martini';
+import Smile from '@lucide/svelte/icons/smile';
+import Laugh from '@lucide/svelte/icons/laugh';
+import Frown from '@lucide/svelte/icons/frown';
+import Angry from '@lucide/svelte/icons/angry';
+import HeartCrack from '@lucide/svelte/icons/heart-crack';
+import Handshake from '@lucide/svelte/icons/handshake';
+import Baby from '@lucide/svelte/icons/baby';
+import Footprints from '@lucide/svelte/icons/footprints';
+import Brain from '@lucide/svelte/icons/brain';
+import MessageCircle from '@lucide/svelte/icons/message-circle';
+import Flag from '@lucide/svelte/icons/flag';
+import Target from '@lucide/svelte/icons/target';
+import Shield from '@lucide/svelte/icons/shield';
+import Trophy from '@lucide/svelte/icons/trophy';
+import Award from '@lucide/svelte/icons/award';
+import Bomb from '@lucide/svelte/icons/bomb';
+import WandSparkles from '@lucide/svelte/icons/wand-sparkles';
+import Dice from '@lucide/svelte/icons/dice-5';
+import Spade from '@lucide/svelte/icons/spade';
+import Club from '@lucide/svelte/icons/club';
+import Diamond from '@lucide/svelte/icons/diamond';
+import Sparkle from '@lucide/svelte/icons/sparkle';
+import Shapes from '@lucide/svelte/icons/shapes';
+import Triangle from '@lucide/svelte/icons/triangle';
+import Hexagon from '@lucide/svelte/icons/hexagon';
 
 /**
  * Custom instrument glyphs drawn in the Lucide style (24×24, 2px stroke, round caps)
@@ -140,7 +236,16 @@ export const iconGroups: { name: string; icons: IconEntry[] }[] = [
 			L('speaker', 'Speaker', Speaker),
 			L('radio', 'Radio', Radio),
 			L('vinyl', 'Record', Disc3),
-			L('cassette', 'Cassette', CassetteTape)
+			L('cd', 'CD', Disc),
+			L('cassette', 'Cassette', CassetteTape),
+			L('notes', 'Notes', Music2),
+			L('beamed', 'Beamed notes', Music4),
+			L('bell', 'Bell', Bell),
+			L('volume', 'Volume', Volume2),
+			L('keyboard', 'Keyboard', Keyboard),
+			L('podcast', 'Podcast', Podcast),
+			L('broadcast', 'Broadcast', RadioTower),
+			L('pulse', 'Pulse', Activity)
 		]
 	},
 	{
@@ -172,7 +277,41 @@ export const iconGroups: { name: string; icons: IconEntry[] }[] = [
 			L('fish', 'Fish', Fish),
 			L('feather', 'Feather', Feather),
 			L('cat', 'Cat', Cat),
-			L('rabbit', 'Rabbit', Rabbit)
+			L('rabbit', 'Rabbit', Rabbit),
+			L('dog', 'Dog', Dog),
+			L('squirrel', 'Squirrel', Squirrel),
+			L('turtle', 'Turtle', Turtle),
+			L('snail', 'Snail', Snail),
+			L('bug', 'Bug', Bug),
+			L('paw', 'Paw print', PawPrint),
+			L('palm', 'Palm tree', TreePalm),
+			L('shrub', 'Shrub', Shrub),
+			L('blossom', 'Blossom', Flower),
+			L('clover', 'Clover', Clover),
+			L('storm', 'Storm', CloudLightning),
+			L('sunny', 'Partly sunny', CloudSun),
+			L('snowfall', 'Snowfall', CloudSnow),
+			L('fog', 'Fog', CloudFog),
+			L('tornado', 'Tornado', Tornado),
+			L('moonstar', 'Moon & star', MoonStar),
+			L('droplets', 'Droplets', Droplets),
+			L('earth', 'Earth', Earth)
+		]
+	},
+	{
+		name: 'Food & drink',
+		icons: [
+			L('apple', 'Apple', Apple),
+			L('cherry', 'Cherry', Cherry),
+			L('grape', 'Grape', Grape),
+			L('citrus', 'Citrus', Citrus),
+			L('pizza', 'Pizza', Pizza),
+			L('cake', 'Cake', Cake),
+			L('cookie', 'Cookie', Cookie),
+			L('candy', 'Candy', Candy),
+			L('icecream', 'Ice cream', IceCream),
+			L('beer', 'Beer', Beer),
+			L('martini', 'Cocktail', Martini)
 		]
 	},
 	{
@@ -204,7 +343,40 @@ export const iconGroups: { name: string; icons: IconEntry[] }[] = [
 			L('wine', 'Wine', Wine),
 			L('lightbulb', 'Idea', Lightbulb),
 			L('hourglass', 'Hourglass', Hourglass),
-			L('key', 'Key', Key)
+			L('key', 'Key', Key),
+			L('umbrella', 'Umbrella', Umbrella),
+			L('tent', 'Tent', Tent),
+			L('map', 'Map', MapIcon),
+			L('pin', 'Map pin', MapPin),
+			L('anchor', 'Anchor', Anchor),
+			L('sailboat', 'Sailboat', Sailboat),
+			L('car', 'Car', Car),
+			L('bike', 'Bike', Bike),
+			L('bus', 'Bus', Bus),
+			L('store', 'Store', Store),
+			L('ferris', 'Ferris wheel', FerrisWheel),
+			L('satellite', 'Satellite', Satellite),
+			L('camera', 'Camera', Camera),
+			L('palette', 'Palette', Palette),
+			L('pen', 'Pen', PenTool),
+			L('scroll', 'Scroll', Scroll),
+			L('clock', 'Clock', Clock),
+			L('alarm', 'Alarm clock', AlarmClock),
+			L('phone', 'Phone', Phone),
+			L('tv', 'TV', Tv),
+			L('joystick', 'Joystick', Joystick),
+			L('ticket', 'Ticket', Ticket),
+			L('mail', 'Mail', Mail),
+			L('gift', 'Gift', Gift),
+			L('glasses', 'Glasses', Glasses),
+			L('shirt', 'Shirt', Shirt),
+			L('hammer', 'Hammer', Hammer),
+			L('wrench', 'Wrench', Wrench),
+			L('scissors', 'Scissors', Scissors),
+			L('magnet', 'Magnet', Magnet),
+			L('flask', 'Flask', FlaskConical),
+			L('microscope', 'Microscope', Microscope),
+			L('thermometer', 'Thermometer', Thermometer)
 		]
 	},
 	{
@@ -223,7 +395,32 @@ export const iconGroups: { name: string; icons: IconEntry[] }[] = [
 			L('origami', 'Origami', Origami),
 			L('puzzle', 'Puzzle', Puzzle),
 			L('swords', 'Swords', Swords),
-			L('skull', 'Skull', Skull)
+			L('skull', 'Skull', Skull),
+			L('smile', 'Smile', Smile),
+			L('laugh', 'Laugh', Laugh),
+			L('frown', 'Frown', Frown),
+			L('angry', 'Angry', Angry),
+			L('heartbreak', 'Heartbreak', HeartCrack),
+			L('handshake', 'Handshake', Handshake),
+			L('baby', 'Baby', Baby),
+			L('footprints', 'Footprints', Footprints),
+			L('brain', 'Brain', Brain),
+			L('chat', 'Chat', MessageCircle),
+			L('flag', 'Flag', Flag),
+			L('target', 'Target', Target),
+			L('shield', 'Shield', Shield),
+			L('trophy', 'Trophy', Trophy),
+			L('award', 'Award', Award),
+			L('bomb', 'Bomb', Bomb),
+			L('wand', 'Magic wand', WandSparkles),
+			L('dice', 'Dice', Dice),
+			L('spade', 'Spade', Spade),
+			L('club', 'Club', Club),
+			L('diamond', 'Diamond', Diamond),
+			L('sparkle', 'Sparkle', Sparkle),
+			L('shapes', 'Shapes', Shapes),
+			L('triangle', 'Triangle', Triangle),
+			L('hexagon', 'Hexagon', Hexagon)
 		]
 	}
 ];

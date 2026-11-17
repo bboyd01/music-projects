@@ -26,6 +26,14 @@
 			class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
 			aria-label="{label} date"
 			value={value ?? ''}
+			onclick={(e) => {
+				// Desktop Chrome/Edge only open the picker from the (hidden) calendar glyph; open it from anywhere on the chip.
+				try {
+					e.currentTarget.showPicker();
+				} catch {
+					/* Unsupported — fall back to the native behaviour. */
+				}
+			}}
 			onchange={(e) => onchange(e.currentTarget.value || null)}
 		/>
 		{#if value}
