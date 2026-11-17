@@ -31,10 +31,83 @@
 		></div>
 	{/each}
 	<div class="absolute inset-0" style:background="var(--overlay)"></div>
+	<!-- Two soft layers of shade and light circling slowly on different loops, so the overlay's
+	     texture shifts and breathes while the photo stays put. -->
+	<div class="flow flow-a"></div>
+	<div class="flow flow-b"></div>
 	<div class="grain absolute inset-0"></div>
 </div>
 
 <style>
+	/* Oversized so the edges never show while the layers circle around. */
+	.flow {
+		position: absolute;
+		inset: -30%;
+		background-repeat: no-repeat;
+		will-change: transform;
+		animation: var(--dur) ease-in-out infinite;
+	}
+	.flow-a {
+		--dur: 80s;
+		animation-name: orbit-a;
+		background-image:
+			radial-gradient(22% 18% at 30% 32%, var(--flow-shade), transparent),
+			radial-gradient(18% 24% at 70% 64%, var(--flow-shade), transparent),
+			radial-gradient(16% 14% at 56% 38%, var(--flow-light), transparent);
+	}
+	.flow-b {
+		--dur: 115s;
+		animation-name: orbit-b;
+		background-image:
+			radial-gradient(20% 16% at 64% 30%, var(--flow-shade), transparent),
+			radial-gradient(16% 20% at 34% 68%, var(--flow-light), transparent),
+			radial-gradient(18% 18% at 44% 52%, var(--flow-shade), transparent);
+	}
+	/* Slow closed loops: the shading shifts and breathes in place rather than sweeping past. */
+	@keyframes orbit-a {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+		}
+		25% {
+			transform: translate3d(6vw, -4vh, 0) rotate(4deg) scale(1.05);
+		}
+		50% {
+			transform: translate3d(2vw, 6vh, 0) rotate(-2deg) scale(0.97);
+		}
+		75% {
+			transform: translate3d(-6vw, 2vh, 0) rotate(3deg) scale(1.03);
+		}
+	}
+	@keyframes orbit-b {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+		}
+		30% {
+			transform: translate3d(-5vw, 5vh, 0) rotate(-4deg) scale(1.04);
+		}
+		60% {
+			transform: translate3d(4vw, 3vh, 0) rotate(3deg) scale(0.96);
+		}
+		80% {
+			transform: translate3d(3vw, -5vh, 0) rotate(-2deg) scale(1.02);
+		}
+	}
+	/* Respect the app's motion setting and the OS reduced-motion preference. */
+	:global(:root[data-motion='off']) .flow {
+		animation: none;
+	}
+	@media (max-width: 767px), (pointer: coarse) {
+		:global(:root[data-motion='mobile-off']) .flow {
+			animation: none;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.flow {
+			animation: none;
+		}
+	}
 	.photo {
 		filter: var(--photo-filter);
 		transform: scale(1.15);
