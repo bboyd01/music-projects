@@ -15,6 +15,7 @@ export async function PATCH({ request, locals }) {
 		...defined({
 			theme: oneOf(body.theme, 'Theme', ['system', 'dark', 'light'] as const),
 			motion: oneOf(body.motion, 'Animations', ['on', 'mobile-off', 'off'] as const),
+			bgEffects: oneOf(body.bgEffects, 'Background effects', ['on', 'mobile-off', 'off'] as const),
 			musicService: oneOf(body.musicService, 'Music service', ['apple', 'spotify'] as const),
 			timeline: oneOf(body.timeline, 'Player timeline', ['line', 'waveform'] as const),
 			dawEnabled: optBool(body.dawEnabled, 'Open in DAW'),

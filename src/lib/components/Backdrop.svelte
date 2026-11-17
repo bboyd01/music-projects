@@ -22,10 +22,12 @@
 	});
 
 	// ── Overlay flow ──────────────────────────────────────────
-	// Soft pools of shade and light circling slowly over the overlay. Drawn on a tiny canvas
-	// (1/8 of the screen) that the browser stretches to full size: smooth gradients look the same,
+	// Soft pools of shade and light circling slowly over the overlay. Drawn on a small canvas
+	// (1/5 of the screen) that the browser stretches to full size: smooth gradients look the same,
 	// it costs almost no GPU memory, and it never has to be re-drawn when the photo changes.
-	const SCALE = 1 / 8;
+	// Blobs fade with an S-curve, and a faint dither breaks up 8-bit banding when stretched.
+	const FALLOFF = [0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1].map((x) => [x, 1 - x * x * (3 - 2 * x)] as const);
+	const SCALE = 1 / 5;
 	type Blob = { x: number; y: number; rx: number; ry: number; light: boolean };
 	type Layer = { period: number; phase: number; dx: number; dy: number; rot: number; zoom: number; blobs: Blob[] };
 	// Positions and radii are fractions of the screen (blobs may extend past the edges).
@@ -100,6 +102,16 @@
 		const s2d = sunCanvas.getContext('2d');
 		if (!s2d) return;
 		const sctx: CanvasRenderingContext2D = s2d;
+		// Static noise used to dither the flow layer (removes up to ~1.5 alpha levels at random).
+		const noise = document.createElement('canvas');
+		noise.width = noise.height = 64;
+		{
+			const nctx = noise.getContext('2d')!;
+			const img = nctx.createImageData(64, 64);
+			for (let i = 0; i < img.data.length; i += 4) img.data[i + 3] = Math.random() * 255;
+			nctx.putImageData(img, 0, 0);
+		}
+		const noisePattern = ctx.createPattern(noise, 'repeat');
 		const sprite = document.createElement('canvas');
 		sprite.width = sprite.height = 64;
 		let spriteColor = '';
@@ -110,6 +122,7 @@
 		let shade = parse(ctx, 'transparent');
 		let light = shade;
 		let still = false;
+		let enabled = true;
 		let w = 0;
 		let h = 0;
 
@@ -117,8 +130,20 @@
 			const cs = getComputedStyle(root);
 			shade = parse(ctx, cs.getPropertyValue('--flow-shade'));
 			light = parse(ctx, cs.getPropertyValue('--flow-light'));
-			const m = root.dataset.motion;
-			still = reduced.matches || m === 'off' || (m === 'mobile-off' && small.matches);
+			// Background effects setting (independent of Animations); reduced motion → a still frame.
+			const m = root.dataset.bgfx;
+			const wasEnabled = enabled;
+			enabled = !(m === 'off' || (m === 'mobile-off' && small.matches));
+			still = reduced.matches;
+			if (enabled !== wasEnabled) {
+				canvas.style.visibility = sunCanvas.style.visibility = enabled ? '' : 'hidden';
+				if (!enabled) {
+					ctx.setTransform(1, 0, 0, 1, 0, 0);
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					sctx.setTransform(1, 0, 0, 1, 0, 0);
+					sctx.clearRect(0, 0, sunCanvas.width, sunCanvas.height);
+				}
+			}
 			w = innerWidth;
 			h = innerHeight;
 			const cw = Math.max(1, Math.ceil(w * SCALE));
@@ -176,8 +201,10 @@
 			sctx.globalAlpha = 1;
 		}
 
-		function draw(t: number) {
+		/** Sun spots every frame; the slow, soft flow layer only when `withFlow` is set. */
+		function draw(t: number, withFlow = true) {
 			drawSun(t);
+			if (!withFlow) return;
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			for (const l of flow) {
@@ -194,12 +221,20 @@
 					ctx.translate(b.x * w, b.y * h);
 					ctx.scale(b.rx * w, b.ry * h);
 					const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
-					grad.addColorStop(0, `rgba(${r},${g},${bl},${al})`);
-					grad.addColorStop(1, `rgba(${r},${g},${bl},0)`);
+					for (const [at, k] of FALLOFF) grad.addColorStop(at, `rgba(${r},${g},${bl},${al * k})`);
 					ctx.fillStyle = grad;
 					ctx.fillRect(-1, -1, 2, 2);
 					ctx.restore();
 				}
+			}
+			if (noisePattern) {
+				ctx.setTransform(1, 0, 0, 1, 0, 0);
+				ctx.globalCompositeOperation = 'destination-out';
+				ctx.globalAlpha = 0.025;
+				ctx.fillStyle = noisePattern;
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+				ctx.globalAlpha = 1;
+				ctx.globalCompositeOperation = 'source-over';
 			}
 		}
 
@@ -208,16 +243,17 @@
 		let raf = 0;
 		let timer = 0;
 		let last = -Infinity;
-		let lastRefresh = 0;
+		let lastRefresh = -Infinity;
+		let lastFlow = -Infinity;
 		const tick = (now: number) => {
 			// Pick up theme / setting / size changes once a second.
-			if (now - lastRefresh > 1000) {
+			if (now - lastRefresh >= 1000) {
 				lastRefresh = now;
 				refresh();
-				if (still) draw(0); // keeps a static frame current with theme changes
+				if (enabled && still) draw(0); // keeps a static frame current with theme changes
 			}
-			if (still) {
-				// Motion off: no frame loop, just check the settings again in a second.
+			if (!enabled || still) {
+				// Off or reduced motion: no frame loop, just check the settings again in a second.
 				timer = window.setTimeout(() => tick(performance.now()), 1000);
 				return;
 			}
@@ -225,20 +261,38 @@
 			// The motion is slow, so ~30 fps is plenty.
 			if (now - last < 33) return;
 			last = now;
-			draw((now - start) / 1000);
+			// The soft flow layer moves slowly, so ~20 fps is enough for it.
+			const withFlow = now - lastFlow >= 48;
+			if (withFlow) lastFlow = now;
+			draw((now - start) / 1000, withFlow);
 		};
-		draw(0);
+		// Apply a settings change right away instead of within a second.
+		wake = () => {
+			cancelAnimationFrame(raf);
+			clearTimeout(timer);
+			lastRefresh = -Infinity;
+			last = -Infinity;
+			tick(performance.now());
+		};
+		if (enabled) draw(0);
 		tick(performance.now());
 		const onResize = () => {
 			refresh();
-			draw(still ? 0 : (performance.now() - start) / 1000);
+			if (enabled) draw(still ? 0 : (performance.now() - start) / 1000);
 		};
 		addEventListener('resize', onResize);
 		return () => {
 			cancelAnimationFrame(raf);
 			clearTimeout(timer);
 			removeEventListener('resize', onResize);
+			wake = null;
 		};
+	});
+
+	let wake: (() => void) | null = null;
+	$effect(() => {
+		void ui.bgEffects; // re-check as soon as the setting changes
+		wake?.();
 	});
 </script>
 

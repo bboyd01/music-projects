@@ -7,6 +7,8 @@ class UiState {
 	/** URL of the (small) image shown blurred behind everything. */
 	backdrop = $state<string>('/backgrounds/bg-01.webp');
 	motion = $state<'on' | 'mobile-off' | 'off'>('on');
+	/** Background effects (moving light and shade); independent of motion. */
+	bgEffects = $state<'on' | 'mobile-off' | 'off'>('on');
 	reducedMotion = $state(false);
 	small = $state(false);
 	/** On-screen keyboard is up (phones): hide bottom bars so they don't cover inputs. */
@@ -23,6 +25,7 @@ if (browser) {
 	rm.addEventListener('change', (e) => (ui.reducedMotion = e.matches));
 	sm.addEventListener('change', (e) => (ui.small = e.matches));
 	ui.motion = (document.documentElement.dataset.motion as UiState['motion']) ?? 'on';
+	ui.bgEffects = (document.documentElement.dataset.bgfx as UiState['bgEffects']) ?? 'on';
 
 	// The visual viewport shrinks when the keyboard opens; the layout viewport doesn't.
 	// Expose its height as --vvh so sheets can size themselves above the keyboard.
@@ -65,6 +68,11 @@ export const ease = (t: number) => {
 export function setMotion(m: UiState['motion']) {
 	ui.motion = m;
 	if (browser) document.documentElement.dataset.motion = m;
+}
+
+export function setBgEffects(m: UiState['bgEffects']) {
+	ui.bgEffects = m;
+	if (browser) document.documentElement.dataset.bgfx = m;
 }
 
 export function setTheme(t: 'system' | 'dark' | 'light') {

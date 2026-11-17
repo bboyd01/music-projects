@@ -14,6 +14,8 @@ const createdAt = () => integer('created_at', { mode: 'number' }).notNull().defa
 export type UserSettings = {
 	theme?: 'system' | 'dark' | 'light';
 	motion?: 'on' | 'mobile-off' | 'off';
+	/** Moving light and shade behind the app (independent of Animations). */
+	bgEffects?: 'on' | 'mobile-off' | 'off';
 	musicService?: 'apple' | 'spotify';
 	/** Player timeline style: a waveform (default) or the plain line. */
 	timeline?: 'line' | 'waveform';

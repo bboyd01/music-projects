@@ -53,9 +53,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const settings = event.locals.user?.settings ?? {};
 	const theme = settings.theme ?? 'system';
 	const motion = settings.motion ?? 'on';
+	const bgfx = settings.bgEffects ?? 'on';
 
 	return resolve(event, {
 		transformPageChunk: ({ html }) =>
-			html.replace('%mp.theme%', theme).replace('%mp.motion%', motion)
+			html.replace('%mp.theme%', theme).replace('%mp.motion%', motion).replace('%mp.bgfx%', bgfx)
 	});
 };

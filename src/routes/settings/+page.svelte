@@ -10,7 +10,7 @@
 	import LogOut from '@lucide/svelte/icons/log-out';
 	import { api } from '#lib/api.ts';
 	import { normalizeExt, projectPath } from '#lib/daw.ts';
-	import { setMotion, setTheme } from '#lib/state/ui.svelte.ts';
+	import { setBgEffects, setMotion, setTheme } from '#lib/state/ui.svelte.ts';
 	import StatusManager from '#lib/components/settings/StatusManager.svelte';
 	import BackgroundPicker from '#lib/components/settings/BackgroundPicker.svelte';
 	import ApiCard from '#lib/components/settings/ApiCard.svelte';
@@ -24,6 +24,7 @@
 	async function save(patch: Record<string, string | boolean>) {
 		if (patch.theme) setTheme(patch.theme as 'system');
 		if (patch.motion) setMotion(patch.motion as 'on');
+		if (patch.bgEffects) setBgEffects(patch.bgEffects as 'on');
 		await api('PATCH', '/api/me/settings', patch);
 		invalidateAll();
 	}
@@ -118,6 +119,13 @@
 						<p class="text-[13.5px] text-fg-3">Subtle motion on panels and views (130ms max).</p>
 					</div>
 					{@render segmented(motions, settings.motion ?? 'on', (v) => save({ motion: v }), 'Animations')}
+				</div>
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<div>
+						<p class="font-medium">Background effects</p>
+						<p class="text-[13.5px] text-fg-3">Slowly moving light and shade behind the app.</p>
+					</div>
+					{@render segmented(motions, settings.bgEffects ?? 'on', (v) => save({ bgEffects: v }), 'Background effects')}
 				</div>
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<div>

@@ -15,6 +15,7 @@
 
 	$effect(() => {
 		ui.motion = data.user?.settings.motion ?? 'on';
+		ui.bgEffects = data.user?.settings.bgEffects ?? 'on';
 	});
 
 	// ── Backdrop: one place decides what's behind everything ──
