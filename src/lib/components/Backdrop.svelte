@@ -31,7 +31,7 @@
 	// Positions and radii are fractions of the screen (blobs may extend past the edges).
 	const flow: Layer[] = [
 		{
-			period: 25,
+			period: 15,
 			phase: 0,
 			dx: 0.06,
 			dy: 0.05,
@@ -44,7 +44,7 @@
 			]
 		},
 		{
-			period: 38,
+			period: 25,
 			phase: 2.1,
 			dx: 0.05,
 			dy: 0.05,
