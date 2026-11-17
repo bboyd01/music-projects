@@ -35,6 +35,9 @@
 	/* Slowly flowing texture in the backdrop overlay (Backdrop.svelte). */
 	--flow-shade: rgb(11 11 12 / 0.23);
 	--flow-light: rgb(255 245 230 / 0.04);
+	/* Drifting sun spots: color and peak opacity. */
+	--sun-color: rgb(255 226 170);
+	--sun-strength: 0.06;
 	--blur: 20px;
 
 	--dur-panel: 130ms;
@@ -67,6 +70,8 @@
 	--photo-filter: blur(48px) saturate(0.55) brightness(1.08);
 	--flow-shade: rgb(90 80 60 / 0.069);
 	--flow-light: rgb(255 255 255 / 0.253);
+	--sun-color: rgb(255 250 235);
+	--sun-strength: 0.28;
 }
 
 @media (prefers-color-scheme: light) {
@@ -94,6 +99,8 @@
 		--photo-filter: blur(48px) saturate(0.55) brightness(1.08);
 		--flow-shade: rgb(90 80 60 / 0.069);
 		--flow-light: rgb(255 255 255 / 0.253);
+		--sun-color: rgb(255 250 235);
+		--sun-strength: 0.28;
 	}
 }
 

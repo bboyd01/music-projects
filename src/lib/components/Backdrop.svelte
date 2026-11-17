@@ -59,6 +59,29 @@
 	];
 
 	let canvas: HTMLCanvasElement;
+	let sunCanvas: HTMLCanvasElement;
+
+	// ── Sun spots ─────────────────────────────────────────────
+	// A few soft spots of light drifting and twinkling, like sunlight through leaves. Drawn at half
+	// resolution from one pre-rendered spot image, so each spot is a single cheap image copy.
+	const SUN_SCALE = 1 / 2;
+	type Spot = { x: number; y: number; vx: number; vy: number; r: number; sway: number; swayT: number; tw: number; ph: number };
+	const spots: Spot[] = Array.from({ length: 30 }, () => {
+		const r = 0.012 + Math.random() ** 2 * 0.05; // mostly small, a few large (fraction of the longer side)
+		const speed = (0.003 + Math.random() * 0.004) * (0.6 + r * 10); // bigger spots drift a little faster
+		const dir = -Math.PI / 5 + (Math.random() - 0.5) * 1.2; // a shared, gentle diagonal drift
+		return {
+			x: Math.random(),
+			y: Math.random(),
+			vx: Math.cos(dir) * speed,
+			vy: Math.sin(dir) * speed,
+			r,
+			sway: 0.004 + Math.random() * 0.01,
+			swayT: 8 + Math.random() * 10,
+			tw: 5 + Math.random() * 9,
+			ph: Math.random() * Math.PI * 2
+		};
+	});
 
 	/** Any CSS color → [r, g, b, a]. The canvas normalizes it to "#rrggbb" or "rgba(r, g, b, a)". */
 	function parse(ctx: CanvasRenderingContext2D, c: string): [number, number, number, number] {
@@ -74,6 +97,13 @@
 		const c2d = canvas.getContext('2d');
 		if (!c2d) return;
 		const ctx: CanvasRenderingContext2D = c2d;
+		const s2d = sunCanvas.getContext('2d');
+		if (!s2d) return;
+		const sctx: CanvasRenderingContext2D = s2d;
+		const sprite = document.createElement('canvas');
+		sprite.width = sprite.height = 64;
+		let spriteColor = '';
+		let sunStrength = 0;
 		const root = document.documentElement;
 		const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 		const small = matchMedia('(max-width: 767px), (pointer: coarse)');
@@ -97,9 +127,57 @@
 				canvas.width = cw;
 				canvas.height = ch;
 			}
+			const sw = Math.max(1, Math.ceil(w * SUN_SCALE));
+			const sh = Math.max(1, Math.ceil(h * SUN_SCALE));
+			if (sunCanvas.width !== sw || sunCanvas.height !== sh) {
+				sunCanvas.width = sw;
+				sunCanvas.height = sh;
+			}
+			sunStrength = parseFloat(cs.getPropertyValue('--sun-strength')) || 0;
+			const color = cs.getPropertyValue('--sun-color').trim();
+			if (color !== spriteColor) {
+				// Re-render the spot image only when the theme's color changes.
+				spriteColor = color;
+				const [r, g, b] = parse(ctx, color);
+				const sp = sprite.getContext('2d')!;
+				sp.clearRect(0, 0, 64, 64);
+				const grad = sp.createRadialGradient(32, 32, 0, 32, 32, 32);
+				grad.addColorStop(0, `rgba(${r},${g},${b},1)`);
+				grad.addColorStop(0.45, `rgba(${r},${g},${b},0.6)`);
+				grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+				sp.fillStyle = grad;
+				sp.fillRect(0, 0, 64, 64);
+			}
+		}
+
+		function drawSun(t: number) {
+			sctx.setTransform(1, 0, 0, 1, 0, 0);
+			sctx.globalCompositeOperation = 'source-over';
+			sctx.clearRect(0, 0, sunCanvas.width, sunCanvas.height);
+			if (sunStrength <= 0) return;
+			sctx.globalCompositeOperation = 'lighter'; // overlapping spots add up, like light does
+			const k = sunCanvas.width / w;
+			const long = Math.max(w, h);
+			const count = small.matches ? 15 : spots.length; // fewer on phones
+			for (let i = 0; i < count; i++) {
+				const p = spots[i];
+				const rad = p.r * long;
+				// Drift, wrapping around the edges with room for the spot's size.
+				const mx = rad / w;
+				const my = rad / h;
+				const x = ((((p.x + p.vx * t) % 1) + 1) % 1) * (1 + 2 * mx) - mx;
+				const y = ((((p.y + p.vy * t) % 1) + 1) % 1) * (1 + 2 * my) - my;
+				const sx = x * w + Math.sin((t / p.swayT) * Math.PI * 2 + p.ph) * p.sway * long;
+				const sy = y * h + Math.cos((t / (p.swayT * 1.3)) * Math.PI * 2 + p.ph) * p.sway * long;
+				const twinkle = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin((t / p.tw) * Math.PI * 2 + p.ph));
+				sctx.globalAlpha = sunStrength * twinkle;
+				sctx.drawImage(sprite, (sx - rad) * k, (sy - rad) * k, rad * 2 * k, rad * 2 * k);
+			}
+			sctx.globalAlpha = 1;
 		}
 
 		function draw(t: number) {
+			drawSun(t);
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			for (const l of flow) {
@@ -174,6 +252,8 @@
 	{/each}
 	<div class="absolute inset-0" style:background="var(--overlay)"></div>
 	<canvas bind:this={canvas} class="flow absolute inset-0 h-full w-full"></canvas>
+	<!-- Soft spots of sunlight drifting and twinkling slowly. -->
+	<canvas bind:this={sunCanvas} class="sun absolute inset-0 h-full w-full"></canvas>
 	<div class="grain absolute inset-0"></div>
 </div>
 
